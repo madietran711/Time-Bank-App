@@ -1,40 +1,42 @@
-#ifndef SERVICE_H
-#define SERVICE_H
+//
+// Created by TRAN HA PHUONG on 12/01/2024.
+//
 
-#include <iostream>
-#include <vector>
+#ifndef TIME_BANK_APP_SERVICE_H
+#define TIME_BANK_APP_SERVICE_H
+#include <string>
 #include "Skill.h"
+#include <vector>
+#include "Member.h"
 
-using std::cin;
-using std::cout;
-using std::endl;
-using std::getline;
-using std::string;
-using std::vector;
+class Service {
 
-class Service
-{
 private:
-    string service_owner;
-    string start_time;
-    string end_time;
-    vector<Skill> skill_list;
-    int consuming_CD;
+    std::string serviceId;
+    Member *service_owner;
+    std::string startTime;
+    std::string endTime;
+
+    std::vector<Skill> skillList;
+    int consumingCD;
     double score_required;
-    string supporter_name;
+    Member *supporter;
 
 public:
     Service(
-        string service_owner,
-        string start_time,
-        string end_time,
-        vector<Skill> skill_list,
-        int consuming_CD,
-        double score_required,
-        string supporter_name);
+            std::string serviceId,
+            Member *service_owner,
+            std::string startTime,
+            std::string endTime,
+            std::string availableTime,
+            int consumingCD,
+            double scoreRequired,
+            Member *supporter,
+            std::vector<Skill> skillList={});
 
     // Return address of the array of info to display
     int *returnServiceInfo();
 };
 
-#endif
+
+#endif //TIME_BANK_APP_SERVICE_H
