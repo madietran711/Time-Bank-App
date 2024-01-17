@@ -4,10 +4,12 @@
 
 #ifndef TIME_BANK_APP_REQUEST_H
 #define TIME_BANK_APP_REQUEST_H
-#include<string>
+#include <string>
 #include "Service.h"
 #include "Member.h"
-class Request {
+
+class Request
+{
 private:
     std::string requestId;
     Service *service;
@@ -17,21 +19,18 @@ private:
     int status;
     int score;
 
-
-
 public:
     Request(
-            std::string requestId,
-            Service *service,
-            Member *requester,
-            std::string startTime,
-            std::string endTime,
-            int status,
-            int score);
+        std::string requestId,
+        Service *service,
+        Member *requester,
+        std::string startTime,
+        std::string endTime,
+        int status,
+        int score);
 
     // Return address of the array of info to display
     int *returnRequestInfo();
-
 };
 
-#endif //TIME_BANK_APP_REQUEST_H
+#endif // TIME_BANK_APP_REQUEST_H

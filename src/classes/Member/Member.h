@@ -8,8 +8,10 @@
 #include <vector>
 #include "Skill.h"
 #include "Service.h"
+#include "Request.h"
 
-class Member {
+class Member
+{
 private:
     std::string memberId;
     std::string username;
@@ -20,31 +22,31 @@ private:
     std::string homeAddress;
     double hostScore;
     double supporterScore;
-    std::vector <Skill> skills;
-
+    std::vector<Skill> skills;
+    std::vector<Member> blockedList;
     std::vector<Service> listedService;
 
 public:
     Member(
-            std::string memberId,
-            std::string username,
-            std::string password,
-            std::string fullName,
-            std::string phoneNumber,
-            std::string email,
-            std::string homeAddress,
-            double hostScore,
-            double supporterScore,
-            std::vector<Skill> skills,
-
-            std::vector<Service> listedService={});
+        std::string memberId,
+        std::string username,
+        std::string password,
+        std::string fullName,
+        std::string phoneNumber,
+        std::string email,
+        std::string homeAddress,
+        double hostScore,
+        double supporterScore,
+        std::vector<Skill> skills,
+        std::vector<Member> blockedList,
+        std::vector<Service> listedService = {});
 
     Member(
 
-            std::string username,
-            std::string password);
+        std::string username,
+        std::string password);
 
-    void addSkill(Skill *skill);
+    bool addSkill(Skill *skill);
 
     void checkLogIn();
 
@@ -52,7 +54,16 @@ public:
     int *profileInfo();
 
     void addCD();
+
+    // declare friend class
+    friend class Request;
+    friend class Service;
+    friend class Skill;
 };
 
+#endif // TIME_BANK_APP_MEMBER_H
+iend class Skill;
+}
+;
 
-#endif //TIME_BANK_APP_MEMBER_H
+#endif // TIME_BANK_APP_MEMBER_H
