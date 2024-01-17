@@ -41,7 +41,7 @@ public:
         double hostScore,
         double supporterScore,
         int creditPoint = 20,
-        std::vector<Skill> skills,
+        std::vector<Skill> skills={},
         std::vector<Member> blockedList = {},
         std::vector<Service> listedService = {},
         std::vector<Request> acceptedRequest = {});
