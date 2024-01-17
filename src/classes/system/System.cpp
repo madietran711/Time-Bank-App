@@ -94,7 +94,7 @@ void System::displayMemberMenu()
     std::cout << "2. Manage Skills (View, Add)\n";
     std::cout << "3. View Available Services\n";
     std::cout << "4. Manage Service Listing (Add Service, Delete Service, View & Accept Request)\n";
-    std::cout << "5. Manage Request (View, Delete)\n";
+    std::cout << "5. Manage Request (View, Add, Delete)\n";
     std::cout << "6. View Reviews\n";
     std::cout << "7. Add Review For Service\n";
     std::cout << "8. Rate Host\n";
