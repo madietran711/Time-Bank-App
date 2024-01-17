@@ -82,6 +82,7 @@ public:
 
     // MemberMenu Functions
     void displayMemberProfile(Member *member);
+    void displayMemberSkillList(Member *member);
 };
 
 #endif // TIME_BANK_APP_SYSTEM_H

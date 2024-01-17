@@ -220,3 +220,20 @@ void Member::viewProfile()
          
           << Colors::RESET << std::endl;
 }
+
+void Member::showSkills()
+{
+  std::cout << Colors::MAGENTA
+         << std::left << std::setw(10) << "Skill ID"
+         << std::left << std::setw(20) << "Skill Name"
+         << std::left << std::setw(20) << "Skill Point"
+         << Colors::RESET << std::endl;
+  for (auto skill : this->skills)
+  {
+    std::cout << Colors::YELLOW
+           << std::left << std::setw(10) << skill.getSkillId()
+           << std::left << std::setw(20) << skill.getSkillName()
+           << std::left << std::setw(20) << skill.getRatingScore()
+           << Colors::RESET << std::endl;
+  }
+}

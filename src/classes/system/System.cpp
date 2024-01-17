@@ -112,7 +112,7 @@ void System::displayMemberMenu()
         displayMemberProfile(currentMember);
         break;
     case 2:
-        // displayMemberMenu();
+        displayMemberSkillList(currentMember);
         break;
     case 3:
         // displayMemberMenu();
@@ -360,11 +360,13 @@ bool System::loadAllSkills()
         }
 
         Skill skill;
+        Member *owner = getMemberByID(tokens[1]);
         skill.setSkillId(tokens[0]);
-        skill.setOwner(getMemberByID(tokens[1]));
+        skill.setOwner(owner);
         skill.setSkillName(tokens[2]);
         skill.setRatingScore(std::stod(tokens[3]));
         skill_list.push_back(skill);
+        owner->addSkill(&skill);
     }
 
     skillFile.close();
@@ -472,4 +474,10 @@ void System::displayMemberProfile(Member *member)
 
               << Colors::RESET << endl;
     member->viewProfile();
+}
+
+void System::displayMemberSkillList(Member *member)
+{
+
+    member->showSkills();
 }
