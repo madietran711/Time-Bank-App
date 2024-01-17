@@ -22,9 +22,11 @@ private:
     std::string homeAddress;
     double hostScore;
     double supporterScore;
+    int creditPoint;
     std::vector<Skill> skills;
     std::vector<Member> blockedList;
     std::vector<Service> listedService;
+    std::vector<Request> acceptedRequest;
 
 public:
     Member(
@@ -37,9 +39,11 @@ public:
         std::string homeAddress,
         double hostScore,
         double supporterScore,
+        int creditPoint,
         std::vector<Skill> skills,
-        std::vector<Member> blockedList,
-        std::vector<Service> listedService = {});
+        std::vector<Member> blockedList = {},
+        std::vector<Service> listedService = {},
+        std::vector<Request> acceptedRequest = {});
 
     Member(
 
@@ -62,6 +66,7 @@ public:
 };
 
 #endif // TIME_BANK_APP_MEMBER_H
+
 iend class Skill;
 }
 ;

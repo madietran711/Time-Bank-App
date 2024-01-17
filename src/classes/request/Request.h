@@ -31,6 +31,15 @@ public:
 
     // Return address of the array of info to display
     int *returnRequestInfo();
+
+    // getter functions
+    std::string getRequestId() const;
+    Service *getService() const;
+    Member *getRequester() const;
+    std::string getStartTime() const;
+    std::string getEndTime() const;
+    int getStatus() const;
+    int getScore() const;
 };
 
 #endif // TIME_BANK_APP_REQUEST_H
