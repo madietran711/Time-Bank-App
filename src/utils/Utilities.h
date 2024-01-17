@@ -5,10 +5,8 @@
 #ifndef TIME_BANK_APP_UTILITIES_H
 #define TIME_BANK_APP_UTILITIES_H
 
-
-class utilities {
-
+class utilities
+{
 };
 
-
-#endif //TIME_BANK_APP_UTILITIES_H
+#endif // TIME_BANK_APP_UTILITIES_H

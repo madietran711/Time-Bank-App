@@ -364,8 +364,8 @@ void runDateTests()
     std::cout << "All tests passed!" << std::endl;
 }
 
-int main()
-{
-    runDateTests();
-    return 0;
-}
+// int main()
+// {
+//     runDateTests();
+//     return 0;
+// }

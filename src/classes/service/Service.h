@@ -5,9 +5,9 @@
 #ifndef TIME_BANK_APP_SERVICE_H
 #define TIME_BANK_APP_SERVICE_H
 #include <string>
-#include "Skill.h"
+#include "../skill/Skill.h"
 #include <vector>
-#include "Member.h"
+#include "../member/Member.h"
 
 class Service
 {

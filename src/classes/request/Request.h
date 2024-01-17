@@ -3,9 +3,9 @@
 #ifndef TIME_BANK_APP_REQUEST_H
 #define TIME_BANK_APP_REQUEST_H
 #include <string>
-#include "Service.h"
-#include "Member.h"
-#include "Date.h"
+#include "../service/Service.h"
+#include "../member/Member.h"
+#include "../date/Date.h"
 
 class Request
 {

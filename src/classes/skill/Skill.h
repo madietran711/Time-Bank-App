@@ -2,7 +2,7 @@
 #define TIME_BANK_APP_SKILL_H
 
 #include <string>
-#include "Member.h"
+#include "../member/Member.h"
 
 class Skill
 {

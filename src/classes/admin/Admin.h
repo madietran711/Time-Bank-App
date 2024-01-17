@@ -4,25 +4,25 @@
 
 #ifndef TIME_BANK_APP_ADMIN_H
 #define TIME_BANK_APP_ADMIN_H
-#include<string>
+#include <string>
+#include "../member/Member.h"
 
-class Admin {
+class Admin
+{
 private:
     std::string adminId;
     std::string adminName;
     std::string adminPassword;
 
 public:
+    // Constructor
     Admin(std::string adminId, std::string adminName, std::string adminPassword);
 
-    void checkLogIn();
+    void checkLogIn(std::string adminName, std::string adminPassword);
 
     // Return the address of the array to display profile info
     int *profileInfo();
-
-
-
+    void changeMemberPassword(Member *member, std::string newPassword);
 };
 
-
-#endif //TIME_BANK_APP_ADMIN_H
+#endif // TIME_BANK_APP_ADMIN_H

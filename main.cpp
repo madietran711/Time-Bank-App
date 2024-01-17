@@ -1,7 +1,9 @@
 #include <iostream>
 using namespace std;
+#include "./src/classes/system/System.h"
 
 int main()
 {
-    cout << "Hi";
+    System system;
+    system.run();
 }

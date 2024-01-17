@@ -5,9 +5,9 @@
 
 #include <string>
 #include <vector>
-#include "Skill.h"
-#include "Service.h"
-#include "Request.h"
+#include "../skill/Skill.h"
+#include "../service/Service.h"
+#include "../request/Request.h"
 
 class Member
 {
@@ -29,6 +29,7 @@ private:
 
 public:
     // Constructors
+    Member() = default; // default constructor
     Member(
         std::string memberId,
         std::string username,
@@ -39,7 +40,7 @@ public:
         std::string homeAddress,
         double hostScore,
         double supporterScore,
-        int creditPoint,
+        int creditPoint = 20,
         std::vector<Skill> skills,
         std::vector<Member> blockedList = {},
         std::vector<Service> listedService = {},
@@ -82,10 +83,37 @@ public:
     void setAcceptedRequest(const std::vector<Request> &acceptedRequest);
 
     // Member functions
+    Member *signUp();
+    Member *login();
+    bool logout();
     bool addSkill(Skill *skill);
+    void showSkills();
+    void showListedService();
+    void showAcceptedRequest();
+    void showBlockedList();
     void checkLogIn();
-    int *profileInfo();
+    void viewProfile();
     void addCD();
+    bool blockMember(Member *member);
+    bool unblockMember(Member *member);
+
+    // as a supporter
+    bool addService(Service *service);
+    bool removeService(Service *service);
+    bool acceptRequest(Request *request);
+    void rateHost(Member *host, double score);
+    void showAllRequest();
+    void showAllRequestFilterBySkill(Skill *skill);
+
+    // as a host
+    void requestService(Service *service);
+    void addSupporterReview(Member *supporter, std::string comment, int supporterRating, Request *request);
+    void rateSkill(Skill *skill, double score, Request *request);
+    void showAllService();
+    void showAllServiceFilterBySkill(Skill *skill);
+    void showAllServiceFilterByTime(Date startTime, Date endTime);
+    void showAllServiceFilterByLocation(std::string location);
+    void viewSupporterReview(Member *supporter);
 
     // declare friend class
     friend class Request;
@@ -94,19 +122,7 @@ public:
 };
 
 #endif // TIME_BANK_APP_MEMBER_H
-iend class Skill;
-}
-;
 
-#endif // TIME_BANK_APP_MEMBER_H
 
-iend class Skill;
-}
-;
 
-#endif // TIME_BANK_APP_MEMBER_H
-iend class Skill;
-}
-;
 
-#endif // TIME_BANK_APP_MEMBER_H

@@ -6,9 +6,10 @@ Review::Review(
     int skillRating,
     int supporterRating,
     int hostRating,
-    Request *request)
+    Request *request,
+    std::string comment)
     : reviewId(reviewId), skillRating(skillRating),
-      supporterRating(supporterRating), hostRating(hostRating), request(request)
+      supporterRating(supporterRating), hostRating(hostRating), request(request), comment(comment)
 {
 }
 
@@ -44,6 +45,10 @@ Request *Review::getRequest() const
     return request;
 }
 
+std::string Review::getComment() const
+{
+    return comment;
+}
 // Setter functions
 void Review::setSkillRating(int skillRating)
 {
@@ -63,4 +68,9 @@ void Review::setHostRating(int hostRating)
 void Review::setRequest(Request *request)
 {
     this->request = request;
+}
+
+void Review::setComment(std::string comment)
+{
+    this->comment = comment;
 }

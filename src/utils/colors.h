@@ -1,11 +1,12 @@
 // Colors.h
 
-#ifndef COLORS_H
-#define COLORS_H
+#ifndef TIME_BANK_APP_COLORS_H
+#define TIME_BANK_APP_COLORS_H
 
 #include <iostream>
 
-namespace Colors {
+namespace Colors
+{
     const std::string RESET = "\033[0m";
     const std::string BLACK = "\033[30m";
     const std::string RED = "\033[31m";

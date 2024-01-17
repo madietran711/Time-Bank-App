@@ -4,7 +4,7 @@
 #define TIME_BANK_APP_REVIEW_H
 
 #include <string>
-#include "Request.h"
+#include "../request/Request.h"
 
 class Review
 {
@@ -14,6 +14,7 @@ private:
     int supporterRating;
     int hostRating;
     Request *request;
+    std::string comment;
 
 public:
     // Constructor
@@ -22,7 +23,8 @@ public:
         int skillRating,
         int supporterRating,
         int hostRating,
-        Request *request);
+        Request *request,
+        std::string comment);
 
     // Destructor
     ~Review();
@@ -33,12 +35,14 @@ public:
     int getSupporterRating() const;
     int getHostRating() const;
     Request *getRequest() const;
+    std::string getComment() const;
 
     // Setter functions
     void setSkillRating(int skillRating);
     void setSupporterRating(int supporterRating);
     void setHostRating(int hostRating);
     void setRequest(Request *request);
+    void setComment(std::string comment);
 };
 
 #endif // TIME_BANK_APP_REVIEW_H
