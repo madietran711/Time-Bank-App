@@ -8,9 +8,9 @@ Service::Service(
     Date endTime,
     int consumingCD,
     double scoreRequired,
-    std::vector<Skill> skillList)
+    std::vector<Skill> skillList, std::vector<Request> requestList)
     : serviceId(serviceId), serviceOwner(serviceOwner), startTime(startTime), endTime(endTime), consumingCD(consumingCD),
-      score_required(scoreRequired), skillList(std::move(skillList))
+      score_required(scoreRequired), skillList(std::move(skillList)), requestList(std::move(requestList))
 {
 }
 
@@ -49,7 +49,10 @@ const std::vector<Skill> &Service::getSkillList() const
 {
     return skillList;
 }
-
+const std::vector<Request> &Service::getRequestList() const
+{
+    return requestList;
+}
 // Setter functions
 void Service::setServiceId(const std::string &id)
 {
@@ -86,4 +89,14 @@ void Service::setScoreRequired(double score)
 void Service::setSkillList(const std::vector<Skill> &skills)
 {
     this->skillList = skills;
+}
+void Service::setRequestList(const std::vector<Request> &requests)
+{
+    this->requestList = requests;
+}
+
+// funtional
+void Service::addRequest(Request *request)
+{
+    this->requestList.push_back(*request);
 }

@@ -2,12 +2,19 @@
 #ifndef TIME_BANK_APP_SYSTEM_H
 #define TIME_BANK_APP_SYSTEM_H
 
+#define MEMBER_FILE "./data/member.dat"
+#define SKILL_FILE "./data/skill.dat"
+#define SERVICE_FILE "./data/service.dat"
+#define REQUEST_FILE "./data/request.dat"
+#define REVIEW_FILE "./data/review.dat"
+
 #include "../../utils/colors.h"
 #include "../member/Member.h"
 #include "../service/Service.h"
 #include "../request/Request.h"
 #include "../skill/Skill.h"
 #include "../review/Review.h"
+#include <fstream>
 
 class System
 {
@@ -30,6 +37,38 @@ public:
 
     // Constructors
     System() = default; // default constructor
+
+    // Run when initdata() run, init data
+    std::vector<std::string> splitStr(std::string &, std::string);
+    void initData();
+    void initMembers();
+    void initServices();
+    void initRequests();
+    void initSkills();
+    void initReviews();
+
+    // save data to file
+    bool saveAllData();
+    bool saveAllMembers();
+    bool saveAllServices();
+    bool saveAllRequests();
+    bool saveAllSkills();
+    bool saveAllReviews();
+
+    // Run when updateData() run, update each object to each data file
+    bool loadAllData();
+    bool loadAllMembers();
+    bool loadAllServices();
+    bool loadAllRequests();
+    bool loadAllSkills();
+    bool loadAllReviews();
+
+    // getByID
+    Member *getMemberByID(std::string memberID);
+    Skill *getSkillByID(std::string skillID);
+    Service *getServiceByID(std::string serviceID);
+    Request *getRequestByID(std::string requestID);
+    Review *getReviewByID(std::string reviewID);
 
     // display menu
     void run();

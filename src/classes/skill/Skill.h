@@ -14,6 +14,7 @@ private:
 
 public:
     // Constructor
+    Skill() = default; // default constructor
     Skill(
         std::string skillId,
         Member *owner,
@@ -27,6 +28,7 @@ public:
     double getRatingScore() const;
 
     // Setter functions
+    void setSkillId(const std::string id);
     void setOwner(Member *owner);
     void setSkillName(std::string skillName);
     void setRatingScore(double ratingScore);

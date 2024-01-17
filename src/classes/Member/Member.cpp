@@ -186,3 +186,21 @@ void Member::setAcceptedRequest(const std::vector<Request> &acceptedRequest)
 }
 
 // Member functions
+bool Member::acceptRequest(Request *request)
+{
+  request->setStatus(1);
+  this->acceptedRequest.push_back(*request);
+  return true;
+
+}
+bool Member::addService(Service *service)
+{
+  this->listedService.push_back(*service);
+  return true;
+}
+
+bool Member::addSkill(Skill *skill)
+{
+  this->skills.push_back(*skill);
+  return true;
+}

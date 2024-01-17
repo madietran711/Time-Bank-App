@@ -48,11 +48,13 @@ public:
         std::vector<Skill> skills={},
         std::vector<Member> blockedList = {},
         std::vector<Service> listedService = {},
-        std::vector<Request> acceptedRequest = {});
+        std::vector<Request> acceptedRequest = {}
+        );
 
     Member(
         std::string username,
         std::string password);
+        
 
     // Getter functions
     std::string getMemberId() const;
@@ -100,6 +102,7 @@ public:
     void addCD();
     bool blockMember(Member *member);
     bool unblockMember(Member *member);
+    bool addSkill(Skill *skill);
 
     // as a supporter
     bool addService(Service *service);
