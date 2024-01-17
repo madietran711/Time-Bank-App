@@ -94,6 +94,8 @@ public:
 };
 
 #endif // TIME_BANK_APP_MEMBER_H
+iend class Skill;
+}
 ;
 
 #endif // TIME_BANK_APP_MEMBER_H
