@@ -1,14 +1,11 @@
-//
-// Created by TRAN HA PHUONG on 12/01/2024.
-//
-
 #ifndef TIME_BANK_APP_SKILL_H
 #define TIME_BANK_APP_SKILL_H
+
 #include <string>
 #include "Member.h"
 
-
-class Skill {
+class Skill
+{
 private:
     std::string skillId;
     Member *owner;
@@ -16,16 +13,23 @@ private:
     double ratingScore;
 
 public:
+    // Constructor
     Skill(
-            std::string skillId,
-            Member *owner,
-            std::string skillName,
-            double ratingScore);
+        std::string skillId,
+        Member *owner,
+        std::string skillName,
+        double ratingScore);
 
+    // Getter functions
+    std::string getSkillId() const;
+    Member *getOwner() const;
+    std::string getSkillName() const;
+    double getRatingScore() const;
 
-    // Return address of the array of info to display
-    int *returnSkillInfo();
+    // Setter functions
+    void setOwner(Member *owner);
+    void setSkillName(std::string skillName);
+    void setRatingScore(double ratingScore);
 };
 
-
-#endif //TIME_BANK_APP_SKILL_H
+#endif // TIME_BANK_APP_SKILL_H

@@ -1,9 +1,8 @@
-//
-// Created by TRAN HA PHUONG on 12/01/2024.
-//
+
 
 #ifndef TIME_BANK_APP_MEMBER_H
 #define TIME_BANK_APP_MEMBER_H
+
 #include <string>
 #include <vector>
 #include "Skill.h"
@@ -29,6 +28,7 @@ private:
     std::vector<Request> acceptedRequest;
 
 public:
+    // Constructors
     Member(
         std::string memberId,
         std::string username,
@@ -46,17 +46,45 @@ public:
         std::vector<Request> acceptedRequest = {});
 
     Member(
-
         std::string username,
         std::string password);
 
+    // Getter functions
+    std::string getMemberId() const;
+    std::string getUsername() const;
+    std::string getPassword() const;
+    std::string getFullName() const;
+    std::string getPhoneNumber() const;
+    std::string getEmail() const;
+    std::string getHomeAddress() const;
+    double getHostScore() const;
+    double getSupporterScore() const;
+    int getCreditPoint() const;
+    const std::vector<Skill> &getSkills() const;
+    const std::vector<Member> &getBlockedList() const;
+    const std::vector<Service> &getListedService() const;
+    const std::vector<Request> &getAcceptedRequest() const;
+
+    // Setter functions
+    void setMemberId(std::string memberId);
+    void setUsername(std::string username);
+    void setPassword(std::string password);
+    void setFullName(std::string fullName);
+    void setPhoneNumber(std::string phoneNumber);
+    void setEmail(std::string email);
+    void setHomeAddress(std::string homeAddress);
+    void setHostScore(double hostScore);
+    void setSupporterScore(double supporterScore);
+    void setCreditPoint(int creditPoint);
+    void setSkills(const std::vector<Skill> &skills);
+    void setBlockedList(const std::vector<Member> &blockedList);
+    void setListedService(const std::vector<Service> &listedService);
+    void setAcceptedRequest(const std::vector<Request> &acceptedRequest);
+
+    // Member functions
     bool addSkill(Skill *skill);
-
     void checkLogIn();
-
-    // Return the address of the array to display profile info
     int *profileInfo();
-
     void addCD();
 
     // declare friend class
@@ -67,6 +95,15 @@ public:
 
 #endif // TIME_BANK_APP_MEMBER_H
 
+;
+
+#endif // TIME_BANK_APP_MEMBER_H
+
+iend class Skill;
+}
+;
+
+#endif // TIME_BANK_APP_MEMBER_H
 iend class Skill;
 }
 ;

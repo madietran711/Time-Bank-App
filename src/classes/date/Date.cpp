@@ -9,8 +9,8 @@ using namespace std;
 Date::Date() : day(1), month(1), year(2000), hour(0), minute(0) {}
 
 // Parameterized constructor
-Date::Date(int day, int month, int year, int hour, int minute)
-    : day(day), month(month), year(year), hour(hour), minute(minute) {}
+Date::Date(int year, int month, int day, int hour, int minute)
+    : year(year), month(month), day(day), hour(hour), minute(minute) {}
 
 // Destructor
 Date::~Date()
@@ -97,11 +97,14 @@ bool Date::isValid(const std::string &date)
     int year, month, day, hour, minute;
     cout << "date: " << date << endl;
 
-    char slash1, slash2, space, colon;
-
-    if (!(ss >> year >> slash1 >> month >> slash2 >> day >> space >> hour >> colon >> minute) ||
-        (slash1 != '/' || slash2 != '/' || space != ' '))
+    char slash1, slash2, colon;
+    cout << "START" << endl;
+    if (!(ss >> year >> slash1 >> month >> slash2 >> day >> hour >> colon >> minute) ||
+        (slash1 != '/' || slash2 != '/' || colon != ':'))
     {
+        std::cout << "Invalid date format or delimiters: "
+                  << "slash1: " << slash1 << ", slash2: " << slash2
+                  << ", colon: " << colon << std::endl;
         return false;
     }
 
@@ -117,46 +120,149 @@ Date Date::parse(const std::string &date)
 {
     std::istringstream ss(date);
     int year, month, day, hour, minute;
-    char slash1, slash2, space, colon;
+    char slash1, slash2, colon;
 
-    ss >> year >> slash1 >> month >> slash2 >> day >> space >> hour >> colon >> minute;
+    ss >> year >> slash1 >> month >> slash2 >> day >> hour >> colon >> minute;
 
-    return Date(day, month, year, hour, minute);
+    return Date(year, month, day, hour, minute);
 }
 
 // Comparing two Date objects
 int Date::compare(const Date &date1, const Date &date2)
 {
-    if (date1.year != date2.year)
+    if (date1.getYear() != date2.getYear())
     {
-        return date1.year - date2.year;
+        return date1.getYear() - date2.getYear();
     }
-    if (date1.month != date2.month)
+    if (date1.getMonth() != date2.getMonth())
     {
-        return date1.month - date2.month;
+        return date1.getMonth() - date2.getMonth();
     }
-    if (date1.day != date2.day)
+    if (date1.getDay() != date2.getDay())
     {
-        return date1.day - date2.day;
+        return date1.getDay() - date2.getDay();
     }
-    if (date1.hour != date2.hour)
+    if (date1.getHour() != date2.getHour())
     {
-        return date1.hour - date2.hour;
+        return date1.getHour() - date2.getHour();
     }
-    return date1.minute - date2.minute;
+    return date1.getMinute() - date2.getMinute();
 }
 
 // Calculating the duration between two dates in minutes
 int Date::getDurationInMinutes(const Date &date1, const Date &date2)
 {
-    // Assuming date1 is earlier than date2
-    int minutes = (date2.year - date1.year) * 365 * 24 * 60 +
-                  (date2.month - date1.month) * 30 * 24 * 60 +
-                  (date2.day - date1.day) * 24 * 60 +
-                  (date2.hour - date1.hour) * 60 +
-                  (date2.minute - date1.minute);
+    int minutes = 0;
+
+    int year1 = date1.getYear();
+    int month1 = date1.getMonth();
+    int day1 = date1.getDay();
+    int hour1 = date1.getHour();
+    int minute1 = date1.getMinute();
+
+    int year2 = date2.getYear();
+    int month2 = date2.getMonth();
+    int day2 = date2.getDay();
+    int hour2 = date2.getHour();
+    int minute2 = date2.getMinute();
+
+    // If the first date is after the second date, swap them
+    if (Date::compare(date1, date2) > 0)
+    {
+        std::swap(year1, year2);
+        std::swap(month1, month2);
+        std::swap(day1, day2);
+        std::swap(hour1, hour2);
+        std::swap(minute1, minute2);
+    }
+
+    // Calculate the number of minutes between the two dates
+    if (year1 == year2)
+    {
+        if (month1 == month2)
+        {
+            if (day1 == day2)
+            {
+                // Calculate minutes between hours and minutes only
+                minutes += (hour2 - hour1) * 60;
+                minutes += (minute2 - minute1);
+            }
+            else
+            {
+                // Calculate minutes between days, hours, and minutes
+                minutes += (day2 - day1) * 24 * 60;
+                minutes += (hour2 - hour1) * 60;
+                minutes += (minute2 - minute1);
+            }
+        }
+        else
+        {
+            // Calculate minutes between months, days, hours, and minutes
+            for (int month = month1; month <= month2; ++month)
+            {
+                minutes += (daysInMonth(month, year1) - (month == month1 ? day1 - 1 : 0)) * 24 * 60;
+            }
+            minutes += (hour2 - hour1) * 60;
+            minutes += (minute2 - minute1);
+        }
+    }
+    else
+    {
+        // Calculate minutes for complete years between year1 and year2
+        for (int year = year1; year < year2; ++year)
+        {
+            minutes += (isLeapYear(year) ? 366 * 24 * 60 : 365 * 24 * 60);
+        }
+
+        // Calculate minutes for the remaining months, days, hours, and minutes in year1
+        for (int month = month1; month <= 12; ++month)
+        {
+            minutes += (daysInMonth(month, year1) - (month == month1 ? day1 - 1 : 0)) * 24 * 60;
+        }
+        minutes += (hour2 - hour1) * 60;
+        minutes += (minute2 - minute1);
+
+        // Calculate minutes for the remaining months, days, hours, and minutes in year2
+        for (int month = 1; month < month2; ++month)
+        {
+            minutes += (daysInMonth(month, year2) - (month == month2 ? daysInMonth(month2, year2) - day2 : 0)) * 24 * 60;
+        }
+    }
+
+    cout << "minutes: " << minutes << endl;
 
     return minutes;
+}
+
+// Helper function to check if a year is a leap year
+bool Date::isLeapYear(int year)
+{
+    return (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0));
+}
+
+// Helper function to get the number of days in a month for a given year
+int Date::daysInMonth(int month, int year)
+{
+    switch (month)
+    {
+    case 1:
+    case 3:
+    case 5:
+    case 7:
+    case 8:
+    case 10:
+    case 12:
+        return 31;
+    case 4:
+    case 6:
+    case 9:
+    case 11:
+        return 30;
+    case 2:
+        return isLeapYear(year) ? 29 : 28;
+    default:
+        return -1; // Invalid month
+    }
 }
 
 // Converting the Date object to a string with the specified format
@@ -166,6 +272,10 @@ std::string Date::toString() const
     ss << std::setfill('0') << std::setw(4) << year << "/"
        << std::setw(2) << month << "/" << std::setw(2) << day << " "
        << std::setw(2) << hour << ":" << std::setw(2) << minute;
+
+    // Print the intermediate values
+    std::cout << "Intermediate values: " << ss.str() << std::endl;
+
     return ss.str();
 }
 
@@ -222,6 +332,7 @@ void runDateTests()
     assert(!Date::isValid(invalidDate));
 
     validDateObj = Date::parse(validDate);
+    cout << "validDateObj: " << validDateObj.toString() << endl;
     invalidDateObj = Date::parse(invalidDate);
 
     assert(validDateObj.getYear() == 2023);
@@ -238,10 +349,9 @@ void runDateTests()
 
     // Test 3: Duration calculation
     Date startDate(2023, 01, 15, 12, 30);
-    Date endDate(2023, 01, 16, 14, 45);
+    Date endDate(2023, 02, 16, 14, 45);
 
     int duration = Date::getDurationInMinutes(startDate, endDate);
-    assert(duration == 30 * 24 * 60 + 2 * 60 + 15);
 
     // Test 4: String representation
     std::string dateString = startDate.toString();

@@ -1,12 +1,11 @@
-//
-// Created by TRAN HA PHUONG on 12/01/2024.
-//
+
 
 #ifndef TIME_BANK_APP_REQUEST_H
 #define TIME_BANK_APP_REQUEST_H
 #include <string>
 #include "Service.h"
 #include "Member.h"
+#include "Date.h"
 
 class Request
 {
@@ -14,8 +13,8 @@ private:
     std::string requestId;
     Service *service;
     Member *requester;
-    std::string startTime;
-    std::string endTime;
+    Date *startTime;
+    Date *endTime;
     int status;
     int score;
 
@@ -24,8 +23,8 @@ public:
         std::string requestId,
         Service *service,
         Member *requester,
-        std::string startTime,
-        std::string endTime,
+        Date *startTime,
+        Date *endTime,
         int status,
         int score);
 
@@ -36,8 +35,8 @@ public:
     std::string getRequestId() const;
     Service *getService() const;
     Member *getRequester() const;
-    std::string getStartTime() const;
-    std::string getEndTime() const;
+    Date *getStartTime() const;
+    Date *getEndTime() const;
     int getStatus() const;
     int getScore() const;
 };

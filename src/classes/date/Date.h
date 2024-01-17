@@ -15,7 +15,7 @@ private:
 public:
     // Constructors
     Date();                                                   // Default constructor
-    Date(int day, int month, int year, int hour, int minute); // Parameterized constructor
+    Date(int year, int month, int day, int hour, int minute); // Parameterized constructor
     ~Date();                                                  // Destructor
     Date(const Date &other);                                  // Copy constructor
     Date &operator=(const Date &other);                       // Assignment operator
@@ -39,6 +39,8 @@ public:
     static Date parse(const std::string &date);
     static int compare(const Date &date1, const Date &date2);
     static int getDurationInMinutes(const Date &date1, const Date &date2);
+    static bool isLeapYear(int year);
+    static int daysInMonth(int month, int year);
 
     std::string toString() const;
     std::string getMonthStr() const;
