@@ -1,40 +1,70 @@
-#ifndef SERVICE_H
-#define SERVICE_H
+//
+// Created by TRAN HA PHUONG on 12/01/2024.
+//
 
-#include <iostream>
+#ifndef TIME_BANK_APP_SERVICE_H
+#define TIME_BANK_APP_SERVICE_H
+#include <string>
+#include "../skill/Skill.h"
 #include <vector>
-#include "Skill.h"
-
-using std::cin;
-using std::cout;
-using std::endl;
-using std::getline;
-using std::string;
-using std::vector;
-
+#include "../member/Member.h"
+#include "../date/Date.h"
+#include "../request/Request.h"
+class Member;
+class Skill;
+class Date;
+class Service;
+class Request;
 class Service
 {
+
 private:
-    string service_owner;
-    string start_time;
-    string end_time;
-    vector<Skill> skill_list;
-    int consuming_CD;
+    std::string serviceId;
+    Member *serviceOwner;
+    Date startTime;
+    Date endTime;
+
+    std::vector<Skill> skillList;
+    int consumingCD;
     double score_required;
-    string supporter_name;
+    std::vector<Request> requestList;
 
 public:
     Service(
-        string service_owner,
-        string start_time,
-        string end_time,
-        vector<Skill> skill_list,
-        int consuming_CD,
-        double score_required,
-        string supporter_name);
+        std::string serviceId,
+        Member *serviceOwner,
+        Date startTime,
+        Date endTime,
+        int consumingCD,
+        double scoreRequired,
+        std::vector<Skill> skillList = {},
+        std::vector<Request> requestList = {}
+
+    );
+
+    // Getter functions
+    std::string getServiceId() const;
+    Member *getServiceOwner() const;
+    Date getStartTime() const;
+    Date getEndTime() const;
+    int getConsumingCD() const;
+    double getScoreRequired() const;
+    const std::vector<Skill> &getSkillList() const;
+    const std::vector<Request> &getRequestList() const;
+
+    // Setter functions
+    void setServiceId(const std::string &id);
+    void setServiceOwner(Member *owner);
+    void setStartTime(std::string startTime);
+    void setEndTime(std::string endTime);
+    void setConsumingCD(int consumingCD);
+    void setScoreRequired(double scoreRequired);
+    void setSkillList(const std::vector<Skill> &skillList);
+    void setRequestList(const std::vector<Request> &requestList);
 
     // Return address of the array of info to display
     int *returnServiceInfo();
+    void addRequest(Request *request);
 };
 
-#endif
+#endif // TIME_BANK_APP_SERVICE_H
