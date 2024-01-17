@@ -204,3 +204,19 @@ bool Member::addSkill(Skill *skill)
   this->skills.push_back(*skill);
   return true;
 }
+
+void Member::viewProfile()
+{
+  std::cout << Colors::YELLOW
+         << std::left << std::setw(10) << this->getMemberId()
+         << std::left << std::setw(20) << this->getUsername()
+          << std::left << std::setw(20) << this->getFullName()
+          << std::left << std::setw(20) << this->getPhoneNumber()
+          << std::left << std::setw(20) << this->getEmail()
+          << std::left << std::setw(20) << this->getHomeAddress()
+          << std::left << std::setw(20) << this->getHostScore()
+          << std::left << std::setw(20) <<  this->getSupporterScore()
+          << std::left << std::setw(20) << this->getCreditPoint()
+         
+          << Colors::RESET << std::endl;
+}

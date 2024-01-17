@@ -65,9 +65,11 @@ void System::displayWelcomeMenu()
         displayGuestMenu();
         break;
     case 2:
+        currentMember = getMemberByID("1");
         displayMemberMenu();
         break;
     case 3:
+
         displayAdminMenu();
         break;
 
@@ -84,6 +86,71 @@ void System::displayGuestMenu()
 
 void System::displayMemberMenu()
 {
+    std::cout << Colors::GREEN << "--------------------------------------------------\n";
+    std::cout << "Time Bank Application - Welcome " << currentMember->getFullName() << "\n";
+    std::cout << "--------------------------------------------------\n"
+              << Colors::RESET;
+    std::cout << "1. Manage Profile (View, Edit)\n";
+    std::cout << "2. Manage Skills (View, Add)\n";
+    std::cout << "3. View Available Services\n";
+    std::cout << "4. Manage Service Listing (Add Service, Delete Service, View & Accept Request)\n";
+    std::cout << "5. Manage Request (View, Delete)\n";
+    std::cout << "6. View Reviews\n";
+    std::cout << "7. Add Review For Service\n";
+    std::cout << "8. Rate Host\n";
+    std::cout << "9. Top up Credit Point\n";
+    std::cout << "10. Blocking (View, Block, Unblock)\n";
+
+    std::cout << "25. Logout\n";
+    std::cout << "Please enter your choice: ";
+
+    int choice;
+    std::cin >> choice;
+    switch (choice)
+    {
+    case 1:
+        displayMemberProfile(currentMember);
+        break;
+    case 2:
+        // displayMemberMenu();
+        break;
+    case 3:
+        // displayMemberMenu();
+        break;
+    case 4:
+        // displayMemberMenu();
+        break;
+    case 5:
+        // displayMemberMenu();
+        break;
+    case 6:
+        // displayMemberMenu();
+        break;
+    case 7:
+        // displayMemberMenu();
+        break;
+    case 8:
+        // displayMemberMenu();
+        break;
+    case 9:
+        // displayMemberMenu();
+        break;
+    case 10:
+        // displayMemberMenu();
+        break;
+    case 11:
+        // displayMemberMenu();
+        break;
+    case 12:
+        // displayMemberMenu();
+        break;
+    case 13:
+        // displayMemberMenu();
+        break;
+    case 14:
+        // displayMemberMenu();
+        break;
+    }
 }
 
 void System::displayAdminMenu()
@@ -387,4 +454,22 @@ std::vector<std::string> System::splitStr(std::string &str, std::string delimite
     }
     tokens.push_back(str);
     return tokens;
+}
+
+void System::displayMemberProfile(Member *member)
+{
+
+    std::cout << Colors::MAGENTA << "Member Profile\n"
+              << std::left << std::setw(10) << "ID"
+              << std::left << std::setw(20) << "USERNAME"
+              << std::left << std::setw(20) << "FULL NAME"
+              << std::left << std::setw(20) << "PHONE NUMBER"
+              << std::left << std::setw(20) << "EMAIL"
+              << std::left << std::setw(20) << "HOME ADDRESS"
+              << std::left << std::setw(20) << "HOST SCORE"
+              << std::left << std::setw(20) << "SUPPORTER SCORE"
+              << std::left << std::setw(20) << "CREDIT POINT"
+
+              << Colors::RESET << endl;
+    member->viewProfile();
 }

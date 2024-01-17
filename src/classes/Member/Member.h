@@ -9,6 +9,8 @@
 #include "../service/Service.h"
 #include "../request/Request.h"
 #include "../date/Date.h"
+#include "../../utils/colors.h"
+#include<iomanip>
 class Skill;
 class Service;
 class Request;
@@ -54,7 +56,7 @@ public:
     Member(
         std::string username,
         std::string password);
-        
+
 
     // Getter functions
     std::string getMemberId() const;
@@ -102,7 +104,7 @@ public:
     void addCD();
     bool blockMember(Member *member);
     bool unblockMember(Member *member);
-    bool addSkill(Skill *skill);
+   
 
     // as a supporter
     bool addService(Service *service);
