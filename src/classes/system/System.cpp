@@ -109,9 +109,11 @@ void System::displayMemberMenu()
     switch (choice)
     {
     case 1:
+        cout << "--------------1. Manage Profile (View, Edit)----------------\n";
         displayMemberProfile(currentMember);
         break;
     case 2:
+        cout << "--------------2. Manage Skills (View, Add)----------------\n";
         displayMemberSkillList(currentMember);
         break;
     case 3:
