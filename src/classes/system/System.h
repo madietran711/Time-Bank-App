@@ -1,7 +1,7 @@
 
 #ifndef TIME_BANK_APP_SYSTEM_H
 #define TIME_BANK_APP_SYSTEM_H
-#include <vector>
+
 #include "../../utils/colors.h"
 #include "../member/Member.h"
 #include "../service/Service.h"
@@ -20,13 +20,13 @@ public:
     std::vector<Review> review_list;
 
     // Current user data
-    string adminUsername = "admin";
-    string adminPassword = "admin123";
+    std::string adminUsername = "admin";
+    std::string adminPassword = "admin123";
     Member *currentMember = nullptr;
     bool isUserLoggedIn = false;
     bool isUserAdmin = false;
 
-    vector<string> availableLocations = {"HANOI", "SAIGON"};
+    std::vector<std::string> availableLocations = {"HANOI", "SAIGON"};
 
     // Constructors
     System() = default; // default constructor

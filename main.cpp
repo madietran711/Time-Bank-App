@@ -4,6 +4,7 @@ using namespace std;
 
 int main()
 {
+    cout << "Program starts here!" << endl;
     System system;
     system.run();
 }

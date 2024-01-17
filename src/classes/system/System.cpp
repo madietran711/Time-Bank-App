@@ -42,3 +42,18 @@ void System::run()
     // Print the main menu
     displayWelcomeMenu();
 };
+
+void System::displayWelcomeMenu()
+{
+    std::cout << Colors::GREEN << "--------------------------------------------------\n";
+    std::cout << "Welcome to Time Bank Application\n";
+    std::cout << "--------------------------------------------------\n"
+              << Colors::RESET;
+    std::cout << "1. Login\n";
+    std::cout << "2. Register\n";
+    std::cout << "3. Exit\n";
+    std::cout << "Please enter your choice: ";
+
+    int choice;
+    std::cin >> choice;
+};

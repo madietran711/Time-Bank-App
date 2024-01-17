@@ -3,7 +3,7 @@
 
 #include <string>
 #include "../member/Member.h"
-
+class Member;
 class Skill
 {
 private:

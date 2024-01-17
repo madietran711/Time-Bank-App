@@ -8,7 +8,11 @@
 #include "../skill/Skill.h"
 #include "../service/Service.h"
 #include "../request/Request.h"
-
+#include "../date/Date.h"
+class Skill;
+class Service;
+class Request;
+class Date;
 class Member
 {
 private:

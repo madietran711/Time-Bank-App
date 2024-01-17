@@ -8,7 +8,10 @@
 #include "../skill/Skill.h"
 #include <vector>
 #include "../member/Member.h"
-
+#include "../date/Date.h"
+class Member;
+class Skill;
+class Date;
 class Service
 {
 

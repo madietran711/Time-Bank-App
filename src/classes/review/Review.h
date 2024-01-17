@@ -5,7 +5,7 @@
 
 #include <string>
 #include "../request/Request.h"
-
+class Request;
 class Review
 {
 private:

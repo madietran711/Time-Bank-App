@@ -7,6 +7,9 @@
 #include "../member/Member.h"
 #include "../date/Date.h"
 
+class Service;
+class Member;
+class Date;
 class Request
 {
 private:

@@ -186,26 +186,3 @@ void Member::setAcceptedRequest(const std::vector<Request> &acceptedRequest)
 }
 
 // Member functions
-bool Member::addSkill(Skill *skill)
-{
-  // Implement the logic to add a skill
-  // ...
-}
-
-void Member::checkLogIn()
-{
-  // Implement the login logic
-  // ...
-}
-
-int *Member::profileInfo()
-{
-  // Implement the logic to return profile information
-  // ...
-}
-
-void Member::addCD()
-{
-  // Implement the logic to add CD (Credit Point)
-  // ...
-}
