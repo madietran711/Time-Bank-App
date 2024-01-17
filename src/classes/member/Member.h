@@ -2,6 +2,7 @@
 #define MEMBER_H
 
 #include "Skill.h"
+#include "Service.h"
 #include <iostream>
 #include <vector>
 
@@ -15,40 +16,42 @@ using std::vector;
 class Member
 {
 private:
-    bool is_admin;
-    string username;
-    string password;
-    string full_name;
-    string phone_num;
-    string email;
-    string home_address;
-    double host_score;
-    double supporter_score;
-    Skill skills[10];
+    std::string memberId;
+    std::string username;
+    std::string password;
+    std::string fullName;
+    std::string phoneNumber;
+    std::string email;
+    std::string homeAddress;
+    double hostScore;
+    double supporterScore;
+    std::vector<Skill> skills;
 
-    vector<string> listed_service;
+    std::vector<Service> listedService;
 
 public:
+    Member();
     Member(
-        bool is_admin,
-        string username,
-        string password,
-        string full_name,
-        string phone_num,
-        string email,
-        string home_address,
-        double host_score,
-        double supporter_score,
-        Skill skills[10],
+        std::string memberId,
+        std::string username,
+        std::string password,
+        std::string fullName,
+        std::string phoneNumber,
+        std::string email,
+        std::string homeAddress,
+        double hostScore,
+        double supporterScore,
+        std::vector<Skill> skills,
 
-        vector<string> listed_service);
+        std::vector<Service> listedService = {});
 
     Member(
         bool is_admin,
         string username,
         string password);
 
-    void addSkill();
+    void addSkill(Skill *);
+    void addService(Service *);
 
     void checkLogIn();
 
@@ -56,5 +59,7 @@ public:
     int *profileInfo();
 
     void addCD();
+
+    friend class System;
 };
 #endif

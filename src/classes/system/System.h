@@ -3,42 +3,56 @@
 
 #include "Member.h"
 #include "Service.h"
+#include "Request.h"
+
+#define MEMBER_FILE "../../../Data/member.txt"
+#define SKILL_FILE "./Data/skills.txt"
+#define SERVICE_FILE "./Data/service.txt"
+#define REQUEST_FILE "./Data/request.txt"
 
 #include <iostream>
 #include <vector>
-
-using std::cin;
-using std::cout;
-using std::endl;
-using std::getline;
-using std::string;
-using std::vector;
+#include <fstream>
+#include <sstream>
+#include <string>
 
 class System
 {
 private:
     vector<Member *> member_list;
     vector<Service *> service_list;
+    vector<Skill *> skill_list;
+    vector<Request *> request_list;
     Member CurentMember;
 
 public:
+    System(std::vector<Member *> member_list = {},
+           std::vector<Service *> service_list = {},
+           std::vector<Request *> request_list = {},
+           std::vector<Skill *> skill_list = {});
+
+    Member *getMember(string memID);
+    Service *getService(string servID);
+    // When Member and Skill are initialized, add skill to member's skill list
+    void linkSkillToMember(Skill *);
+
     // Initialize all objects
     void initData();
     // Update all datas to databases
     void updateData();
 
     // Run when initdata() run, init data
+    vector<string> splitStr(string &, string);
     void initMembers();
     void initServices();
     void initRequests();
     void initSkills();
-    // When Member and Skill are initialized, add skill to member's skill list
-    void linkSkillToMember();
 
     // Run when updateData() run, update each object to each data file
     void updateMemberFile();
     void updateServiceFile();
     void updateSkillsFile();
+    void updateRequestFile();
 
     // Print option to get user's input (0/x means exit or return to last page)
     int getUserInput();

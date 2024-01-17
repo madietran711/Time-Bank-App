@@ -1,0 +1,1 @@
+ID;username;password;fullname;phone;email;addy;hostScor;spScore

@@ -15,22 +15,24 @@ using std::vector;
 class Skill
 {
 private:
-    string owner;
-    string skill_name;
-    double rating_score;
+    std::string skillId;
+    Member *owner;
+    std::string skillName;
+    double ratingScore;
 
 public:
     Skill(
-        string owner,
-        string skill_name);
-
-    Skill(
-        string owner,
-        string skill_name,
-        double rating_score);
+        std::string skillId,
+        Member *owner,
+        std::string skillName,
+        double ratingScore);
 
     // Return address of the array of info to display
     int *returnSkillInfo();
+
+    string getOwnerID();
+
+    friend class System;
 };
 
 #endif

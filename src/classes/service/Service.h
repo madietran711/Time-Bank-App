@@ -15,26 +15,32 @@ using std::vector;
 class Service
 {
 private:
-    string service_owner;
-    string start_time;
-    string end_time;
-    vector<Skill> skill_list;
-    int consuming_CD;
+    std::string serviceId;
+    Member *service_owner;
+    std::string startTime;
+    std::string endTime;
+    std::string availableTime;
+    int consumingCD;
     double score_required;
-    string supporter_name;
+    Member *supporter;
+    std::vector<Skill> skillList;
 
 public:
     Service(
-        string service_owner,
-        string start_time,
-        string end_time,
-        vector<Skill> skill_list,
-        int consuming_CD,
-        double score_required,
-        string supporter_name);
+        std::string serviceId,
+        Member *service_owner,
+        std::string startTime,
+        std::string endTime,
+        std::string availableTime,
+        int consumingCD,
+        double scoreRequired,
+        Member *supporter,
+        std::vector<Skill> skillList = {});
 
     // Return address of the array of info to display
     int *returnServiceInfo();
+
+    friend class System;
 };
 
 #endif
