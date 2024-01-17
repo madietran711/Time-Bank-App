@@ -4,18 +4,14 @@
 Service::Service(
     std::string serviceId,
     Member *serviceOwner,
-    std::string startTime,
-    std::string endTime,
+    Date startTime,
+    Date endTime,
     int consumingCD,
     double scoreRequired,
     std::vector<Skill> skillList)
-    : serviceId(serviceId), serviceOwner(serviceOwner), consumingCD(consumingCD),
+    : serviceId(serviceId), serviceOwner(serviceOwner), startTime(startTime), endTime(endTime), consumingCD(consumingCD),
       score_required(scoreRequired), skillList(std::move(skillList))
 {
-
-    // Assuming you have a Date constructor that takes a string for initialization.
-    this->startTime = new Date(startTime);
-    this->endTime = new Date(endTime);
 }
 
 // Getter functions
@@ -29,12 +25,12 @@ Member *Service::getServiceOwner() const
     return serviceOwner;
 }
 
-Date *Service::getStartTime() const
+Date Service::getStartTime() const
 {
     return startTime;
 }
 
-Date *Service::getEndTime() const
+Date Service::getEndTime() const
 {
     return endTime;
 }
@@ -57,45 +53,37 @@ const std::vector<Skill> &Service::getSkillList() const
 // Setter functions
 void Service::setServiceId(const std::string &id)
 {
-    serviceId = id;
+    this->serviceId = id;
 }
 
 void Service::setServiceOwner(Member *owner)
 {
-    serviceOwner = owner;
+    this->serviceOwner = owner;
 }
 
-void Service::setStartTime(const std::string &start)
+void Service::setStartTime(std::string startTime)
 {
     // Assuming you have a Date setter function that takes a string.
-    startTime->setDateTimeFromString(start);
+    this->startTime = Date::parse(startTime);
 }
 
-void Service::setEndTime(const std::string &end)
+void Service::setEndTime(std::string endTime)
 {
     // Assuming you have a Date setter function that takes a string.
-    endTime->setDateTimeFromString(end);
+    this->endTime = Date::parse(endTime);
 }
 
 void Service::setConsumingCD(int cd)
 {
-    consumingCD = cd;
+    this->consumingCD = cd;
 }
 
 void Service::setScoreRequired(double score)
 {
-    score_required = score;
+    this->score_required = score;
 }
 
 void Service::setSkillList(const std::vector<Skill> &skills)
 {
-    skillList = skills;
-}
-
-// Destructor
-Service::~Service()
-{
-    // Add cleanup code for dynamic memory if needed.
-    delete startTime;
-    delete endTime;
+    this->skillList = skills;
 }

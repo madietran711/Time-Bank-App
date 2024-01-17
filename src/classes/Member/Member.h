@@ -94,7 +94,6 @@ public:
 };
 
 #endif // TIME_BANK_APP_MEMBER_H
-
 ;
 
 #endif // TIME_BANK_APP_MEMBER_H

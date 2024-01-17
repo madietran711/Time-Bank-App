@@ -15,8 +15,8 @@ class Service
 private:
     std::string serviceId;
     Member *serviceOwner;
-    Date *startTime;
-    Date *endTime;
+    Date startTime;
+    Date endTime;
 
     std::vector<Skill> skillList;
     int consumingCD;
@@ -26,19 +26,17 @@ public:
     Service(
         std::string serviceId,
         Member *serviceOwner,
-        std::string startTime,
-        std::string endTime,
-
+        Date startTime,
+        Date endTime,
         int consumingCD,
         double scoreRequired,
-
         std::vector<Skill> skillList = {});
 
     // Getter functions
     std::string getServiceId() const;
     Member *getServiceOwner() const;
-    Date *getStartTime() const;
-    Date *getEndTime() const;
+    Date getStartTime() const;
+    Date getEndTime() const;
     int getConsumingCD() const;
     double getScoreRequired() const;
     const std::vector<Skill> &getSkillList() const;
@@ -46,8 +44,8 @@ public:
     // Setter functions
     void setServiceId(const std::string &id);
     void setServiceOwner(Member *owner);
-    void setStartTime(Date *startTime);
-    void setEndTime(Date *endTime);
+    void setStartTime(std::string startTime);
+    void setEndTime(std::string endTime);
     void setConsumingCD(int consumingCD);
     void setScoreRequired(double scoreRequired);
     void setSkillList(const std::vector<Skill> &skillList);
