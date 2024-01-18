@@ -14,10 +14,10 @@ Member::Member(
     double hostScore,
     double supporterScore,
     int creditPoint,
-    std::vector<Skill> skills,
-    std::vector<Member> blockedList,
-    std::vector<Service> listedService,
-    std::vector<Request> acceptedRequest)
+    std::vector<Skill *> skills,
+    std::vector<Member *> blockedList,
+    std::vector<Service *> listedService = {},
+    std::vector<Request *> acceptedRequest = {})
     : memberId(memberId),
       username(username),
       password(password),
@@ -191,7 +191,6 @@ bool Member::acceptRequest(Request *request)
   request->setStatus(1);
   this->acceptedRequest.push_back(*request);
   return true;
-
 }
 bool Member::addService(Service *service)
 {
@@ -208,32 +207,32 @@ bool Member::addSkill(Skill *skill)
 void Member::viewProfile()
 {
   std::cout << Colors::YELLOW
-         << std::left << std::setw(10) << this->getMemberId()
-         << std::left << std::setw(20) << this->getUsername()
-          << std::left << std::setw(20) << this->getFullName()
-          << std::left << std::setw(20) << this->getPhoneNumber()
-          << std::left << std::setw(20) << this->getEmail()
-          << std::left << std::setw(20) << this->getHomeAddress()
-          << std::left << std::setw(20) << this->getHostScore()
-          << std::left << std::setw(20) <<  this->getSupporterScore()
-          << std::left << std::setw(20) << this->getCreditPoint()
-         
-          << Colors::RESET << std::endl;
+            << std::left << std::setw(10) << this->getMemberId()
+            << std::left << std::setw(20) << this->getUsername()
+            << std::left << std::setw(20) << this->getFullName()
+            << std::left << std::setw(20) << this->getPhoneNumber()
+            << std::left << std::setw(20) << this->getEmail()
+            << std::left << std::setw(20) << this->getHomeAddress()
+            << std::left << std::setw(20) << this->getHostScore()
+            << std::left << std::setw(20) << this->getSupporterScore()
+            << std::left << std::setw(20) << this->getCreditPoint()
+
+            << Colors::RESET << std::endl;
 }
 
 void Member::showSkills()
 {
   std::cout << Colors::MAGENTA
-         << std::left << std::setw(10) << "Skill ID"
-         << std::left << std::setw(20) << "Skill Name"
-         << std::left << std::setw(20) << "Skill Point"
-         << Colors::RESET << std::endl;
+            << std::left << std::setw(10) << "Skill ID"
+            << std::left << std::setw(20) << "Skill Name"
+            << std::left << std::setw(20) << "Skill Point"
+            << Colors::RESET << std::endl;
   for (auto skill : this->skills)
   {
     std::cout << Colors::YELLOW
-           << std::left << std::setw(10) << skill.getSkillId()
-           << std::left << std::setw(20) << skill.getSkillName()
-           << std::left << std::setw(20) << skill.getRatingScore()
-           << Colors::RESET << std::endl;
+              << std::left << std::setw(10) << skill.getSkillId()
+              << std::left << std::setw(20) << skill.getSkillName()
+              << std::left << std::setw(20) << skill.getRatingScore()
+              << Colors::RESET << std::endl;
   }
 }

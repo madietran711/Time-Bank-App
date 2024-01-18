@@ -28,10 +28,9 @@ private:
     double hostScore;
     double supporterScore;
     int creditPoint;
-    std::vector<Skill> skills;
-    std::vector<Member> blockedList;
-    std::vector<Service> listedService;
-    std::vector<Request> acceptedRequest;
+    std::vector<Skill*> skills;
+    std::vector<Member*> blockedList;
+    std::vector<Service*> acceptedRequest;
 
 public:
     // Constructors
@@ -47,10 +46,10 @@ public:
         double hostScore,
         double supporterScore,
         int creditPoint = 20,
-        std::vector<Skill> skills={},
-        std::vector<Member> blockedList = {},
-        std::vector<Service> listedService = {},
-        std::vector<Request> acceptedRequest = {}
+        std::vector<Skill*> skills={},
+        std::vector<Member*> blockedList = {},
+        std::vector<Service*> listedService = {},
+        std::vector<Request*> acceptedRequest = {}
         );
 
     Member(

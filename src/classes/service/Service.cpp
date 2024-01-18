@@ -8,11 +8,16 @@ Service::Service(
     Date endTime,
     int consumingCD,
     double scoreRequired,
-    std::vector<Skill> skillList, std::vector<Request> requestList)
-    : serviceId(serviceId), serviceOwner(serviceOwner), startTime(startTime), endTime(endTime), consumingCD(consumingCD),
-      score_required(scoreRequired), skillList(std::move(skillList)), requestList(std::move(requestList))
-{
-}
+    std::vector<Skill> skillList,
+    std::vector<Request> requestList)
+    : serviceId(serviceId),
+      serviceOwner(serviceOwner),
+      startTime(startTime),
+      endTime(endTime),
+      consumingCD(consumingCD),
+      score_required(scoreRequired),
+      skillList(std::move(skillList)),
+      requestList(std::move(requestList)){};
 
 // Getter functions
 std::string Service::getServiceId() const

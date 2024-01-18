@@ -251,8 +251,17 @@ bool System::saveAllMembers()
     }
 
     for (const Member &member : member_list)
-    {                                                                                                                                                                                                                                                                                                                                                   // Use const reference to avoid unnecessary copy
-        memberFile << member.getMemberId() << "," << member.getUsername() << "," << member.getPassword() << "," << member.getFullName() << "," << member.getPhoneNumber() << "," << member.getEmail() << "," << member.getHomeAddress() << "," << member.getHostScore() << "," << member.getSupporterScore() << "," << member.getCreditPoint() << "\n"; // Use '\n' for a newline character
+    { // Use const reference to avoid unnecessary copy
+        memberFile << member.getMemberId() << ","
+                   << member.getUsername() << ","
+                   << member.getPassword() << ","
+                   << member.getFullName() << ","
+                   << member.getPhoneNumber() << ","
+                   << member.getEmail() << ","
+                   << member.getHomeAddress() << ","
+                   << member.getHostScore() << ","
+                   << member.getSupporterScore() << ","
+                   << member.getCreditPoint() << "\n"; // Use '\n' for a newline character
         // Use '\n' for a newline character
     }
 
@@ -274,8 +283,11 @@ bool System::saveAllSkills()
     }
 
     for (const Skill &skill : skill_list)
-    {                                                                                                                                                      // Use const reference to avoid unnecessary copy
-        skillFile << skill.getSkillId() << "," << skill.getOwner()->getMemberId() << "," << skill.getSkillName() << "," << skill.getRatingScore() << "\n"; // Use '\n' for a newline character
+    { // Use const reference to avoid unnecessary copy
+        skillFile << skill.getSkillId() << ","
+                  << skill.getOwner()->getMemberId() << ","
+                  << skill.getSkillName() << ","
+                  << skill.getRatingScore() << "\n"; // Use '\n' for a newline character
     }
 
     skillFile.close();
@@ -379,6 +391,39 @@ bool System::loadAllSkills()
 
 bool System::loadAllServices()
 {
+    service_list.clear();
+    std::ifstream serviceFile(SERVICE_FILE, std::ios::in);
+
+    if (!serviceFile.is_open())
+    {
+        std::cout << "Failed to open service file\n";
+        return false;
+    }
+
+    std::string line;
+    while (std::getline(serviceFile, line))
+    {
+        std::vector<std::string> tokens = splitStr(line, ",");
+        if (tokens.size() != 8)
+        {
+            std::cout << "Invalid service data\n";
+            continue;
+        }
+
+        Service service;
+        Member *owner = getMemberByID(tokens[1]);
+        service.setServiceId(tokens[0]);
+        service.setServiceOwner(owner);
+        service.setStartTime(tokens[2]);
+        service.setEndTime(tokens[3]);
+        service.setConsumingCD(std::stoi(tokens[4]));
+        service.setScoreRequired(std::stod(tokens[5]));
+        
+        }
+
+    serviceFile.close();
+
+    cout << "Loaded " << Colors::YELLOW << skill_list.size() << Colors::GREEN << " skills." << Colors::RESET << endl;
     return true;
 }
 bool System::loadAllRequests()

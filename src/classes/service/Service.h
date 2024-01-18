@@ -30,6 +30,7 @@ private:
     std::vector<Request> requestList;
 
 public:
+    Service() = default;
     Service(
         std::string serviceId,
         Member *serviceOwner,

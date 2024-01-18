@@ -54,6 +54,12 @@
         "unordered_map": "cpp",
         "variant": "cpp",
         "algorithm": "cpp",
-        "fstream": "cpp"
+        "fstream": "cpp",
+        "*.tcc": "cpp",
+        "deque": "cpp",
+        "memory": "cpp",
+        "memory_resource": "cpp",
+        "type_traits": "cpp",
+        "utility": "cpp"
     }
 }
