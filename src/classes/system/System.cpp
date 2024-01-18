@@ -296,6 +296,63 @@ bool System::saveAllSkills()
 
     return true;
 }
+
+bool System::saveAllRequests()
+{
+    std::ofstream requestFile(REQUEST_FILE, std::ios::out);
+
+    if (!requestFile.is_open())
+    {
+        std::cout << "Failed to create/open request file\n";
+        return false;
+    }
+
+    for (const Request *request : request_list)
+    { // Use const reference to avoid unnecessary copy
+        requestFile << request->getRequestId() << ","
+                    << request->getService()->getServiceId() << ","
+                    << request->getRequester()->getMemberId() << ","
+                    << request->getStartTime().toString() << ","
+                    << request->getEndTime().toString() << ","
+                    << request->getStatus() << ","
+                    << "\n"; // Use '\n' for a newline character
+    }
+
+    requestFile.close();
+
+    cout << "Saved " << Colors::YELLOW << skill_list.size() << Colors::GREEN << " skills." << Colors::RESET << endl;
+
+    return true;
+}
+
+bool System::saveAllServices()
+{
+    std::ofstream serviceFile(SERVICE_FILE, std::ios::out);
+
+    if (!serviceFile.is_open())
+    {
+        std::cout << "Failed to create/open service file\n";
+        return false;
+    }
+
+    for (const Service *service : service_list)
+    { // Use const reference to avoid unnecessary copy
+        serviceFile << service->getServiceId() << ","
+                    << service->getServiceOwner()->getMemberId() << ","
+                    << service->getStartTime().toString() << ","
+                    << service->getEndTime().toString() << ","
+                    << service->getConsumingCD() << ","
+                    << service->getScoreRequired() << ","
+                    << "\n"; // Use '\n' for a newline character
+    }
+
+    serviceFile.close();
+
+    cout << "Saved " << Colors::YELLOW << skill_list.size() << Colors::GREEN << " skills." << Colors::RESET << endl;
+
+    return true;
+}
+
 bool System::loadAllData()
 {
 
@@ -373,18 +430,11 @@ bool System::loadAllSkills()
             std::cout << "Invalid skill data\n";
             continue;
         }
-        cout << "Loaded file";
-        Skill *skill;
-        cout << "create skill";
-
+        Skill *skill = new Skill;
         Member *owner = getMemberByID(tokens[1]);
-        cout << tokens[0];
         skill->setSkillId(tokens[0]);
-        cout << "2";
         skill->setOwner(owner);
-        cout << "3";
         skill->setSkillName(tokens[2]);
-        cout << "4";
         skill->setRatingScore(std::stod(tokens[3]));
         skill_list.push_back(skill);
         owner->addSkill(skill);
@@ -434,7 +484,40 @@ bool System::loadAllServices()
 }
 bool System::loadAllRequests()
 {
-    cout << "hi";
+    request_list.clear();
+    std::ifstream requestFile(REQUEST_FILE, std::ios::in);
+
+    if (!requestFile.is_open())
+    {
+        std::cout << "Failed to open request file\n";
+        return false;
+    }
+
+    std::string line;
+    while (std::getline(requestFile, line))
+    {
+        std::vector<std::string> tokens = splitStr(line, ",");
+        if (tokens.size() != 6)
+        {
+            std::cout << "Invalid request data\n";
+            continue;
+        }
+
+        Request *request;
+        Service *service = getServiceByID(tokens[1]);
+        Member *requester = getMemberByID(tokens[2]);
+        request->setRequestId(tokens[0]);
+        request->setService(service);
+        request->setRequester(requester);
+        request->setStartTime(tokens[3]);
+        request->setEndTime(tokens[4]);
+        request->setStatus(stoi(tokens[5]));
+        service->addRequest(request);
+    }
+
+    requestFile.close();
+
+    cout << "Loaded " << Colors::YELLOW << skill_list.size() << Colors::GREEN << " Requests." << Colors::RESET << endl;
     return true;
 }
 // get BY ID
