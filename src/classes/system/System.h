@@ -8,6 +8,7 @@
 #include <vector>
 #include <string>
 #include <regex>
+#include <algorithm>
 
 using std::cin;
 using std::cout;

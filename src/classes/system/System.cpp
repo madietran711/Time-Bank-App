@@ -1,61 +1,26 @@
 #include "System.h"
 
-void System::welcomeScreen() {
-    for (int i = 0; i < 30; i++) {
-        cout << "-";
-    }
-
-    cout << endl 
-        << "EEET2482/COSC2082 ASSIGNMENT" << endl 
-        << "“TIME BANK” APPLICATION" << endl
-        << "Instructor: Mr. Tran Duc Linh" << endl
-        << "Group: Group No. 19" << endl
-        << "s3926984, Nguyen Ba Khoi" << endl
-        << "s3979462, Nguyen Quoc Binh" << endl
-        << "s3979638, Tran Ha Phuong" << endl
-        << "s4022878, Dang Minh Triet" << endl;
-
-    for (int i = 0; i < 30; i++) {
-        cout << "-";
-    }
-    cout << endl;
-
-    mainMenu();
-}
-
-void System::mainMenu() {
-    cout << "Use the app as: " << endl
-        << "1: Guest" << endl
-        << "2: Member" << endl
-        << "3: Admin" << endl;
-
-    // not finish
-}
-
-bool System::validateUsername(string& str){ 
-    if (str.empty()){
+bool System::validateUsername(string& str) {
+    if (str.empty()) {
         cout << "ERROR: Username is blank.\n";
         return false;
     }
 
-    std::regex reg1 { "^[a-zA-Z0-9@.]{6,30}$" };
-    std::regex reg2 { "^([^@.]*[@.]?[^@.]*)$" };
-
-    //a username can have either one . or one @
-    if (!std::regex_match(str, reg1)){ 
-        cout << "ERROR: `Username` must contain 4 - 18 characters. No special characters.\n"
-             << "       `Username` is only available for . and @.\n";
-        return false;
-    } 
-
-    if (!std::regex_match(str, reg2)){
-        cout << "ERROR: `Username` contains more than 1 . or @.\n";
+    if (str.length() < 6 || str.length() > 30) { // Check length (6-30 characters)
+        cout << "ERROR: Username must contain 6-30 characters.\n";
         return false;
     }
 
-    for(auto mem : member_list){ //every username must be unique
+    for (char c : str) { // Check allowed characters
+        if (!isalnum(c) || c == '@') {
+            cout << "ERROR: Username can only contain letters, digits, and no blank space.\n";
+            return false;
+        }
+    }
+
+    for(auto mem : member_list) { // Username must not duplicated
         if(str == mem->username){ //Create getUserName()
-            cout << "FAILED: `Username` is already taken.\n";
+            cout << "FAILED: Username is already taken.\n";
             return false;
         }
     }
@@ -64,13 +29,18 @@ bool System::validateUsername(string& str){
 }
 
 bool System::validatePassword(string& str){ 
-    if (str.empty()){
+    if (str.empty()) {
         cout << "ERROR: Password is blank.\n";
         return false;
     }
 
-    if ( str.length() < 4 || str.find(" ") != std::string::npos ){
-        cout << "ERROR: `Password` must contains at least 4 characters. No `blank_space`.\n";
+    if (str.length() < 8 || str.length() > 20) { // Check length (8-20 characters)
+        cout << "ERROR: Username must contain 8-20 characters.\n";
+        return false;
+    }
+
+    if (str.find(" ") != std::string::npos) { // Check blank space
+        cout << "ERROR: Password must contains no blank space.\n";
         return false;
     }
 
@@ -83,15 +53,27 @@ bool System::validateFullName(string& str){
         return false;
     }
 
-    std::regex reg1("^\\s+|\\s+$"); // Matches leading or trailing whitespace
-    std::string trimmedString = std::regex_replace(str, reg1, "");
+    // Trim heading and ending whitespaces
+    str.erase(str.begin(), find_if_not(str.begin(), str.end(), ::isspace));
+    str.erase(find_if_not(str.rbegin(), str.rend(), ::isspace).base(), str.end());
 
-    std::regex reg2 { "^[a-zA-Z0-9]{3,30}$" };
-
-    if (!std::regex_match(trimmedString, reg2)){
-        cout << "ERROR: Full name must contain 3 - 30 characters, blank space, and no digit characters.\n";
+    if (str.length() < 3 || str.length() > 30) { // Check length (3-30 characters)
+        cout << "ERROR: Full name must contain 3-30 characters.\n";
         return false;
     }
+
+    for (char c : str) { // Check allowed characters
+        if (!isalpha(c) && c != ' ') {
+            cout << "ERROR: Full name must contain letters and spaces only.\n";
+            return false;
+        }
+    }
+
+    if (str.find(" ") == std::string::npos) { // Check for at least one space
+        cout << "ERROR: Full name must contain at least one space.\n";
+        return false;
+    }
+
     return true;
 }
 
@@ -101,20 +83,38 @@ bool System::validatePhoneNumber(string& str){ // validate phone number
         return false;
     }
 
-    std::regex reg1("^\\s+|\\s+$"); // Matches leading or trailing whitespace
-    std::string trimmedString = std::regex_replace(str, reg1, "");
+    // Trim heading and ending whitespaces
+    str.erase(str.begin(), find_if_not(str.begin(), str.end(), ::isspace));
+    str.erase(find_if_not(str.rbegin(), str.rend(), ::isspace).base(), str.end()); 
 
-    std::regex reg2 { "^(0|84)([0-9]{9}|[0-9]{8})$" }; // header number is 0 or 84 only with 10 digits
-  
-    if (!std::regex_match(trimmedString, reg2)){
-        cout << "ERROR: Phone must contain 10 numbers starting with 0 or 84.\n";
+    for (char c : str) { // Check digits
+        if (!isdigit(c)) {
+            cout << "ERROR: Phone number must only contain digits.\n";
+            return false;
+        }
+    }
+
+    if (str[0] != '0' && str.compare(0, 2, "84") != 0 ) { // Check header number (0 or 84)
+        cout << "ERROR: Phone number must start with 0 or 84.\n";
         return false;
     }
+
+    int validLength = (str[0] == '0') ? 10 : 11; //10 if starting with 0, 11 if starting with 84 
+
+    if (str.length() != validLength) { // Check length
+        if (validLength == 10) {
+            cout << "ERROR: Phone number starting with 0 must be 10 digits long.\n";
+            return false;
+        } else {
+            cout << "ERROR: Phone number starting with 84 must be 11 digits long.\n";
+            return false;
+        }
+    } 
 
     return true;
 }
 
-bool validateEmail(string& str) {
+bool System::validateEmail(string& str) {
     if (str.empty()){
         cout << "ERROR: Email is blank.\n";
         return false;
@@ -123,15 +123,28 @@ bool validateEmail(string& str) {
     int atIndex = str.find('@'); //Search for @ position
     int dotIndex = str.find('.', atIndex + 1);  // Search for . after @
 
-    if (atIndex != std::string::npos && dotIndex != std::string::npos && dotIndex != atIndex + 1) {
-        return true;  // "@" and "." found in valid positions
-    } else {
-        std::cout << "ERROR: Wrong email format." << std::endl;
+    if (str[0] == '.' || str[atIndex - 1] == '.') {
+        cout << "ERROR: Email's local part cannot begin or end with a dot.\n";
         return false;
+    } 
+
+    for (int i = 0; i < atIndex; i++) { //Loop through the local part
+        if (str[i] == '.' && str[i+1] == '.') {
+            cout << "ERROR: Email's local part cannot contain two dots in a row.\n";
+            return false;
+        }
     }
+    
+    if ( !(atIndex != std::string::npos && isalnum(str[atIndex + 1]) && dotIndex != std::string::npos && isalnum(str[dotIndex + 1])) ) {
+        // Check email address does not contains @, followed by character (domain name), a dot after @, followed by character (top-level domain)
+        std::cout << "ERROR: Wrong email domain format." << std::endl;
+        return false;
+    } 
+
+    return true;
 }
 
-bool validateHomeAddressString(string& str) {
+bool System::validateHomeAddress(string& str) {
     if (str.empty()){
         cout << "ERROR: Home address is blank.\n";
         return false;
@@ -142,5 +155,6 @@ bool validateHomeAddressString(string& str) {
 
     return (lowercaseAddress.find("hanoi") != std::string::npos) ||
            (lowercaseAddress.find("ha noi") != std::string::npos) ||
+           (lowercaseAddress.find("ho chi minh") != std::string::npos) ||
            (lowercaseAddress.find("ho chi minh city") != std::string::npos);
 }
