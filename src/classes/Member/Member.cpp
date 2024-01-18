@@ -3,6 +3,7 @@
 #include "Member.h"
 
 // Constructors
+Member::Member() {}
 Member::Member(
     std::string memberId,
     std::string username,
@@ -233,46 +234,44 @@ void Member::showSkills()
 
 bool Member::blockMember(Member *member)
 {
-  this->blockedList.push_back(*member);
+  this->blockedList.push_back(member);
   return true;
-} 
-
-
+}
 
 bool Member::unblockMember(Member *member)
 {
   for (int i = 0; i < this->blockedList.size(); i++)
   {
-    if (this->blockedList[i].getUsername() == member->getUsername())
+    if (this->blockedList[i]->getUsername() == member->getUsername())
     {
       this->blockedList.erase(this->blockedList.begin() + i);
       return true;
     }
   }
-  
 }
 
-void Member::showBlockedList(){
+void Member::showBlockedList()
+{
   std::cout << Colors::MAGENTA
-          << std::left << std::setw(10) << "No."
-         << std::left << std::setw(10) << "Member ID"
-         << std::left << std::setw(20) << "Username"
-         << Colors::RESET << std::endl;
+            << std::left << std::setw(10) << "No."
+            << std::left << std::setw(10) << "Member ID"
+            << std::left << std::setw(20) << "Username"
+            << Colors::RESET << std::endl;
 
-int count=1;
-  for (auto member : this->blockedList)
+  int count = 1;
+  for (Member *member : this->blockedList)
   {
     std::cout << Colors::YELLOW
-    << std::left << std::setw(10) << count;
-           << std::left << std::setw(10) << member.getMemberId()
-           << std::left << std::setw(20) << member.getUsername()
-          
-           << Colors::RESET << std::endl;
-            count++;
+              << std::left << std::setw(10) << count
+              << std::left << std::setw(10) << member->getMemberId()
+              << std::left << std::setw(20) << member->getUsername()
+
+              << Colors::RESET << std::endl;
+    count++;
   }
 }
 
-void Member::addCD (int cd){
+void Member::addCD(int cd)
+{
   this->creditPoint += cd;
-
 }

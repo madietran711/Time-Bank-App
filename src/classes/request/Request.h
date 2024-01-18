@@ -24,6 +24,8 @@ private:
     int status;
 
 public:
+    // Constructor
+    Request() = default;
     Request(
         std::string requestId,
         Service *service,

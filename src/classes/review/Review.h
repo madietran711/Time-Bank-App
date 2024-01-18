@@ -18,6 +18,7 @@ private:
 
 public:
     // Constructor
+    Review() = default;
     Review(
         std::string reviewId,
         int skillRating,

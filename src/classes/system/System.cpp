@@ -47,6 +47,7 @@ void System::displayWelcomeMenu()
 {
     // initData();
     loadAllData();
+    printAllData();
     // Print the main menu
     std::cout << Colors::GREEN << "--------------------------------------------------\n";
     std::cout << "Welcome to Time Bank Application\n";
@@ -86,74 +87,89 @@ void System::displayGuestMenu()
 
 void System::displayMemberMenu()
 {
-    std::cout << Colors::GREEN << "--------------------------------------------------\n";
-    std::cout << "Time Bank Application - Welcome " << currentMember->getFullName() << "\n";
-    std::cout << "--------------------------------------------------\n"
-              << Colors::RESET;
-    std::cout << "1. Manage Profile (View, Edit)\n";
-    std::cout << "2. Manage Skills (View, Add)\n";
-    std::cout << "3. View Available Services\n";
-    std::cout << "4. Manage Service Listing (Add Service, Delete Service, View & Accept Request)\n";
-    std::cout << "5. View Available Supporter (By Time or Location)\n";
-    std::cout << "6. Manage Request (View, Add, Delete)\n";
-    std::cout << "7. View Reviews\n";
-    std::cout << "8. Add Review For Service\n";
-    std::cout << "9. Rate Host\n";
-    std::cout << "10. Top up Credit Point\n";
-    std::cout << "10. Blocking (View, Block, Unblock)\n";
-
-    std::cout << "25. Logout\n";
-    std::cout << "Please enter your choice: ";
-
     int choice;
-    std::cin >> choice;
-    switch (choice)
+    bool exit = false;
+    do
     {
-    case 1:
-        cout << "--------------1. Manage Profile (View, Edit)----------------\n";
-        displayMemberProfile(currentMember);
-        break;
-    case 2:
-        cout << "--------------2. Manage Skills (View, Add)----------------\n";
-        displayMemberSkillList(currentMember);
-        break;
-    case 3:
-        // displayMemberMenu();
-        break;
-    case 4:
-        // displayMemberMenu();
-        break;
-    case 5:
-        // displayMemberMenu();
-        break;
-    case 6:
-        // displayMemberMenu();
-        break;
-    case 7:
-        // displayMemberMenu();
-        break;
-    case 8:
-        // displayMemberMenu();
-        break;
-    case 9:
-        // displayMemberMenu();
-        break;
-    case 10:
-        // displayMemberMenu();
-        break;
-    case 11:
-        // displayMemberMenu();
-        break;
-    case 12:
-        // displayMemberMenu();
-        break;
-    case 13:
-        // displayMemberMenu();
-        break;
-    case 14:
-        // displayMemberMenu();
-        break;
-    }
+        std::cout << Colors::GREEN << "--------------------------------------------------\n";
+        std::cout << "Time Bank Application - Welcome " << currentMember->getFullName() << "\n";
+        std::cout << "--------------------------------------------------\n"
+                  << Colors::RESET;
+        std::cout << "1. Manage Profile (View, Edit)\n";
+        std::cout << "2. Manage Skills (View, Add)\n";
+        std::cout << "3. View Available Services\n";
+        std::cout << "4. Manage Service Listing (Add Service, Delete Service, View & Accept Request)\n";
+        std::cout << "5. View Available Supporter (By Time or Location)\n";
+        std::cout << "6. Manage Request (View, Add, Delete)\n";
+        std::cout << "7. View Reviews\n";
+        std::cout << "8. Add Review For Service\n";
+        std::cout << "9. Rate Host\n";
+        std::cout << "10. Top up Credit Point\n";
+        std::cout << "11. Blocking (View, Block, Unblock)\n";
+
+        std::cout << "25. Logout\n";
+        std::cout << "Please enter your choice: ";
+
+        std::cin >> choice;
+        switch (choice)
+        {
+        case 1:
+            cout << Colors::GREEN << "--------------1. Manage Profile (View, Edit)----------------\n"
+                 << Colors::RESET;
+            displayMemberProfile(currentMember);
+            break;
+        case 2:
+            cout << Colors::GREEN << "--------------2. Manage Skills (View, Add)----------------\n"
+                 << Colors::RESET;
+            displayMemberSkillList(currentMember);
+            break;
+        case 3:
+            // displayMemberMenu();
+            break;
+        case 4:
+            // displayMemberMenu();
+            break;
+        case 5:
+            // displayMemberMenu();
+            break;
+        case 6:
+            // displayMemberMenu();
+            break;
+        case 7:
+            cout << Colors::GREEN << "--------------7. View Reviews----------------\n"
+                 << Colors::RESET;
+            viewReviews();
+            break;
+        case 8:
+            // displayMemberMenu();
+            break;
+        case 9:
+            cout << Colors::GREEN << "--------------9. Rate Host----------------\n"
+                 << Colors::RESET;
+            hostRatingFunction();
+            break;
+        case 10:
+            cout << Colors::GREEN << "--------------10. Top up Credit Point----------------\n"
+                 << Colors::RESET;
+            topUp();
+            break;
+        case 11:
+            cout << Colors::GREEN << "--------------11. Blocking (View, Block, Unblock)----------------\n"
+                 << Colors::RESET;
+            manageBlockList();
+            break;
+        case 12:
+            // displayMemberMenu();
+            break;
+        case 13:
+            // displayMemberMenu();
+            break;
+        case 25:
+            // displayMemberMenu();
+            exit = true;
+            break;
+        }
+    } while (!exit);
 }
 
 void System::displayAdminMenu()
@@ -227,8 +243,8 @@ void System::initRequests()
     Date date2 = Date::parse("2024/01/20 14:00");
     Date date3 = Date::parse("2024/01/25 15:00");
     Date date4 = Date::parse("2024/01/25 17:00");
-    Request *request1 = new Request("1", service_list[0], member_list[1], date1, date2, 1);
-    Request *request2 = new Request("2", service_list[1], member_list[0], date3, date4, 1);
+    Request *request1 = new Request("1", service_list[0], member_list[1], date1, date2, skill_list[0], 1);
+    Request *request2 = new Request("2", service_list[1], member_list[0], date3, date4, skill_list[0], 1);
 
     // Add the new requests to the existing request_list
     request_list.push_back(request1);
@@ -321,7 +337,7 @@ bool System::saveAllRequests()
 
     requestFile.close();
 
-    cout << "Saved " << Colors::YELLOW << skill_list.size() << Colors::GREEN << " skills." << Colors::RESET << endl;
+    cout << "Saved " << Colors::YELLOW << request_list.size() << Colors::GREEN << " skills." << Colors::RESET << endl;
 
     return true;
 }
@@ -349,7 +365,7 @@ bool System::saveAllServices()
 
     serviceFile.close();
 
-    cout << "Saved " << Colors::YELLOW << skill_list.size() << Colors::GREEN << " skills." << Colors::RESET << endl;
+    cout << "Saved " << Colors::YELLOW << service_list.size() << Colors::GREEN << " skills." << Colors::RESET << endl;
 
     return true;
 }
@@ -377,7 +393,7 @@ bool System::saveAllReviews()
 
     reviewFile.close();
 
-    cout << "Saved " << Colors::YELLOW << skill_list.size() << Colors::GREEN << " reviews." << Colors::RESET << endl;
+    cout << "Saved " << Colors::YELLOW << review_list.size() << Colors::GREEN << " reviews." << Colors::RESET << endl;
     return true;
 }
 
@@ -490,13 +506,13 @@ bool System::loadAllServices()
     while (std::getline(serviceFile, line))
     {
         std::vector<std::string> tokens = splitStr(line, ",");
-        if (tokens.size() != 8)
+        if (tokens.size() != 6)
         {
             std::cout << "Invalid service data\n";
             continue;
         }
 
-        Service *service;
+        Service *service = new Service();
         Member *owner = getMemberByID(tokens[1]);
         service->setServiceId(tokens[0]);
         service->setServiceOwner(owner);
@@ -504,11 +520,12 @@ bool System::loadAllServices()
         service->setEndTime(tokens[3]);
         service->setConsumingCD(std::stoi(tokens[4]));
         service->setScoreRequired(std::stod(tokens[5]));
+        service_list.push_back(service);
     }
 
     serviceFile.close();
 
-    cout << "Loaded " << Colors::YELLOW << skill_list.size() << Colors::GREEN << " Service." << Colors::RESET << endl;
+    cout << "Loaded " << Colors::YELLOW << service_list.size() << Colors::GREEN << " Service." << Colors::RESET << endl;
     return true;
 }
 
@@ -527,13 +544,13 @@ bool System::loadAllRequests()
     while (std::getline(requestFile, line))
     {
         std::vector<std::string> tokens = splitStr(line, ",");
-        if (tokens.size() != 6)
+        if (tokens.size() != 7)
         {
             std::cout << "Invalid request data\n";
             continue;
         }
 
-        Request *request;
+        Request *request = new Request();
         Service *service = getServiceByID(tokens[1]);
         Member *requester = getMemberByID(tokens[2]);
         request->setRequestId(tokens[0]);
@@ -541,13 +558,15 @@ bool System::loadAllRequests()
         request->setRequester(requester);
         request->setStartTime(tokens[3]);
         request->setEndTime(tokens[4]);
-        request->setStatus(stoi(tokens[5]));
-        service->addRequest(request);
+        request->setSkill(getSkillByID(tokens[5]));
+        request->setStatus(stoi(tokens[6]));
+
+        request_list.push_back(request);
     }
 
     requestFile.close();
 
-    cout << "Loaded " << Colors::YELLOW << skill_list.size() << Colors::GREEN << " Requests." << Colors::RESET << endl;
+    cout << "Loaded " << Colors::YELLOW << request_list.size() << Colors::GREEN << " Requests." << Colors::RESET << endl;
     return true;
 }
 
@@ -572,7 +591,7 @@ bool System::loadAllReviews()
             continue;
         }
 
-        Review *review;
+        Review *review = new Review();
         Request *request = getRequestByID(tokens[4]);
         review->setReviewId(tokens[0]);
         review->setSkillRating(std::stoi(tokens[1]));
@@ -580,13 +599,16 @@ bool System::loadAllReviews()
         review->setHostRating(std::stoi(tokens[3]));
         review->setRequest(request);
         review->setComment(tokens[5]);
+
+        review_list.push_back(review);
     };
 
     reviewFile.close();
 
-    cout << "Loaded " << Colors::YELLOW << skill_list.size() << Colors::GREEN << " Review." << Colors::RESET << endl;
+    cout << "Loaded " << Colors::YELLOW << review_list.size() << Colors::GREEN << " Review." << Colors::RESET << endl;
     return true;
 }
+
 // get BY ID
 Member *System::getMemberByID(std::string memberId)
 {
@@ -692,7 +714,7 @@ void System::displayMemberSkillList(Member *member)
 // --------------------------------------7. View Reviews-----------------------------
 void System::viewReviews()
 {
-    cout << "List of reviews: " << endl;
+    cout << "List of my services' reviews: " << endl;
     for (Review *review : review_list)
     {
         if (review->getRequest()->getService()->getServiceOwner() == currentMember)
@@ -701,8 +723,9 @@ void System::viewReviews()
             cout << Colors::CYAN << "Skill Rating: " << Colors::YELLOW << review->getSkillRating() << endl;
             cout << Colors::CYAN << "Supporter Rating: " << Colors::YELLOW << review->getSupporterRating() << endl;
             cout << Colors::CYAN << "Host Rating: " << Colors::YELLOW << review->getHostRating() << endl;
-            cout << Colors::CYAN << "Request ID: " << Colors::YELLOW << review->getRequest()->getRequestId() << endl;
+            cout << Colors::CYAN << "Service: " << Colors::YELLOW << review->getRequest()->getSkill()->getSkillName() << endl;
             cout << Colors::CYAN << "Comment: " << Colors::YELLOW << review->getComment() << endl;
+            cout << "-----------------------------------------" << endl;
         }
     }
 }
@@ -758,7 +781,7 @@ void System::rateHost(Member *host, double score, Request *request)
     }
     // calculate new score
     double newHostScore = (currentHostScore * numberOfHostReview + score) / (numberOfHostReview + 1);
-    host->setHostScore(newHostScore);
+    host->setHostScore(newHostScore, request);
     cout << "Rated host " << Colors::YELLOW << host->getFullName() << Colors::GREEN << " with score " << Colors::YELLOW << score << Colors::RESET << endl;
 }
 // --------------------------10. Top up Credit Point-----------------------------------
@@ -817,6 +840,7 @@ void System::manageBlockList()
     cout << Colors::CYAN << "Please enter your choice: " << Colors::RESET;
     int choice;
     cin >> choice;
+    Member *member = new Member();
     switch (choice)
     {
     case 1:
@@ -832,11 +856,67 @@ void System::manageBlockList()
             cout << Colors::MAGENTA << "Invalid number. Please enter the number of member you want to unblock: " << Colors::RESET;
             cin >> number;
         }
-        Member *member = currentMember->getBlockedList()[number - 1];
+
+        member = currentMember->getBlockedList()[number - 1];
         currentMember->unblockMember(member);
         break;
     case 3:
 
         break;
+    }
+}
+
+void System::printAllData()
+{
+    for (Member *member : member_list)
+    {
+        cout << member->getMemberId() << ","
+             << member->getUsername() << ","
+             << member->getPassword() << ","
+             << member->getFullName() << ","
+             << member->getPhoneNumber() << ","
+             << member->getEmail() << ","
+             << member->getHomeAddress() << ","
+             << member->getHostScore() << ","
+             << member->getSupporterScore() << ","
+             << member->getCreditPoint() << "\n"; // Use '\n' for a newline character
+        // Use '\n' for a newline character
+    }
+    for (Skill *skill : skill_list)
+    { // Use const reference to avoid unnecessary copy
+        cout << skill->getSkillId() << ","
+             << skill->getOwner()->getMemberId() << ","
+             << skill->getSkillName() << ","
+             << skill->getRatingScore() << "\n"; // Use '\n' for a newline character
+    }
+    for (Service *service : service_list)
+    { // Use const reference to avoid unnecessary copy
+        cout << service->getServiceId() << ","
+             << service->getServiceOwner()->getMemberId() << ","
+             << service->getStartTime().toString() << ","
+             << service->getEndTime().toString() << ","
+             << service->getConsumingCD() << ","
+             << service->getScoreRequired() << ","
+             << "\n"; // Use '\n' for a newline character
+    }
+    for (Request *request : request_list)
+    { // Use const reference to avoid unnecessary copy
+        cout << request->getRequestId() << ","
+             << request->getService()->getServiceId() << ","
+             << request->getRequester()->getMemberId() << ","
+             << request->getStartTime().toString() << ","
+             << request->getEndTime().toString() << ","
+             << request->getStatus() << ","
+             << "\n"; // Use '\n' for a newline character
+    }
+    for (Review *review : review_list)
+    { // Use const reference to avoid unnecessary copy
+        cout << review->getReviewId() << ","
+             << review->getSkillRating() << ","
+             << review->getSupporterRating() << ","
+             << review->getHostRating() << ","
+             << review->getRequest()->getRequestId() << ","
+             << review->getComment() << ","
+             << "\n"; // Use '\n' for a newline character
     }
 }
