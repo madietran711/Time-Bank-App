@@ -61,5 +61,6 @@
         "memory_resource": "cpp",
         "type_traits": "cpp",
         "utility": "cpp"
-    }
+    },
+    "C_Cpp.errorSquiggles": "enabled"
 }

@@ -177,8 +177,8 @@ void System::initData()
 void System::initMembers()
 {
     // Initialize some members
-    Member newMember1("1", "newUsername1", "newPassword1", "New Full Name 1", "123456789", "newemail1@example.com", "New Address 1", 4.5, 3.2, 15);
-    Member newMember2("2", "newUsername2", "newPassword2", "New Full Name 2", "987654321", "newemail2@example.com", "New Address 2", 3.8, 4.1, 10);
+    Member *newMember1 = new Member("1", "newUsername1", "newPassword1", "New Full Name 1", "123456789", "newemail1@example.com", "New Address 1", 4.5, 3.2, 15);
+    Member *newMember2 = new Member("2", "newUsername2", "newPassword2", "New Full Name 2", "987654321", "newemail2@example.com", "New Address 2", 3.8, 4.1, 10);
 
     // Add the new members to the existing member_list
     member_list.push_back(newMember1);
@@ -188,16 +188,16 @@ void System::initMembers()
 void System::initSkills()
 {
     // Initialize some skills
-    Skill skill1("1", &member_list[0], "Programming", 4.8);
-    Skill skill2("2", &member_list[1], "Graphic Design", 3.5);
+    Skill *skill1 = new Skill("1", member_list[0], "Programming", 4.8);
+    Skill *skill2 = new Skill("2", member_list[1], "Graphic Design", 3.5);
 
     // Add the new skills to the existing skill_list
     skill_list.push_back(skill1);
     skill_list.push_back(skill2);
 
     // Link skills to members
-    member_list[0].addSkill(&skill1);
-    member_list[1].addSkill(&skill2);
+    member_list[0]->addSkill(skill1);
+    member_list[1]->addSkill(skill2);
 }
 
 void System::initServices()
@@ -207,16 +207,16 @@ void System::initServices()
     Date date2 = Date::parse("2024/01/20 15:00");
     Date date3 = Date::parse("2024/01/25 14:00");
     Date date4 = Date::parse("2024/01/25 18:00");
-    Service service1("1", &member_list[0], date1, date2, 2, 4.5);
-    Service service2("2", &member_list[1], date3, date4, 3, 3.8);
+    Service *service1 = new Service("1", member_list[0], date1, date2, 2, 4.5, {}, {});
+    Service *service2 = new Service("2", member_list[1], date3, date4, 3, 3.8, {}, {});
 
     // Add the new services to the existing service_list
     service_list.push_back(service1);
     service_list.push_back(service2);
 
     // Link services to members
-    member_list[0].addService(&service1);
-    member_list[1].addService(&service2);
+    member_list[0]->addService(service1);
+    member_list[1]->addService(service2);
 }
 
 void System::initRequests()
@@ -226,18 +226,18 @@ void System::initRequests()
     Date date2 = Date::parse("2024/01/20 14:00");
     Date date3 = Date::parse("2024/01/25 15:00");
     Date date4 = Date::parse("2024/01/25 17:00");
-    Request request1("1", &service_list[0], &member_list[1], date1, date2, 1);
-    Request request2("2", &service_list[1], &member_list[0], date3, date4, 1);
+    Request *request1 = new Request("1", service_list[0], member_list[1], date1, date2, 1);
+    Request *request2 = new Request("2", service_list[1], member_list[0], date3, date4, 1);
 
     // Add the new requests to the existing request_list
     request_list.push_back(request1);
     request_list.push_back(request2);
 
     // Link requests to members and services
-    member_list[1].acceptRequest(&request1);
-    member_list[0].acceptRequest(&request2);
-    service_list[0].addRequest(&request1);
-    service_list[1].addRequest(&request2);
+    member_list[1]->acceptRequest(request1);
+    member_list[0]->acceptRequest(request2);
+    service_list[0]->addRequest(request1);
+    service_list[1]->addRequest(request2);
 }
 
 bool System::saveAllMembers()
@@ -250,18 +250,18 @@ bool System::saveAllMembers()
         return false;
     }
 
-    for (const Member &member : member_list)
+    for (const Member *member : member_list)
     { // Use const reference to avoid unnecessary copy
-        memberFile << member.getMemberId() << ","
-                   << member.getUsername() << ","
-                   << member.getPassword() << ","
-                   << member.getFullName() << ","
-                   << member.getPhoneNumber() << ","
-                   << member.getEmail() << ","
-                   << member.getHomeAddress() << ","
-                   << member.getHostScore() << ","
-                   << member.getSupporterScore() << ","
-                   << member.getCreditPoint() << "\n"; // Use '\n' for a newline character
+        memberFile << member->getMemberId() << ","
+                   << member->getUsername() << ","
+                   << member->getPassword() << ","
+                   << member->getFullName() << ","
+                   << member->getPhoneNumber() << ","
+                   << member->getEmail() << ","
+                   << member->getHomeAddress() << ","
+                   << member->getHostScore() << ","
+                   << member->getSupporterScore() << ","
+                   << member->getCreditPoint() << "\n"; // Use '\n' for a newline character
         // Use '\n' for a newline character
     }
 
@@ -282,12 +282,12 @@ bool System::saveAllSkills()
         return false;
     }
 
-    for (const Skill &skill : skill_list)
+    for (const Skill *skill : skill_list)
     { // Use const reference to avoid unnecessary copy
-        skillFile << skill.getSkillId() << ","
-                  << skill.getOwner()->getMemberId() << ","
-                  << skill.getSkillName() << ","
-                  << skill.getRatingScore() << "\n"; // Use '\n' for a newline character
+        skillFile << skill->getSkillId() << ","
+                  << skill->getOwner()->getMemberId() << ","
+                  << skill->getSkillName() << ","
+                  << skill->getRatingScore() << "\n"; // Use '\n' for a newline character
     }
 
     skillFile.close();
@@ -308,6 +308,7 @@ bool System::loadAllData()
     std::cout << "\n"
               << "\n"
               << "\n";
+    return true;
 }
 
 bool System::loadAllMembers()
@@ -331,7 +332,7 @@ bool System::loadAllMembers()
             continue;
         }
 
-        Member member(
+        Member *member = new Member(
             tokens[0],
             tokens[1],
             tokens[2],
@@ -372,15 +373,21 @@ bool System::loadAllSkills()
             std::cout << "Invalid skill data\n";
             continue;
         }
+        cout << "Loaded file";
+        Skill *skill;
+        cout << "create skill";
 
-        Skill skill;
         Member *owner = getMemberByID(tokens[1]);
-        skill.setSkillId(tokens[0]);
-        skill.setOwner(owner);
-        skill.setSkillName(tokens[2]);
-        skill.setRatingScore(std::stod(tokens[3]));
+        cout << tokens[0];
+        skill->setSkillId(tokens[0]);
+        cout << "2";
+        skill->setOwner(owner);
+        cout << "3";
+        skill->setSkillName(tokens[2]);
+        cout << "4";
+        skill->setRatingScore(std::stod(tokens[3]));
         skill_list.push_back(skill);
-        owner->addSkill(&skill);
+        owner->addSkill(skill);
     }
 
     skillFile.close();
@@ -418,8 +425,7 @@ bool System::loadAllServices()
         service.setEndTime(tokens[3]);
         service.setConsumingCD(std::stoi(tokens[4]));
         service.setScoreRequired(std::stod(tokens[5]));
-        
-        }
+    }
 
     serviceFile.close();
 
@@ -433,11 +439,11 @@ bool System::loadAllRequests()
 // get BY ID
 Member *System::getMemberByID(std::string memberId)
 {
-    for (Member &member : member_list)
+    for (Member *member : member_list)
     {
-        if (member.getMemberId() == memberId)
+        if (member->getMemberId() == memberId)
         {
-            return &member;
+            return member;
         }
     }
 
@@ -445,11 +451,11 @@ Member *System::getMemberByID(std::string memberId)
 }
 Skill *System::getSkillByID(std::string skillId)
 {
-    for (Skill &skill : skill_list)
+    for (Skill *skill : skill_list)
     {
-        if (skill.getSkillId() == skillId)
+        if (skill->getSkillId() == skillId)
         {
-            return &skill;
+            return skill;
         }
     }
 
@@ -457,11 +463,11 @@ Skill *System::getSkillByID(std::string skillId)
 }
 Service *System::getServiceByID(std::string serviceId)
 {
-    for (Service &service : service_list)
+    for (Service *service : service_list)
     {
-        if (service.getServiceId() == serviceId)
+        if (service->getServiceId() == serviceId)
         {
-            return &service;
+            return service;
         }
     }
 
@@ -469,11 +475,11 @@ Service *System::getServiceByID(std::string serviceId)
 }
 Request *System::getRequestByID(std::string requestId)
 {
-    for (Request &request : request_list)
+    for (Request *request : request_list)
     {
-        if (request.getRequestId() == requestId)
+        if (request->getRequestId() == requestId)
         {
-            return &request;
+            return request;
         }
     }
 
@@ -481,11 +487,11 @@ Request *System::getRequestByID(std::string requestId)
 }
 Review *System::getReviewByID(std::string reviewId)
 {
-    for (Review &review : review_list)
+    for (Review *review : review_list)
     {
-        if (review.getReviewId() == reviewId)
+        if (review->getReviewId() == reviewId)
         {
-            return &review;
+            return review;
         }
     }
 

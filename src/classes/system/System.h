@@ -21,11 +21,11 @@ class System
 {
 
 public:
-    std::vector<Member> member_list;
-    std::vector<Service> service_list;
-    std::vector<Request> request_list;
-    std::vector<Skill> skill_list;
-    std::vector<Review> review_list;
+    std::vector<Member*> member_list;
+    std::vector<Service*> service_list;
+    std::vector<Request*> request_list;
+    std::vector<Skill*> skill_list;
+    std::vector<Review*> review_list;
 
     // Current user data
     std::string adminUsername = "admin";
