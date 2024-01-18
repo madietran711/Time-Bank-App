@@ -82,7 +82,7 @@ public:
     void setPhoneNumber(std::string phoneNumber);
     void setEmail(std::string email);
     void setHomeAddress(std::string homeAddress);
-    void setHostScore(double hostScore);
+    void setHostScore(double hostScore, Request *request);
     void setSupporterScore(double supporterScore);
     void setCreditPoint(int creditPoint);
     void setSkills(const std::vector<Skill> &skills);
@@ -101,7 +101,7 @@ public:
     void showBlockedList();
     void checkLogIn();
     void viewProfile();
-    void addCD();
+    void addCD(int cd);
     bool blockMember(Member *member);
     bool unblockMember(Member *member);
    
@@ -110,7 +110,7 @@ public:
     bool addService(Service *service);
     bool removeService(Service *service);
     bool acceptRequest(Request *request);
-    void rateHost(Member *host, double score);
+    // void rateHost(Member *host, double score);
     void showAllRequest();
     void showAllRequestFilterBySkill(Skill *skill);
 

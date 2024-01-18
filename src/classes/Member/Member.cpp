@@ -150,7 +150,7 @@ void Member::setHomeAddress(std::string homeAddress)
   this->homeAddress = homeAddress;
 }
 
-void Member::setHostScore(double hostScore)
+void Member::setHostScore(double hostScore, Request *request)
 {
   this->hostScore = hostScore;
 }
@@ -236,4 +236,50 @@ void Member::showSkills()
            << std::left << std::setw(20) << skill.getRatingScore()
            << Colors::RESET << std::endl;
   }
+}
+
+bool Member::blockMember(Member *member)
+{
+  this->blockedList.push_back(*member);
+  return true;
+} 
+
+
+
+bool Member::unblockMember(Member *member)
+{
+  for (int i = 0; i < this->blockedList.size(); i++)
+  {
+    if (this->blockedList[i].getUsername() == member->getUsername())
+    {
+      this->blockedList.erase(this->blockedList.begin() + i);
+      return true;
+    }
+  }
+  
+}
+
+void Member::showBlockedList(){
+  std::cout << Colors::MAGENTA
+          << std::left << std::setw(10) << "No."
+         << std::left << std::setw(10) << "Member ID"
+         << std::left << std::setw(20) << "Username"
+         << Colors::RESET << std::endl;
+
+int count=1;
+  for (auto member : this->blockedList)
+  {
+    std::cout << Colors::YELLOW
+    << std::left << std::setw(10) << count;
+           << std::left << std::setw(10) << member.getMemberId()
+           << std::left << std::setw(20) << member.getUsername()
+          
+           << Colors::RESET << std::endl;
+            count++;
+  }
+}
+
+void Member::addCD (int cd){
+  this->creditPoint += cd;
+
 }
