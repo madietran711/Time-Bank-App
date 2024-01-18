@@ -47,7 +47,7 @@ void Skill::setRatingScore(double ratingScore)
     this->ratingScore = ratingScore;
 }
 
-void Skill::setSkillId(const std::string id)
+void Skill::setSkillId(std::string id)
 {
     this->skillId = id;
 }

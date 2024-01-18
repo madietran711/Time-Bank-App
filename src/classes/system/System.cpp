@@ -379,6 +379,21 @@ bool System::loadAllSkills()
 
         Member *owner = getMemberByID(tokens[1]);
         cout << tokens[0];
+        try
+        {
+            skill->setSkillId(tokens[0]);
+            cout << "2";
+            skill->setOwner(owner);
+            cout << "3";
+            skill->setSkillName(tokens[2]);
+            cout << "4";
+            skill->setRatingScore(std::stod(tokens[3]));
+        }
+        catch (const std::exception &e)
+        {
+            std::cerr << e.what() << '\n';
+        }
+
         skill->setSkillId(tokens[0]);
         cout << "2";
         skill->setOwner(owner);
@@ -417,19 +432,19 @@ bool System::loadAllServices()
             continue;
         }
 
-        Service service;
+        Service *service;
         Member *owner = getMemberByID(tokens[1]);
-        service.setServiceId(tokens[0]);
-        service.setServiceOwner(owner);
-        service.setStartTime(tokens[2]);
-        service.setEndTime(tokens[3]);
-        service.setConsumingCD(std::stoi(tokens[4]));
-        service.setScoreRequired(std::stod(tokens[5]));
+        service->setServiceId(tokens[0]);
+        service->setServiceOwner(owner);
+        service->setStartTime(tokens[2]);
+        service->setEndTime(tokens[3]);
+        service->setConsumingCD(std::stoi(tokens[4]));
+        service->setScoreRequired(std::stod(tokens[5]));
     }
 
     serviceFile.close();
 
-    cout << "Loaded " << Colors::YELLOW << skill_list.size() << Colors::GREEN << " skills." << Colors::RESET << endl;
+    cout << "Loaded " << Colors::YELLOW << skill_list.size() << Colors::GREEN << " Service." << Colors::RESET << endl;
     return true;
 }
 bool System::loadAllRequests()
