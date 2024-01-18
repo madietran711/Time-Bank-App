@@ -6,6 +6,8 @@
 
 #include <iostream>
 #include <vector>
+#include <string>
+#include <regex>
 
 using std::cin;
 using std::cout;
@@ -84,6 +86,12 @@ public:
 
     // Display services for Guest
     void guestViewServices(); // Need idea
+    bool validateUsername(string& str);
+    bool validatePassword(string& str);
+    bool validateFullName(string& str);
+    bool validatePhoneNumber(string& str);
+    bool validateEmail(string& str);
+    bool validateHomeAddress(string& str);
 };
 
 #endif
