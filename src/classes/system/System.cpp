@@ -45,7 +45,7 @@ void System::run()
 
 void System::displayWelcomeMenu()
 {
-    initData();
+    // initData();
     loadAllData();
     // Print the main menu
     std::cout << Colors::GREEN << "--------------------------------------------------\n";
@@ -379,21 +379,6 @@ bool System::loadAllSkills()
 
         Member *owner = getMemberByID(tokens[1]);
         cout << tokens[0];
-        try
-        {
-            skill->setSkillId(tokens[0]);
-            cout << "2";
-            skill->setOwner(owner);
-            cout << "3";
-            skill->setSkillName(tokens[2]);
-            cout << "4";
-            skill->setRatingScore(std::stod(tokens[3]));
-        }
-        catch (const std::exception &e)
-        {
-            std::cerr << e.what() << '\n';
-        }
-
         skill->setSkillId(tokens[0]);
         cout << "2";
         skill->setOwner(owner);
@@ -449,6 +434,7 @@ bool System::loadAllServices()
 }
 bool System::loadAllRequests()
 {
+    cout << "hi";
     return true;
 }
 // get BY ID
