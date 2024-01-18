@@ -10,7 +10,7 @@
 #include "../request/Request.h"
 #include "../date/Date.h"
 #include "../../utils/colors.h"
-#include<iomanip>
+#include <iomanip>
 class Skill;
 class Service;
 class Request;
@@ -28,14 +28,14 @@ private:
     double hostScore;
     double supporterScore;
     int creditPoint;
-    std::vector<Skill> skills;
-    std::vector<Member> blockedList;
-    std::vector<Service> listedService;
-    std::vector<Request> acceptedRequest;
+    std::vector<Skill *> skills;
+    std::vector<Member *> blockedList;
+    std::vector<Request *> acceptedRequest;
+    std::vector<Service *> listedService;
 
 public:
     // Constructors
-    Member() = default; // default constructor
+    Member(); // default constructor
     Member(
         std::string memberId,
         std::string username,
@@ -46,17 +46,11 @@ public:
         std::string homeAddress,
         double hostScore,
         double supporterScore,
-        int creditPoint = 20,
-        std::vector<Skill> skills={},
-        std::vector<Member> blockedList = {},
-        std::vector<Service> listedService = {},
-        std::vector<Request> acceptedRequest = {}
-        );
+        int creditPoint = 20);
 
     Member(
         std::string username,
         std::string password);
-
 
     // Getter functions
     std::string getMemberId() const;
@@ -69,10 +63,10 @@ public:
     double getHostScore() const;
     double getSupporterScore() const;
     int getCreditPoint() const;
-    const std::vector<Skill> &getSkills() const;
-    const std::vector<Member> &getBlockedList() const;
-    const std::vector<Service> &getListedService() const;
-    const std::vector<Request> &getAcceptedRequest() const;
+    const std::vector<Skill *> &getSkills() const;
+    const std::vector<Member *> &getBlockedList() const;
+    const std::vector<Service *> &getListedService() const;
+    const std::vector<Request *> &getAcceptedRequest() const;
 
     // Setter functions
     void setMemberId(std::string memberId);
@@ -82,13 +76,13 @@ public:
     void setPhoneNumber(std::string phoneNumber);
     void setEmail(std::string email);
     void setHomeAddress(std::string homeAddress);
-    void setHostScore(double hostScore);
+    void setHostScore(double hostScore, Request *request);
     void setSupporterScore(double supporterScore);
     void setCreditPoint(int creditPoint);
-    void setSkills(const std::vector<Skill> &skills);
-    void setBlockedList(const std::vector<Member> &blockedList);
-    void setListedService(const std::vector<Service> &listedService);
-    void setAcceptedRequest(const std::vector<Request> &acceptedRequest);
+    void setSkills(const std::vector<Skill *> &skills);
+    void setBlockedList(const std::vector<Member *> &blockedList);
+    void setListedService(const std::vector<Service *> &listedService);
+    void setAcceptedRequest(const std::vector<Request *> &acceptedRequest);
 
     // Member functions
     Member *signUp();
@@ -101,16 +95,15 @@ public:
     void showBlockedList();
     void checkLogIn();
     void viewProfile();
-    void addCD();
+    void addCD(int cd);
     bool blockMember(Member *member);
     bool unblockMember(Member *member);
-   
 
     // as a supporter
     bool addService(Service *service);
     bool removeService(Service *service);
     bool acceptRequest(Request *request);
-    void rateHost(Member *host, double score);
+    // void rateHost(Member *host, double score);
     void showAllRequest();
     void showAllRequestFilterBySkill(Skill *skill);
 
@@ -131,7 +124,3 @@ public:
 };
 
 #endif // TIME_BANK_APP_MEMBER_H
-
-
-
-

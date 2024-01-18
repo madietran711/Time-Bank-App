@@ -50,6 +50,12 @@ std::string Review::getComment() const
     return comment;
 }
 // Setter functions
+
+void Review::setReviewId(std::string Id)
+{
+    this->reviewId = Id;
+}
+
 void Review::setSkillRating(int skillRating)
 {
     this->skillRating = skillRating;

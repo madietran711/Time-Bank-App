@@ -18,6 +18,7 @@ private:
 
 public:
     // Constructor
+    Review() = default;
     Review(
         std::string reviewId,
         int skillRating,
@@ -38,6 +39,7 @@ public:
     std::string getComment() const;
 
     // Setter functions
+    void setReviewId(std::string Id);
     void setSkillRating(int skillRating);
     void setSupporterRating(int supporterRating);
     void setHostRating(int hostRating);

@@ -28,10 +28,11 @@ public:
     double getRatingScore() const;
 
     // Setter functions
-    void setSkillId(const std::string id);
+    void setSkillId(std::string id);
     void setOwner(Member *owner);
     void setSkillName(std::string skillName);
     void setRatingScore(double ratingScore);
 };
 
 #endif // TIME_BANK_APP_SKILL_H
+     // TIME_BANK_APP_SKILL_H

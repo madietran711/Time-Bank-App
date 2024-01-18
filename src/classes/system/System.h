@@ -21,11 +21,11 @@ class System
 {
 
 public:
-    std::vector<Member> member_list;
-    std::vector<Service> service_list;
-    std::vector<Request> request_list;
-    std::vector<Skill> skill_list;
-    std::vector<Review> review_list;
+    std::vector<Member *> member_list;
+    std::vector<Service *> service_list;
+    std::vector<Request *> request_list;
+    std::vector<Skill *> skill_list;
+    std::vector<Review *> review_list;
 
     // Current user data
     std::string adminUsername = "admin";
@@ -83,6 +83,25 @@ public:
     // MemberMenu Functions
     void displayMemberProfile(Member *member);
     void displayMemberSkillList(Member *member);
+    void viewReviews();
+    void manageRequest();
+    void topUp();
+    void manageBlockList();
+    // void displayAvailableSupporter();
+    // void displayAvailableSupporterByLocation(string location);
+    // void displayAvailableSupporterByTime(string startTime, string endTime);
+    // void displayMemberRequestList(Member *member);
+    // void addRequest(Request *request);
+    // void deleteRequest(Request *request);
+    // void displayMyReview(Member *member);
+    // void addReviewForSupporter(Member *member, Request *request, int supporterRaying, int skillRating, string comment);
+    void rateHost(Member *host, double score, Request *request);
+    void hostRatingFunction();
+    // void topUpCD(Member *member, int cd);
+    void manageBlockList(Member *member);
+    void printAllData();
+
+    // reallocation of pointers
 };
 
 #endif // TIME_BANK_APP_SYSTEM_H

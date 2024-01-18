@@ -9,9 +9,10 @@ Request::Request(
     Member *requester,
     Date startTime,
     Date endTime,
+    Skill *skill,
     int status)
     : requestId(requestId), service(service), requester(requester),
-      startTime(startTime), endTime(endTime), status(status) {}
+      startTime(startTime), endTime(endTime), skill(skill), status(status) {}
 
 // Getter functions
 std::string Request::getRequestId() const
@@ -43,6 +44,10 @@ int Request::getStatus() const
 {
     return status;
 }
+Skill *Request::getSkill() const
+{
+    return skill;
+}
 
 // setter functions
 void Request::setRequestId(const std::string &requestId)
@@ -69,4 +74,9 @@ void Request::setEndTime(std::string endTime)
 void Request::setStatus(int status)
 {
     this->status = status;
+}
+
+void Request::setSkill(Skill *skill)
+{
+    this->skill = skill;
 }

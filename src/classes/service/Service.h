@@ -23,13 +23,13 @@ private:
     Member *serviceOwner;
     Date startTime;
     Date endTime;
-
-    std::vector<Skill> skillList;
     int consumingCD;
     double score_required;
-    std::vector<Request> requestList;
+    std::vector<Skill *> skillList;
+    std::vector<Request *> requestList;
 
 public:
+    Service() = default;
     Service(
         std::string serviceId,
         Member *serviceOwner,
@@ -37,10 +37,8 @@ public:
         Date endTime,
         int consumingCD,
         double scoreRequired,
-        std::vector<Skill> skillList = {},
-        std::vector<Request> requestList = {}
-
-    );
+        std::vector<Skill *> skillList,
+        std::vector<Request *> requestList);
 
     // Getter functions
     std::string getServiceId() const;
@@ -49,8 +47,8 @@ public:
     Date getEndTime() const;
     int getConsumingCD() const;
     double getScoreRequired() const;
-    const std::vector<Skill> &getSkillList() const;
-    const std::vector<Request> &getRequestList() const;
+    const std::vector<Skill *> &getSkillList() const;
+    const std::vector<Request *> &getRequestList() const;
 
     // Setter functions
     void setServiceId(const std::string &id);
@@ -59,8 +57,8 @@ public:
     void setEndTime(std::string endTime);
     void setConsumingCD(int consumingCD);
     void setScoreRequired(double scoreRequired);
-    void setSkillList(const std::vector<Skill> &skillList);
-    void setRequestList(const std::vector<Request> &requestList);
+    void setSkillList(const std::vector<Skill*> &skillList);
+    void setRequestList(const std::vector<Request*> &requestList);
 
     // Return address of the array of info to display
     int *returnServiceInfo();
