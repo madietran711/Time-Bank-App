@@ -94,11 +94,12 @@ void System::displayMemberMenu()
     std::cout << "2. Manage Skills (View, Add)\n";
     std::cout << "3. View Available Services\n";
     std::cout << "4. Manage Service Listing (Add Service, Delete Service, View & Accept Request)\n";
-    std::cout << "5. Manage Request (View, Add, Delete)\n";
-    std::cout << "6. View Reviews\n";
-    std::cout << "7. Add Review For Service\n";
-    std::cout << "8. Rate Host\n";
-    std::cout << "9. Top up Credit Point\n";
+    std::cout << "5. View Available Supporter (By Time or Location)\n";
+    std::cout << "6. Manage Request (View, Add, Delete)\n";
+    std::cout << "7. View Reviews\n";
+    std::cout << "8. Add Review For Service\n";
+    std::cout << "9. Rate Host\n";
+    std::cout << "10. Top up Credit Point\n";
     std::cout << "10. Blocking (View, Block, Unblock)\n";
 
     std::cout << "25. Logout\n";
@@ -683,4 +684,159 @@ void System::displayMemberSkillList(Member *member)
 {
 
     member->showSkills();
+}
+
+// ---------------5. View Available Supporter (By Time or Location)----------------
+
+// -----------------------6. Manage Request (View, Add, Delete)---------------------
+// --------------------------------------7. View Reviews-----------------------------
+void System::viewReviews()
+{
+    cout << "List of reviews: " << endl;
+    for (Review *review : review_list)
+    {
+        if (review->getRequest()->getService()->getServiceOwner() == currentMember)
+        {
+            cout << Colors::CYAN << "Review ID: " << Colors::YELLOW << review->getReviewId() << endl;
+            cout << Colors::CYAN << "Skill Rating: " << Colors::YELLOW << review->getSkillRating() << endl;
+            cout << Colors::CYAN << "Supporter Rating: " << Colors::YELLOW << review->getSupporterRating() << endl;
+            cout << Colors::CYAN << "Host Rating: " << Colors::YELLOW << review->getHostRating() << endl;
+            cout << Colors::CYAN << "Request ID: " << Colors::YELLOW << review->getRequest()->getRequestId() << endl;
+            cout << Colors::CYAN << "Comment: " << Colors::YELLOW << review->getComment() << endl;
+        }
+    }
+}
+// -------------------------8. Add Review For Service--------------------------------
+// -------------------------------------9. Rate Host----------------------------------
+void System::hostRatingFunction()
+{
+    // show list of accepted request and let user choose
+    int count = 1;
+    cout << "List of accepted request: " << endl;
+    for (Request *request : currentMember->getAcceptedRequest())
+    {
+        cout << Colors::CYAN << "Request No.: " << Colors::YELLOW << count << endl;
+        cout << Colors::CYAN << "Request ID: " << Colors::YELLOW << request->getRequestId() << endl;
+        cout << Colors::CYAN << "Service Name: " << Colors::YELLOW << request->getSkill()->getSkillName() << endl;
+        cout << Colors::CYAN << "Host Name: " << Colors::YELLOW << request->getService()->getServiceOwner()->getFullName() << endl;
+        cout << Colors::CYAN << "Start Time: " << Colors::YELLOW << request->getStartTime().toString() << endl;
+        cout << Colors::CYAN << "End Time: " << Colors::YELLOW << request->getEndTime().toString() << endl;
+        cout << Colors::CYAN << "Status: " << Colors::YELLOW << request->getStatus() << endl;
+        count++;
+    }
+    // user choirce
+    int requestNumber;
+    cout << Colors::MAGENTA << "Please enter request number to rate host: " << Colors::RESET;
+    cin >> requestNumber;
+    while (requestNumber < 1 || requestNumber > currentMember->getAcceptedRequest().size())
+    {
+        cout << Colors::MAGENTA << "Invalid number. Please enter request number to rate host: " << Colors::RESET;
+        cin >> requestNumber;
+    }
+
+    Request *request = currentMember->getAcceptedRequest()[requestNumber - 1];
+    // rate host
+
+    double score;
+    cout << endl;
+    cout << Colors::MAGENTA << "Please enter score to rate host: " << Colors::RESET;
+    cin >> score;
+    rateHost(request->getService()->getServiceOwner(), score, request);
+}
+void System::rateHost(Member *host, double score, Request *request)
+{
+    int numberOfHostReview = 0;
+    int currentHostScore = host->getHostScore();
+    // find review from review_list by request
+    for (Review *review : review_list)
+    {
+        if (review->getRequest() == request)
+        {
+
+            numberOfHostReview++;
+        }
+    }
+    // calculate new score
+    double newHostScore = (currentHostScore * numberOfHostReview + score) / (numberOfHostReview + 1);
+    host->setHostScore(newHostScore);
+    cout << "Rated host " << Colors::YELLOW << host->getFullName() << Colors::GREEN << " with score " << Colors::YELLOW << score << Colors::RESET << endl;
+}
+// --------------------------10. Top up Credit Point-----------------------------------
+void System::topUp()
+{
+
+    int creditPoint, choice;
+    cout << "Please enter credit point to top up: ";
+    cin >> creditPoint;
+    cout << Colors::CYAN << " Your bill is " << Colors::BOLD << "$" << creditPoint << Colors::YELLOW << ". Please choose a payment method to complete the transaction: " << Colors::RESET << endl;
+    cout << "1. Credit Card" << endl;
+    cout << "2. Cash" << endl;
+    cout << "3. Internet Banking" << endl;
+    cout << "4. Cancel Payment" << endl;
+    cout << Colors::GREEN << "Please enter your choice: " << Colors::RESET;
+
+    switch (choice)
+    {
+    case 1:
+    case 2:
+    case 3:
+        currentMember->addCD(100);
+        cout << "Top up " << Colors::YELLOW << creditPoint << Colors::GREEN << " credit point to " << Colors::YELLOW << currentMember->getFullName() << Colors::RESET << endl;
+        break;
+    case 4:
+        cout << "Confirm cancel paymen? (Y/N)" << endl;
+        char confirm;
+        cin >> confirm;
+        if (confirm == 'Y' || confirm == 'y')
+        {
+            cout << "Cancel payment successfully" << endl;
+            return;
+        }
+        else if (confirm == 'N' || confirm == 'n')
+        {
+            cout << "Cancel payment failed" << endl;
+            break;
+        }
+        else
+        {
+            cout << "Invalid choice. Please try again." << endl;
+            break;
+        }
+    default:
+        cout << "Invalid choice. Please try again.\n";
+        break;
+    }
+}
+// -------------------------11. Blocking (View, Block, Unblock)------------------------
+void System::manageBlockList()
+{
+    cout << Colors::GREEN << "1. View Block List" << endl;
+    cout << Colors::GREEN << "2. Unblock Member" << endl;
+    cout << Colors::GREEN << "3. Block Member" << endl;
+    cout << Colors::GREEN << "4. Back" << endl;
+    cout << Colors::CYAN << "Please enter your choice: " << Colors::RESET;
+    int choice;
+    cin >> choice;
+    switch (choice)
+    {
+    case 1:
+        currentMember->showBlockedList();
+        break;
+    case 2:
+        currentMember->showBlockedList();
+        cout << Colors::CYAN << "Please enter the number of member you want to unblock: " << Colors::RESET;
+        int number;
+        cin >> number;
+        while (number < 1 || number > currentMember->getBlockedList().size())
+        {
+            cout << Colors::MAGENTA << "Invalid number. Please enter the number of member you want to unblock: " << Colors::RESET;
+            cin >> number;
+        }
+        Member *member = currentMember->getBlockedList()[number - 1];
+        currentMember->unblockMember(member);
+        break;
+    case 3:
+
+        break;
+    }
 }
