@@ -38,6 +38,7 @@ public:
     std::string getComment() const;
 
     // Setter functions
+    void setReviewId(std::string Id);
     void setSkillRating(int skillRating);
     void setSupporterRating(int supporterRating);
     void setHostRating(int hostRating);

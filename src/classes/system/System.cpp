@@ -353,6 +353,33 @@ bool System::saveAllServices()
     return true;
 }
 
+bool System::saveAllReviews()
+{
+    std::ofstream reviewFile(REVIEW_FILE, std::ios::out);
+
+    if (!reviewFile.is_open())
+    {
+        std::cout << "Failed to create/open review file\n";
+        return false;
+    }
+
+    for (const Review *review : review_list)
+    { // Use const reference to avoid unnecessary copy
+        reviewFile << review->getReviewId() << ","
+                   << review->getSkillRating() << ","
+                   << review->getSupporterRating() << ","
+                   << review->getHostRating() << ","
+                   << review->getRequest()->getRequestId() << ","
+                   << review->getComment() << ","
+                   << "\n"; // Use '\n' for a newline character
+    }
+
+    reviewFile.close();
+
+    cout << "Saved " << Colors::YELLOW << skill_list.size() << Colors::GREEN << " reviews." << Colors::RESET << endl;
+    return true;
+}
+
 bool System::loadAllData()
 {
 
@@ -362,6 +389,7 @@ bool System::loadAllData()
     loadAllSkills();
     loadAllServices();
     loadAllRequests();
+    loadAllReviews();
     std::cout << "\n"
               << "\n"
               << "\n";
@@ -482,6 +510,7 @@ bool System::loadAllServices()
     cout << "Loaded " << Colors::YELLOW << skill_list.size() << Colors::GREEN << " Service." << Colors::RESET << endl;
     return true;
 }
+
 bool System::loadAllRequests()
 {
     request_list.clear();
@@ -518,6 +547,43 @@ bool System::loadAllRequests()
     requestFile.close();
 
     cout << "Loaded " << Colors::YELLOW << skill_list.size() << Colors::GREEN << " Requests." << Colors::RESET << endl;
+    return true;
+}
+
+bool System::loadAllReviews()
+{
+    review_list.clear();
+    std::ifstream reviewFile(REVIEW_FILE, std::ios::in);
+
+    if (!reviewFile.is_open())
+    {
+        std::cout << "Failed to open review file\n";
+        return false;
+    }
+
+    std::string line;
+    while (std::getline(reviewFile, line))
+    {
+        std::vector<std::string> tokens = splitStr(line, ",");
+        if (tokens.size() != 6)
+        {
+            std::cout << "Invalid review data\n";
+            continue;
+        }
+
+        Review *review;
+        Request *request = getRequestByID(tokens[4]);
+        review->setReviewId(tokens[0]);
+        review->setSkillRating(std::stoi(tokens[1]));
+        review->setSupporterRating(std::stoi(tokens[2]));
+        review->setHostRating(std::stoi(tokens[3]));
+        review->setRequest(request);
+        review->setComment(tokens[5]);
+    };
+
+    reviewFile.close();
+
+    cout << "Loaded " << Colors::YELLOW << skill_list.size() << Colors::GREEN << " Review." << Colors::RESET << endl;
     return true;
 }
 // get BY ID
