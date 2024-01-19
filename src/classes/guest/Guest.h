@@ -4,8 +4,8 @@
 #include <string>
 #include <vector>
 #include "../../utils/colors.h"
-#include "../skill/Skill.h"
 #include "../service/Service.h"
+#include "../skill/Skill.h"
 #include <iomanip>
 class Service;
 class Skill;
