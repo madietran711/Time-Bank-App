@@ -116,6 +116,10 @@ public:
     bool checkLogIn(std::string username, std::string password, std::string logInType);
     void registerNewAcc();
     bool validateRegisterRegex(string input, std::regex pattern);
+    bool validateUniqueUsername(string input, vector<Member *> member_list);
+    bool validateUniqueEmail(string input, vector<Member *> member_list);
+    bool validateUniquePhone(string input, vector<Member *> member_list);
+
     std::string getRegUsername();
     std::string getRegPassword();
     std::string getRegEmail();
@@ -123,8 +127,7 @@ public:
     std::string getRegName();
     std::string getRegAddress();
     std::string getRegCity();
-
-    bool verifyContinue();
+    void verifyContinueRegister();
 };
 
 #endif // TIME_BANK_APP_SYSTEM_H

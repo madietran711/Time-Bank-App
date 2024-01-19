@@ -1213,35 +1213,176 @@ void System::registerNewAcc()
     std::string address;
     std::string city;
 }
-
 std::string System::getRegUsername()
 {
     string input;
-    std::cout << "Input Username: ";
-    cin >> input;
-    if (validateRegisterRegex(input, usernameRegex))
+    do
     {
-    };
+        std::cout << "Input Username: ";
+        cin >> input;
+
+        if (!validateRegisterRegex(input, passwordRegex) or !validateUniqueUsername(input, member_list))
+        {
+            if (!validateRegisterRegex(input, passwordRegex))
+            {
+                std::cout << "Username must only contains alphanumeric and underscores";
+            };
+
+            if (!validateUniqueUsername(input, member_list))
+            {
+                std::cout << "Username must be unique";
+            };
+        }
+        else
+        {
+            return input;
+        }
+
+        verifyContinueRegister();
+    } while (true);
 };
 
-std::string System::getRegPassword(){};
-std::string System::getRegEmail(){};
-std::string System::getRegPhone(){};
-std::string System::getRegName(){};
-std::string System::getRegAddress(){};
-std::string System::getRegCity(){};
+std::string System::getRegPassword()
+{
+    string input;
+    do
+    {
+        std::cout << "Input Password: ";
+        cin >> input;
+        if (validateRegisterRegex(input, passwordRegex))
+        {
+            return input;
+        };
+        verifyContinueRegister();
+    } while (!validateRegisterRegex(input, passwordRegex));
+};
 
-bool verifyContinueRegister()
+std::string System::getRegEmail()
+{
+    string input;
+    do
+    {
+        std::cout << "Input Email: ";
+        cin >> input;
+        if (validateRegisterRegex(input, emailRegex) && validateUniqueEmail(input, member_list))
+        {
+            return input;
+        };
+        cout << "Email must includes characters, an @ symbol, domain name, and a domain suffix";
+        verifyContinueRegister();
+    } while (!validateRegisterRegex(input, emailRegex) && validateUniqueEmail(input, member_list));
+};
+
+std::string System::getRegPhone()
+{
+    string input;
+    do
+    {
+        std::cout << "Input Phone Number: ";
+        cin >> input;
+        if (validateRegisterRegex(input, phoneNumRegex) && validateUniquePhone(input, member_list))
+        {
+            return input;
+        };
+        cout << "Phone Number must only includes numbers";
+        verifyContinueRegister();
+    } while (!validateRegisterRegex(input, emailRegex) && validateUniquePhone(input, member_list));
+};
+
+std::string System::getRegName()
+{
+    string input;
+    do
+    {
+        std::cout << "Input your full name: ";
+        cin >> input;
+        if (validateRegisterRegex(input, nameRegex))
+        {
+            return input;
+        };
+        cout << "Name can only have letters, hyphen, apostrophe";
+        verifyContinueRegister();
+    } while (!validateRegisterRegex(input, nameRegex));
+};
+std::string System::getRegCity()
+{
+    string input;
+    do
+    {
+        std::cout << "Input your city (HANOI/SAIGON): ";
+        cin >> input;
+        if (validateRegisterRegex(input, cityRegex))
+        {
+            return input;
+        };
+        cout << "Please input only HANOI or SAIGON";
+        verifyContinueRegister();
+    } while (!validateRegisterRegex(input, cityRegex));
+};
+
+std::string System::getRegAddress()
+{
+    string input;
+    do
+    {
+        std::cout << "Input your address: ";
+        cin >> input;
+        if (validateRegisterRegex(input, addressRegex))
+        {
+            return input;
+        };
+        verifyContinueRegister();
+    } while (!validateRegisterRegex(input, addressRegex));
+};
+
+void System::verifyContinueRegister()
 {
     string choice;
     std::cout << "Do you want to continue registering? (Y/N): ";
     std::cin >> choice;
     if (choice == "y" or choice == "Y")
     {
+        return;
     }
+    displayWelcomeMenu();
 };
 
 bool System::validateRegisterRegex(string input, std::regex pattern)
 {
     return std::regex_match(input, pattern);
+}
+
+bool System::validateUniqueUsername(string input, vector<Member *> member_list)
+{
+    for (Member *member : member_list)
+    {
+        if (input == member->getUsername())
+        {
+            return false;
+        };
+        return true;
+    }
+}
+bool System::validateUniqueEmail(string input, vector<Member *> member_list)
+{
+    for (Member *member : member_list)
+    {
+        if (input == member->getEmail())
+        {
+            return false;
+        };
+        return true;
+    }
+}
+
+bool System::validateUniquePhone(string input, vector<Member *> member_list)
+{
+    for (Member *member : member_list)
+    {
+        if (input == member->getPhoneNumber())
+        {
+            return false;
+        };
+        return true;
+    }
 }

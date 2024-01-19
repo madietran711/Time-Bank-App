@@ -61,7 +61,9 @@
         "memory_resource": "cpp",
         "type_traits": "cpp",
         "utility": "cpp",
-        "regex": "cpp"
+        "regex": "cpp",
+        "iterator": "cpp",
+        "map": "cpp"
     },
     "C_Cpp.errorSquiggles": "enabled"
 }
