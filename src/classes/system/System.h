@@ -17,6 +17,7 @@
 #include <fstream>
 #include <iomanip>
 
+
 class System
 {
 
@@ -65,6 +66,7 @@ public:
     bool loadAllReviews();
 
     // getByID
+    string System::generateId();
     Member *getMemberByID(std::string memberID);
     Skill *getSkillByID(std::string skillID);
     Service *getServiceByID(std::string serviceID);
@@ -83,6 +85,8 @@ public:
     // MemberMenu Functions
     void displayMemberProfile(Member *member);
     void displayMemberSkillList(Member *member);
+    void displayAvailableServices(Member *member);
+    void displayServiceListing(Member *member);
     void viewReviews();
     void manageRequest();
     void topUp();

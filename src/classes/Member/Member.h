@@ -1,5 +1,3 @@
-
-
 #ifndef TIME_BANK_APP_MEMBER_H
 #define TIME_BANK_APP_MEMBER_H
 
@@ -91,6 +89,7 @@ public:
     Member *login();
     bool logout();
     bool addSkill(Skill *skill);
+    bool removeSkill(Skill *skill);
     void showSkills();
     void showListedService();
     void showAcceptedRequest();
@@ -101,7 +100,7 @@ public:
     bool blockMember(Member *member);
     bool unblockMember(Member *member);
 
-    // as a supporter
+    // Member - Supporter functions
     bool addService(Service *service);
     bool removeService(Service *service);
     bool acceptRequest(Request *request);
@@ -109,7 +108,7 @@ public:
     void showAllRequest();
     void showAllRequestFilterBySkill(Skill *skill);
 
-    // as a host
+    // Member - Host functions
     bool addRequest(Request *request);
     void requestService(Service *service);
     void addSupporterReview(Member *supporter, std::string comment, int supporterRating, Request *request);

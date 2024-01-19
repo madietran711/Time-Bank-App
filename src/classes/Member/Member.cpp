@@ -1,6 +1,7 @@
 // Member.cpp
 
 #include "Member.h"
+#include "../../../../../../../../../mingw64/lib/gcc/x86_64-w64-mingw32/13.2.0/include/c++/bits/algorithmfwd.h"
 
 // Constructors
 Member::Member() {}
@@ -208,6 +209,20 @@ bool Member::addSkill(Skill *skill)
   return true;
 }
 
+bool Member::removeSkill(Skill *skill)
+{
+  std::string removeSkillName = skill->getSkillId();
+  auto it = std::find_if(this->skills.begin(), this->skills.end(), [removeSkillName](const Service &serv) 
+  {
+    return serv.getServiceId() == removeSkillName;
+  });
+  if (it != this->skills.end()) {
+    this->skills.erase(it);
+    return true;
+  }
+  return false;
+}
+
 void Member::viewProfile()
 {
   std::cout << Colors::YELLOW
@@ -250,6 +265,7 @@ bool Member::blockMember(Member *member)
   this->blockedList.push_back(member);
   return true;
 }
+
 bool Member::addRequest(Request *request)
 {
   this->myRequest.push_back(request);
@@ -320,3 +336,94 @@ void Member::viewMyRequest()
     count++;
   }
 }
+// Member - Supporter functions
+bool Member::addService(Service *service) 
+{
+  this->listedService.push_back(service);
+  return true;
+}
+
+bool Member::removeService(Service *service) 
+{
+  std::string removeServiceName = service->getServiceId();
+  auto it = std::find_if(this->listedService.begin(), this->listedService.end(), [removeServiceName](const Service &serv) 
+  {
+    return serv.getServiceId() == removeServiceName;
+  });
+  if (it != this->listedService.end()) {
+    this->listedService.erase(it);
+    return true;
+  }
+  return false;
+}
+
+bool Member::acceptRequest(Request *request)
+{
+
+}
+
+void rateHost(Member *host, double score) {}
+
+void showAllRequest() {}
+
+void showAllRequestFilterBySkill(Skill *skill) {}
+
+// Member - Host functions
+void requestService(Service *service) {}
+
+void addSupporterReview(Member *supporter, std::string comment, int supporterRating, Request *request) {}
+
+void rateSkill(Skill *skill, double score, Request *request) {}
+
+// void Member::showSkills()
+// {
+//   std::cout << Colors::MAGENTA
+//             << std::left << std::setw(10) << "Skill No."
+//             << std::left << std::setw(20) << "Skill Name"
+//             << std::left << std::setw(20) << "Skill Point"
+//             << Colors::RESET << std::endl;
+//   int count = 1;
+//   for (Skill *skill : this->skills)
+//   {
+//     std::cout << Colors::YELLOW
+//               << std::left << std::setw(10) << count
+//               << std::left << std::setw(10) << skill->getSkillId()
+//               << std::left << std::setw(20) << skill->getSkillName()
+//               << std::left << std::setw(20) << skill->getRatingScore()
+//               << Colors::RESET << std::endl;
+
+//     count++;
+//   }
+// }
+
+void Member::showListedService() 
+{
+  std::cout << Colors::MAGENTA
+            << std::left << std::setw(10) << "Service No."
+            << std::left << std::setw(15) << "Service ID"
+            << std::left << std::setw(15) << "Start Time"
+            << std::left << std::setw(15) << "End Time"
+            << std::left << std::setw(15) << "Consuming Credit Points"
+            << std::left << std::setw(15) << "Host Score Required"
+            << Colors::RESET << std::endl;
+  int count = 1;
+  for (Service *service : this->listedService)
+  {
+    std::cout << Colors::YELLOW
+              << std::left << std::setw(10) << count
+              << std::left << std::setw(15) << service->getServiceId()
+              << std::left << std::setw(15) << service->getStartTime()
+              << std::left << std::setw(15) << service->getEndTime()
+              << std::left << std::setw(15) << service->getConsumingCD()
+              << std::left << std::setw(15) << service->getScoreRequired()
+              << Colors::RESET << std::endl;
+  }
+}
+
+void showAllServiceFilterBySkill(Skill *skill) {}
+
+void showAllServiceFilterByTime(Date startTime, Date endTime) {}
+
+void showAllServiceFilterByLocation(std::string location) {}
+
+void viewSupporterReview(Member *supporter) {}
