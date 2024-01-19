@@ -3,14 +3,10 @@
 
 #include <string>
 #include <vector>
-#include "../system/System.h"
-#include "../date/Date.h"
+#include "../../utils/colors.h"
 #include "../skill/Skill.h"
 #include "../service/Service.h"
-#include "../../utils/colors.h"
-
-class System;
-class Date;
+#include <iomanip>
 class Service;
 class Skill;
 
@@ -25,4 +21,4 @@ public:
     std::string getSkillsString(std::vector<Skill *> skillList);
 };
 
-#endif
+#endif // TIME_BANK_APP_GUEST_H

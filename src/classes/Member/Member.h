@@ -39,7 +39,7 @@ private:
 
 public:
     // Constructors
-    Member(); // default constructor
+    Member() = default; // default constructor
     Member(
         std::string memberId,
         std::string username,

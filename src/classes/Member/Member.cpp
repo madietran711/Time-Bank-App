@@ -3,7 +3,7 @@
 #include "Member.h"
 
 // Constructors
-Member::Member() {}
+
 Member::Member(
     std::string memberId,
     std::string username,

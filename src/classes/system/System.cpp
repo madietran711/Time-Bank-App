@@ -103,7 +103,7 @@ void System::displayGuestMenu()
         switch (choice)
         {
         case 1:
-            guest->showAllService(service_list);
+            // guest->showAllService(service_list);
             break;
         case 2:
             // displayMemberMenu();
@@ -207,18 +207,6 @@ void System::displayAdminMenu()
 {
 }
 
-void System::initData()
-{
-    std::cout << "\n"
-              << "\n"
-              << "\n";
-    std::cout << Colors::MAGENTA << "Initializing data...\n"
-              << Colors::RESET;
-    initMembers();
-    initSkills();
-    initServices();
-    initRequests();
-}
 bool System::saveAllData()
 {
     cout << Colors::MAGENTA << "Saving data...\n"
@@ -236,71 +224,6 @@ bool System::saveAllData()
     {
         std::cerr << e.what() << '\n';
     }
-}
-void System::initMembers()
-{
-    // Initialize some members
-    Member *newMember1 = new Member("1", "newUsername1", "newPassword1", "New Full Name 1", "123456789", "newemail1@example.com", "New Address 1", "Ha Noi", 4.5, 3.2, 15);
-    Member *newMember2 = new Member("2", "newUsername2", "newPassword2", "New Full Name 2", "987654321", "newemail2@example.com", "New Address 2", "Ho Chi Minh", 3.8, 4.1, 10);
-
-    // Add the new members to the existing member_list
-    member_list.push_back(newMember1);
-    member_list.push_back(newMember2);
-}
-
-void System::initSkills()
-{
-    // Initialize some skills
-    Skill *skill1 = new Skill("1", member_list[0], "Programming", 4.8);
-    Skill *skill2 = new Skill("2", member_list[1], "Graphic Design", 3.5);
-
-    // Add the new skills to the existing skill_list
-    skill_list.push_back(skill1);
-    skill_list.push_back(skill2);
-
-    // Link skills to members
-    member_list[0]->addSkill(skill1);
-    member_list[1]->addSkill(skill2);
-}
-
-void System::initServices()
-{
-    // Initialize some services
-    Date date1 = Date::parse("2024/01/20 10:00");
-    Date date2 = Date::parse("2024/01/20 15:00");
-    Date date3 = Date::parse("2024/01/25 14:00");
-    Date date4 = Date::parse("2024/01/25 18:00");
-    Service *service1 = new Service("1", member_list[0], date1, date2, 2, 4.5, {}, {});
-    Service *service2 = new Service("2", member_list[1], date3, date4, 3, 3.8, {}, {});
-
-    // Add the new services to the existing service_list
-    service_list.push_back(service1);
-    service_list.push_back(service2);
-
-    // Link services to members
-    member_list[0]->addService(service1);
-    member_list[1]->addService(service2);
-}
-
-void System::initRequests()
-{
-    // Initialize some requests
-    Date date1 = Date::parse("2024/01/20 12:00");
-    Date date2 = Date::parse("2024/01/20 14:00");
-    Date date3 = Date::parse("2024/01/25 15:00");
-    Date date4 = Date::parse("2024/01/25 17:00");
-    Request *request1 = new Request("1", service_list[0], member_list[1], date1, date2, skill_list[0], 1);
-    Request *request2 = new Request("2", service_list[1], member_list[0], date3, date4, skill_list[0], 1);
-
-    // Add the new requests to the existing request_list
-    request_list.push_back(request1);
-    request_list.push_back(request2);
-
-    // Link requests to members and services
-    member_list[1]->acceptRequest(request1);
-    member_list[0]->acceptRequest(request2);
-    service_list[0]->addRequest(request1);
-    service_list[1]->addRequest(request2);
 }
 
 bool System::saveAllMembers()

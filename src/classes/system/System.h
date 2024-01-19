@@ -9,15 +9,16 @@
 #define REVIEW_FILE "./data/review.dat"
 
 #include "../../utils/colors.h"
+#include "../../utils/Utilities.h"
 #include "../member/Member.h"
 #include "../service/Service.h"
 #include "../request/Request.h"
 #include "../skill/Skill.h"
 #include "../review/Review.h"
-#include "../guest/Guest.h"
 
 #include <fstream>
 #include <iomanip>
+using namespace std;
 
 class System
 {
@@ -31,9 +32,7 @@ public:
 
     // Current user data
     std::string adminUsername = "admin";
-    std::string adminPassword = "rmit1234";
-    Guest *guest = new Guest();
-    // Admin *admin = new Admin("admin", "admin123");
+    std::string adminPassword = "admin123";
     Member *currentMember = nullptr;
     bool isUserLoggedIn = false;
     bool isUserAdmin = false;
@@ -43,14 +42,7 @@ public:
     // Constructors
     System() = default; // default constructor
 
-    // Run when initdata() run, init data
     std::vector<std::string> splitStr(std::string &, std::string);
-    void initData();
-    void initMembers();
-    void initServices();
-    void initRequests();
-    void initSkills();
-    void initReviews();
 
     // save data to file
     bool saveAllData();
@@ -82,9 +74,6 @@ public:
     void displayMemberMenu();
     void displayAdminMenu();
 
-    // Log in and registering
-    bool checkLogIn(std::string username, std::string password, std::string logInType);
-
     // GuestMenu Functions
 
     // MemberMenu Functions
@@ -104,11 +93,13 @@ public:
     // void addReviewForSupporter(Member *member, Request *request, int supporterRaying, int skillRating, string comment);
     void rateHost(Member *host, double score, Request *request);
     void hostRatingFunction();
-    // void topUpCD(Member *member, int cd);
     void manageBlockList(Member *member);
 
     // after done debugging delete this function
     void printAllData();
+
+    // login
+    bool checkLogIn(std::string username, std::string password, std::string logInType);
 };
 
 #endif // TIME_BANK_APP_SYSTEM_H
