@@ -72,6 +72,7 @@ void System::displayWelcomeMenu()
         displayMemberMenu();
         break;
     case 3:
+        // currentMember = admin;
 
         displayAdminMenu();
         break;
@@ -85,6 +86,31 @@ void System::displayWelcomeMenu()
 
 void System::displayGuestMenu()
 {
+    int choice;
+    bool exit = false;
+    do
+    {
+        std::cout << Colors::GREEN << "--------------------------------------------------\n";
+        std::cout << "Time Bank Application - Welcome Guest"
+                  << "\n";
+        std::cout << "--------------------------------------------------\n"
+                  << Colors::RESET;
+        std::cout << "1. View all listing\n";
+        std::cout << "2. Go back to user page\n";
+        std::cout << "Please enter your choice: ";
+
+        std::cin >> choice;
+        switch (choice)
+        {
+        case 1:
+            guest->showAllService(service_list);
+            break;
+        case 2:
+            // displayMemberMenu();
+            exit = true;
+            break;
+        }
+    } while (!exit);
 }
 
 void System::displayMemberMenu()
@@ -214,8 +240,8 @@ bool System::saveAllData()
 void System::initMembers()
 {
     // Initialize some members
-    Member *newMember1 = new Member("1", "newUsername1", "newPassword1", "New Full Name 1", "123456789", "newemail1@example.com", "New Address 1", 4.5, 3.2, 15);
-    Member *newMember2 = new Member("2", "newUsername2", "newPassword2", "New Full Name 2", "987654321", "newemail2@example.com", "New Address 2", 3.8, 4.1, 10);
+    Member *newMember1 = new Member("1", "newUsername1", "newPassword1", "New Full Name 1", "123456789", "newemail1@example.com", "New Address 1", "Ha Noi", 4.5, 3.2, 15);
+    Member *newMember2 = new Member("2", "newUsername2", "newPassword2", "New Full Name 2", "987654321", "newemail2@example.com", "New Address 2", "Ho Chi Minh", 3.8, 4.1, 10);
 
     // Add the new members to the existing member_list
     member_list.push_back(newMember1);
@@ -296,6 +322,7 @@ bool System::saveAllMembers()
                    << member->getPhoneNumber() << ","
                    << member->getEmail() << ","
                    << member->getHomeAddress() << ","
+                   << member->getCityLocation() << ","
                    << member->getHostScore() << ","
                    << member->getSupporterScore() << ","
                    << member->getCreditPoint() << "\n"; // Use '\n' for a newline character
@@ -461,7 +488,7 @@ bool System::loadAllMembers()
     while (std::getline(memberFile, line))
     {
         std::vector<std::string> tokens = splitStr(line, ",");
-        if (tokens.size() != 10)
+        if (tokens.size() != 11)
         {
             std::cout << "Invalid member data\n";
             continue;
@@ -475,9 +502,10 @@ bool System::loadAllMembers()
             tokens[4],
             tokens[5],
             tokens[6],
-            std::stod(tokens[7]),
+            tokens[7],
             std::stod(tokens[8]),
-            std::stoi(tokens[9]));
+            std::stod(tokens[9]),
+            std::stoi(tokens[10]));
 
         member_list.push_back(member);
     }
@@ -736,6 +764,26 @@ Review *System::getReviewByID(std::string reviewId)
     return nullptr;
 }
 
+bool System::checkLogIn(std::string username, std::string password, std::string logInType)
+{
+    if (logInType == "admin")
+    {
+        return (username == adminUsername && password == adminPassword) ? true : false;
+    }
+    else if (logInType == "member")
+    {
+        for (Member *member : member_list)
+        {
+            if (username == member->getUsername() && password == member->getUsername())
+            {
+                currentMember = member;
+                return true;
+            }
+            return false;
+        }
+    }
+}
+
 std::vector<std::string> System::splitStr(std::string &str, std::string delimiter)
 {
     std::vector<std::string> tokens;
@@ -767,8 +815,9 @@ void System::displayMemberProfile(Member *member)
               << std::left << std::setw(20) << "USERNAME"
               << std::left << std::setw(20) << "FULL NAME"
               << std::left << std::setw(20) << "PHONE NUMBER"
-              << std::left << std::setw(20) << "EMAIL"
+              << std::left << std::setw(30) << "EMAIL"
               << std::left << std::setw(20) << "HOME ADDRESS"
+              << std::left << std::setw(20) << "CITY"
               << std::left << std::setw(20) << "HOST SCORE"
               << std::left << std::setw(20) << "SUPPORTER SCORE"
               << std::left << std::setw(20) << "CREDIT POINT"

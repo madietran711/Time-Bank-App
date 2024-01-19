@@ -14,6 +14,8 @@
 #include "../request/Request.h"
 #include "../skill/Skill.h"
 #include "../review/Review.h"
+#include "../guest/Guest.h"
+
 #include <fstream>
 #include <iomanip>
 
@@ -29,7 +31,9 @@ public:
 
     // Current user data
     std::string adminUsername = "admin";
-    std::string adminPassword = "admin123";
+    std::string adminPassword = "rmit1234";
+    Guest *guest = new Guest();
+    // Admin *admin = new Admin("admin", "admin123");
     Member *currentMember = nullptr;
     bool isUserLoggedIn = false;
     bool isUserAdmin = false;
@@ -77,6 +81,9 @@ public:
     void displayGuestMenu();
     void displayMemberMenu();
     void displayAdminMenu();
+
+    // Log in and registering
+    bool checkLogIn(std::string username, std::string password, std::string logInType);
 
     // GuestMenu Functions
 

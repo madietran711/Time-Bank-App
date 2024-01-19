@@ -12,6 +12,7 @@ Member::Member(
     std::string phoneNumber,
     std::string email,
     std::string homeAddress,
+    std::string cityLocation,
     double hostScore,
     double supporterScore,
     int creditPoint)
@@ -22,6 +23,7 @@ Member::Member(
       phoneNumber(phoneNumber),
       email(email),
       homeAddress(homeAddress),
+      cityLocation(cityLocation),
       hostScore(hostScore),
       supporterScore(supporterScore),
       creditPoint(creditPoint),
@@ -30,14 +32,6 @@ Member::Member(
       acceptedRequest({}),
       listedService({}),
       myRequest({}){};
-
-Member::Member(std::string username, std::string password)
-    : username(username),
-      password(password)
-{
-  // Initialize other members with default values
-  // ...
-}
 
 // Getter functions
 std::string Member::getMemberId() const
@@ -73,6 +67,11 @@ std::string Member::getEmail() const
 std::string Member::getHomeAddress() const
 {
   return homeAddress;
+}
+
+std::string Member::getCityLocation() const
+{
+  return cityLocation;
 }
 
 double Member::getHostScore() const
@@ -150,6 +149,11 @@ void Member::setHomeAddress(std::string homeAddress)
   this->homeAddress = homeAddress;
 }
 
+void Member::setCityLocation(std::string getCityLocation)
+{
+  this->cityLocation = cityLocation;
+}
+
 void Member::setHostScore(double hostScore, Request *request)
 {
   this->hostScore = hostScore;
@@ -215,8 +219,9 @@ void Member::viewProfile()
             << std::left << std::setw(20) << this->getUsername()
             << std::left << std::setw(20) << this->getFullName()
             << std::left << std::setw(20) << this->getPhoneNumber()
-            << std::left << std::setw(20) << this->getEmail()
+            << std::left << std::setw(30) << this->getEmail()
             << std::left << std::setw(20) << this->getHomeAddress()
+            << std::left << std::setw(20) << this->getCityLocation()
             << std::left << std::setw(20) << this->getHostScore()
             << std::left << std::setw(20) << this->getSupporterScore()
             << std::left << std::setw(20) << this->getCreditPoint()

@@ -9,13 +9,15 @@
 #include "../service/Service.h"
 #include "../request/Request.h"
 #include "../date/Date.h"
+#include "../guest/Guest.h"
 #include "../../utils/colors.h"
 #include <iomanip>
 class Skill;
 class Service;
 class Request;
 class Date;
-class Member
+
+class Member : public Guest
 {
 private:
     std::string memberId;
@@ -25,6 +27,7 @@ private:
     std::string phoneNumber;
     std::string email;
     std::string homeAddress;
+    std::string cityLocation;
     double hostScore;
     double supporterScore;
     int creditPoint;
@@ -45,13 +48,10 @@ public:
         std::string phoneNumber,
         std::string email,
         std::string homeAddress,
+        std::string cityLocation,
         double hostScore,
         double supporterScore,
         int creditPoint = 20);
-
-    Member(
-        std::string username,
-        std::string password);
 
     // Getter functions
     std::string getMemberId() const;
@@ -61,6 +61,7 @@ public:
     std::string getPhoneNumber() const;
     std::string getEmail() const;
     std::string getHomeAddress() const;
+    std::string getCityLocation() const;
     double getHostScore() const;
     double getSupporterScore() const;
     int getCreditPoint() const;
@@ -78,6 +79,7 @@ public:
     void setPhoneNumber(std::string phoneNumber);
     void setEmail(std::string email);
     void setHomeAddress(std::string homeAddress);
+    void setCityLocation(std::string cityLocation);
     void setHostScore(double hostScore, Request *request);
     void setSupporterScore(double supporterScore);
     void setCreditPoint(int creditPoint);
