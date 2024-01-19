@@ -105,3 +105,8 @@ void Service::addRequest(Request *request)
 {
     this->requestList.push_back(request);
 }
+
+void Service::addSkill(Skill *skill)
+{
+    this->skillList.push_back(skill);
+}

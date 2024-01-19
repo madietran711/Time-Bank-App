@@ -273,9 +273,6 @@ std::string Date::toString() const
        << std::setw(2) << month << "/" << std::setw(2) << day << " "
        << std::setw(2) << hour << ":" << std::setw(2) << minute;
 
-    // Print the intermediate values
-    std::cout << "Intermediate values: " << ss.str() << std::endl;
-
     return ss.str();
 }
 

@@ -32,6 +32,7 @@ private:
     std::vector<Member *> blockedList;
     std::vector<Request *> acceptedRequest;
     std::vector<Service *> listedService;
+    std::vector<Request *> myRequest;
 
 public:
     // Constructors
@@ -67,6 +68,7 @@ public:
     const std::vector<Member *> &getBlockedList() const;
     const std::vector<Service *> &getListedService() const;
     const std::vector<Request *> &getAcceptedRequest() const;
+    const std::vector<Request *> &getMyRequest() const;
 
     // Setter functions
     void setMemberId(std::string memberId);
@@ -83,7 +85,7 @@ public:
     void setBlockedList(const std::vector<Member *> &blockedList);
     void setListedService(const std::vector<Service *> &listedService);
     void setAcceptedRequest(const std::vector<Request *> &acceptedRequest);
-
+    void setMyRequest(const std::vector<Request *> &myRequest);
     // Member functions
     Member *signUp();
     Member *login();
@@ -108,6 +110,7 @@ public:
     void showAllRequestFilterBySkill(Skill *skill);
 
     // as a host
+    bool addRequest(Request *request);
     void requestService(Service *service);
     void addSupporterReview(Member *supporter, std::string comment, int supporterRating, Request *request);
     void rateSkill(Skill *skill, double score, Request *request);
@@ -116,6 +119,7 @@ public:
     void showAllServiceFilterByTime(Date startTime, Date endTime);
     void showAllServiceFilterByLocation(std::string location);
     void viewSupporterReview(Member *supporter);
+    void viewMyRequest();
 
     // declare friend class
     friend class Request;

@@ -99,9 +99,9 @@ public:
     void hostRatingFunction();
     // void topUpCD(Member *member, int cd);
     void manageBlockList(Member *member);
-    void printAllData();
 
-    // reallocation of pointers
+    // after done debugging delete this function
+    void printAllData();
 };
 
 #endif // TIME_BANK_APP_SYSTEM_H
