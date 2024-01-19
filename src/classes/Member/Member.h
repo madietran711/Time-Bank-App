@@ -10,12 +10,13 @@
 #include "../request/Request.h"
 #include "../date/Date.h"
 #include "../../utils/colors.h"
+#include "../guest/Guest.h"
 #include <iomanip>
 class Skill;
 class Service;
 class Request;
 class Date;
-class Member
+class Member : public Guest
 {
 private:
     std::string memberId;
@@ -36,6 +37,7 @@ private:
 
 public:
     // Constructors
+
     Member(); // default constructor
     Member(
         std::string memberId,

@@ -9,13 +9,16 @@
 #define REVIEW_FILE "./data/review.dat"
 
 #include "../../utils/colors.h"
+#include "../../utils/Utilities.h"
 #include "../member/Member.h"
+#include "../guest/Guest.h"
 #include "../service/Service.h"
 #include "../request/Request.h"
 #include "../skill/Skill.h"
 #include "../review/Review.h"
 #include <fstream>
 #include <iomanip>
+using namespace std;
 
 class System
 {
@@ -39,14 +42,7 @@ public:
     // Constructors
     System() = default; // default constructor
 
-    // Run when initdata() run, init data
     std::vector<std::string> splitStr(std::string &, std::string);
-    void initData();
-    void initMembers();
-    void initServices();
-    void initRequests();
-    void initSkills();
-    void initReviews();
 
     // save data to file
     bool saveAllData();
@@ -78,6 +74,9 @@ public:
     void displayMemberMenu();
     void displayAdminMenu();
 
+    // AdminMenu Functions
+    void displayAllMember();
+
     // GuestMenu Functions
 
     // MemberMenu Functions
@@ -102,13 +101,6 @@ public:
 
     // after done debugging delete this function
     void printAllData();
-
-    bool validateUsername(string &str);
-    bool validatePassword(string &str);
-    bool validateFullName(string &str);
-    bool validatePhoneNumber(string &str);
-    bool validateEmail(string &str);
-    bool validateHomeAddress(string &str);
 };
 
 #endif // TIME_BANK_APP_SYSTEM_H

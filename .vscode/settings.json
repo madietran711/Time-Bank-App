@@ -60,7 +60,8 @@
         "memory": "cpp",
         "memory_resource": "cpp",
         "type_traits": "cpp",
-        "utility": "cpp"
+        "utility": "cpp",
+        "regex": "cpp"
     },
     "C_Cpp.errorSquiggles": "enabled"
 }

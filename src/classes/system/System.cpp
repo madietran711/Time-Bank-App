@@ -3,7 +3,6 @@
 #include "System.h"
 #include <vector>
 #include <iostream>
-using namespace std;
 
 void System::run()
 {
@@ -11,7 +10,7 @@ void System::run()
     std::string instructorName = "Mr. Tran Duc Linh";
 
     // Student information
-    std::string student1ID = "sXXXXXXX";
+    std::string student1ID = "s3926984";
     std::string student1Name = "Nguyen Ba Khoi";
 
     std::string student2ID = "s4022878";
@@ -50,41 +49,117 @@ void System::displayWelcomeMenu()
     printAllData();
     saveAllData();
     loadAllData();
-    // Print the main menu
-    std::cout << Colors::GREEN << "--------------------------------------------------\n";
-    std::cout << "Welcome to Time Bank Application\n";
-    std::cout << "--------------------------------------------------\n"
-              << Colors::RESET;
-    std::cout << "1. Guest\n";
-    std::cout << "2. Member\n";
-    std::cout << "3. Admin\n";
-    std::cout << "Please enter your choice: ";
-
+    bool exit = false;
     int choice;
-    std::cin >> choice;
-    switch (choice)
+    do
     {
-    case 1:
-        displayGuestMenu();
-        break;
-    case 2:
-        currentMember = getMemberByID("1");
-        displayMemberMenu();
-        break;
-    case 3:
+        // Print the main menu
+        std::cout << Colors::GREEN << "--------------------------------------------------\n";
+        std::cout << "Welcome to Time Bank Application\n";
+        std::cout << "--------------------------------------------------\n"
+                  << Colors::RESET;
+        std::cout << Colors::YELLOW
+                  << std::left << std::setw(20) << "[1] GUEST"
+                  << std::left << std::setw(20) << "[2] MEMBER"
+                  << std::left << std::setw(20) << "[3] ADMIN"
+                  << std::left << std::setw(20) << "[4] EXIT"
+                  << Colors::RESET << std::endl;
+        std::cout << endl;
+        std::cout << Colors::CYAN << "Please enter your choice: " << Colors::RESET;
 
-        displayAdminMenu();
-        break;
+        std::cin >> choice;
+        switch (choice)
+        {
+        case 1:
+            displayGuestMenu();
+            break;
+        case 2:
+            currentMember = getMemberByID("1");
+            displayMemberMenu();
+            break;
+        case 3:
 
-    default:
-        std::cout << "Invalid choice. Please try again.\n";
+            displayAdminMenu();
+            break;
+        case 4:
+            char choice;
+            cout << "Do you want to exit? (Y/N): ";
+            cin >> choice;
+            if (choice == 'Y' || choice == 'y')
+            {
+                saveAllData();
+                exit = true;
+            }
+            else
+            {
+                break;
+            }
+        default:
+            std::cout << "Invalid choice. Please try again.\n";
 
-        break;
-    }
+            break;
+        }
+    } while (!exit);
 };
 
 void System::displayGuestMenu()
 {
+    int choice;
+    bool exit = false;
+    do
+    {
+        std::cout << Colors::GREEN << "--------------------------------------------------\n";
+        std::cout << "Time Bank Application - Welcome Guest\n";
+        std::cout << "--------------------------------------------------\n"
+                  << Colors::RESET;
+        std::cout << Colors::YELLOW << std::setw(5) << "[1]"
+                  << "View Available Services\n";
+        std::cout << std::setw(5) << "[2]"
+                  << "Register\n";
+        std::cout << std::setw(5) << "[3]"
+                  << "Login\n";
+        std::cout << std::setw(5) << "[4]"
+                  << "Exit\n";
+        std::cout << endl;
+        std::cout << Colors::CYAN << "Please enter your choice: " << Colors::RESET;
+
+        std::cin >> choice;
+        switch (choice)
+        {
+        case 1:
+            std::cout << Colors::GREEN << "--------------1. View Available Services----------------\n"
+                      << Colors::RESET;
+            break;
+
+        case 2:
+            std::cout << Colors::GREEN << "--------------2. Register----------------\n"
+                      << Colors::RESET;
+            // registerMember();
+            break;
+        case 3:
+            std::cout << Colors::GREEN << "--------------3. Login----------------\n"
+                      << Colors::RESET;
+            // login();
+            break;
+        case 4:
+            std::cout << Colors::GREEN << "--------------4. Exit----------------\n"
+                      << Colors::RESET;
+            char choice;
+            cout << Colors::CYAN << "Do you want to exit? (Y/N): " << Colors::RESET;
+            cin >> choice;
+            if (choice == 'Y' || choice == 'y')
+            {
+                saveAllData();
+                cout << Colors::MAGENTA << "Exiting...\n"
+                     << Colors::RESET;
+                exit = true;
+            }
+            else
+            {
+                break;
+            }
+        }
+    } while (!exit);
 }
 
 void System::displayMemberMenu()
@@ -97,32 +172,43 @@ void System::displayMemberMenu()
         std::cout << "Time Bank Application - Welcome " << currentMember->getFullName() << "\n";
         std::cout << "--------------------------------------------------\n"
                   << Colors::RESET;
-        std::cout << "1. Manage Profile (View, Edit)\n";
-        std::cout << "2. Manage Skills (View, Add)\n";
-        std::cout << "3. View Available Services\n";
-        std::cout << "4. Manage Service Listing (Add Service, Delete Service, View & Accept Request)\n";
-        std::cout << "5. View Available Supporter (By Time or Location)\n";
-        std::cout << "6. Manage Request (View, Add, Delete)\n";
-        std::cout << "7. View Reviews\n";
-        std::cout << "8. Add Review For Service\n";
-        std::cout << "9. Rate Host\n";
-        std::cout << "10. Top up Credit Point\n";
-        std::cout << "11. Blocking (View, Block, Unblock)\n";
+        std::cout << Colors::YELLOW << std::setw(5) << "[1]"
+                  << "Manage Profile (View, Edit)\n";
+        std::cout << std::setw(5) << "[2]"
+                  << "Manage Skills (View, Add)\n";
+        std::cout << std::setw(5) << "[3]"
+                  << "View Available Services\n";
+        std::cout << std::setw(5) << "[4]"
+                  << "Manage Service Listing (Add Service, Delete Service, View & Accept Request)\n";
 
-        std::cout << "25. Logout\n";
-        std::cout << "Please enter your choice: ";
+        std::cout << std::setw(5) << "[5]"
+                  << "Manage Request (View, Add, Delete)\n";
+        std::cout << std::setw(5) << "[6]"
+                  << "View Reviews For Your Service\n";
+        std::cout << std::setw(5) << "[7]"
+                  << "Manage Reviews (View, Add, Delete)\n";
+        std::cout << std::setw(5) << "[8]"
+                  << "Rate Host\n";
+        std::cout << std::setw(5) << "[9]"
+                  << "Top up Credit Point\n";
+        std::cout << std::setw(5) << "[10]"
+                  << "Blocking (View, Block, Unblock)\n";
+
+        std::cout << "[25] Logout\n";
+        std::cout << endl;
+        std::cout << Colors::CYAN << "Please enter your choice: " << Colors::RESET;
 
         std::cin >> choice;
         switch (choice)
         {
         case 1:
-            cout << Colors::GREEN << "--------------1. Manage Profile (View, Edit)----------------\n"
-                 << Colors::RESET;
+            std::cout << Colors::GREEN << "--------------1. Manage Profile (View, Edit)----------------\n"
+                      << Colors::RESET;
             displayMemberProfile(currentMember);
             break;
         case 2:
-            cout << Colors::GREEN << "--------------2. Manage Skills (View, Add)----------------\n"
-                 << Colors::RESET;
+            std::cout << Colors::GREEN << "--------------2. Manage Skills (View, Add)----------------\n"
+                      << Colors::RESET;
             displayMemberSkillList(currentMember);
             break;
         case 3:
@@ -131,36 +217,35 @@ void System::displayMemberMenu()
         case 4:
             // displayMemberMenu();
             break;
+
         case 5:
             // displayMemberMenu();
-            break;
-        case 6:
-            // displayMemberMenu();
-            cout << Colors::GREEN << "--------------6. Manage Request (View, Add, Delete)----------------\n"
-                 << Colors::RESET;
+            std::cout << Colors::GREEN << "--------------6. Manage Request (View, Add, Delete)----------------\n"
+                      << Colors::RESET;
             manageRequest();
             break;
-        case 7:
-            cout << Colors::GREEN << "--------------7. View Reviews----------------\n"
-                 << Colors::RESET;
+        case 6:
+            std::cout << Colors::GREEN << "--------------7. View Reviews For My Service----------------\n"
+                      << Colors::RESET;
             viewReviews();
             break;
-        case 8:
-            // displayMemberMenu();
+        case 7:
+            std::cout << Colors::GREEN << "--------------8. Manage Reviews (View, Add, Delete)----------------\n"
+                      << Colors::RESET;
             break;
-        case 9:
-            cout << Colors::GREEN << "--------------9. Rate Host----------------\n"
-                 << Colors::RESET;
+        case 8:
+            std::cout << Colors::GREEN << "--------------9. Rate Host----------------\n"
+                      << Colors::RESET;
             hostRatingFunction();
             break;
-        case 10:
-            cout << Colors::GREEN << "--------------10. Top up Credit Point----------------\n"
-                 << Colors::RESET;
+        case 9:
+            std::cout << Colors::GREEN << "--------------10. Top up Credit Point----------------\n"
+                      << Colors::RESET;
             topUp();
             break;
-        case 11:
-            cout << Colors::GREEN << "--------------11. Blocking (View, Block, Unblock)----------------\n"
-                 << Colors::RESET;
+        case 10:
+            std::cout << Colors::GREEN << "--------------11. Blocking (View, Block, Unblock)----------------\n"
+                      << Colors::RESET;
             manageBlockList();
             break;
         case 12:
@@ -171,28 +256,119 @@ void System::displayMemberMenu()
             break;
         case 25:
             // displayMemberMenu();
-            exit = true;
-            break;
+            char choice;
+            cout << "Do you want to log out? (Y/N): ";
+            cin >> choice;
+            if (choice == 'Y' || choice == 'y')
+            {
+                saveAllData();
+                exit = true;
+            }
+            else
+            {
+                break;
+            }
         }
     } while (!exit);
 }
 
 void System::displayAdminMenu()
 {
+
+    int choice;
+    string newPassword;
+    bool exit = false;
+    bool validPassword = false;
+    do
+    {
+        std::cout << Colors::GREEN << "--------------------------------------------------\n";
+        std::cout << "Time Bank Application - Welcome " << adminUsername << "\n";
+        std::cout << "--------------------------------------------------\n"
+                  << Colors::RESET;
+        std::cout << Colors::YELLOW << std::setw(5) << "[1]"
+                  << "View all Members\n";
+        std::cout << std::setw(5) << "[2]"
+                  << "Change Member Password\n";
+        std::cout << std::setw(5) << "[3]"
+                  << "Log Out";
+
+        std::cout << endl;
+        std::cout << Colors::CYAN << "Please enter your choice: " << Colors::RESET;
+
+        std::cin >> choice;
+        int count = 1;
+        switch (choice)
+        {
+        case 1:
+            std::cout << Colors::GREEN << "--------------1. View all Members----------------\n"
+                      << Colors::RESET;
+
+            displayAllMember();
+            break;
+        case 2:
+            std::cout << Colors::GREEN << "--------------2. Change member password----------------\n"
+                      << Colors::RESET;
+            displayAllMember();
+            int memberNo;
+            cout << Colors::CYAN << "Please enter the number of member you want to change password: ";
+            cin >> memberNo;
+            while (memberNo < 1 || memberNo > member_list.size())
+            {
+                cout << Colors::RED << "Invalid choice. Please try again: " << Colors::RESET;
+                cin >> memberNo;
+            }
+
+            do
+            {
+                cout << "Please enter new password: ";
+                cin >> newPassword;
+                if (Utilities::validatePassword(newPassword))
+                {
+                    validPassword = true;
+                    cout << Colors::GREEN << "Password is valid.\n"
+                         << Colors::RESET;
+                    char confirm;
+                    cout << Colors::CYAN << "Are you sure you want to change password? (Y/N): " << Colors::RESET;
+                    cin >> confirm;
+                    if (confirm == 'Y' || confirm == 'y')
+                    {
+                        member_list[choice - 1]->setPassword(newPassword);
+                        cout << Colors::GREEN << "Password changed successfully for \n"
+                             << Colors::BOLD << member_list[choice - 1]->getFullName() << Colors::RESET;
+                    }
+                    else
+                    {
+                        cout << "Password not changed!\n";
+                    }
+                }
+                else
+                {
+                    validPassword = false;
+                    cout << Colors::RED << "Password is invalid.\n"
+                         << Colors::RESET;
+                }
+            } while (!validPassword);
+
+            break;
+
+        case 3:
+            // displayMemberMenu();
+            char choice;
+            cout << "Do you want to log out? (Y/N): ";
+            cin >> choice;
+            if (choice == 'Y' || choice == 'y')
+            {
+                saveAllData();
+                exit = true;
+            }
+            else
+            {
+                break;
+            }
+        }
+    } while (!exit);
 }
 
-void System::initData()
-{
-    std::cout << "\n"
-              << "\n"
-              << "\n";
-    std::cout << Colors::MAGENTA << "Initializing data...\n"
-              << Colors::RESET;
-    initMembers();
-    initSkills();
-    initServices();
-    initRequests();
-}
 bool System::saveAllData()
 {
     cout << Colors::MAGENTA << "Saving data...\n"
@@ -210,71 +386,6 @@ bool System::saveAllData()
     {
         std::cerr << e.what() << '\n';
     }
-}
-void System::initMembers()
-{
-    // Initialize some members
-    Member *newMember1 = new Member("1", "newUsername1", "newPassword1", "New Full Name 1", "123456789", "newemail1@example.com", "New Address 1", 4.5, 3.2, 15);
-    Member *newMember2 = new Member("2", "newUsername2", "newPassword2", "New Full Name 2", "987654321", "newemail2@example.com", "New Address 2", 3.8, 4.1, 10);
-
-    // Add the new members to the existing member_list
-    member_list.push_back(newMember1);
-    member_list.push_back(newMember2);
-}
-
-void System::initSkills()
-{
-    // Initialize some skills
-    Skill *skill1 = new Skill("1", member_list[0], "Programming", 4.8);
-    Skill *skill2 = new Skill("2", member_list[1], "Graphic Design", 3.5);
-
-    // Add the new skills to the existing skill_list
-    skill_list.push_back(skill1);
-    skill_list.push_back(skill2);
-
-    // Link skills to members
-    member_list[0]->addSkill(skill1);
-    member_list[1]->addSkill(skill2);
-}
-
-void System::initServices()
-{
-    // Initialize some services
-    Date date1 = Date::parse("2024/01/20 10:00");
-    Date date2 = Date::parse("2024/01/20 15:00");
-    Date date3 = Date::parse("2024/01/25 14:00");
-    Date date4 = Date::parse("2024/01/25 18:00");
-    Service *service1 = new Service("1", member_list[0], date1, date2, 2, 4.5, {}, {});
-    Service *service2 = new Service("2", member_list[1], date3, date4, 3, 3.8, {}, {});
-
-    // Add the new services to the existing service_list
-    service_list.push_back(service1);
-    service_list.push_back(service2);
-
-    // Link services to members
-    member_list[0]->addService(service1);
-    member_list[1]->addService(service2);
-}
-
-void System::initRequests()
-{
-    // Initialize some requests
-    Date date1 = Date::parse("2024/01/20 12:00");
-    Date date2 = Date::parse("2024/01/20 14:00");
-    Date date3 = Date::parse("2024/01/25 15:00");
-    Date date4 = Date::parse("2024/01/25 17:00");
-    Request *request1 = new Request("1", service_list[0], member_list[1], date1, date2, skill_list[0], 1);
-    Request *request2 = new Request("2", service_list[1], member_list[0], date3, date4, skill_list[0], 1);
-
-    // Add the new requests to the existing request_list
-    request_list.push_back(request1);
-    request_list.push_back(request2);
-
-    // Link requests to members and services
-    member_list[1]->acceptRequest(request1);
-    member_list[0]->acceptRequest(request2);
-    service_list[0]->addRequest(request1);
-    service_list[1]->addRequest(request2);
 }
 
 bool System::saveAllMembers()
@@ -769,9 +880,9 @@ void System::displayMemberProfile(Member *member)
               << std::left << std::setw(20) << "PHONE NUMBER"
               << std::left << std::setw(20) << "EMAIL"
               << std::left << std::setw(20) << "HOME ADDRESS"
-              << std::left << std::setw(20) << "HOST SCORE"
-              << std::left << std::setw(20) << "SUPPORTER SCORE"
-              << std::left << std::setw(20) << "CREDIT POINT"
+              << std::left << std::setw(10) << "HOST SCORE"
+              << std::left << std::setw(10) << "SUPPORTER SCORE"
+              << std::left << std::setw(10) << "CREDIT POINT"
 
               << Colors::RESET << endl;
     member->viewProfile();
@@ -849,13 +960,13 @@ void System::hostRatingFunction()
 {
     // show list of accepted request and let user choose
     int count = 1;
-    cout << "List of accepted request: " << endl;
+    cout << "List of accepted request for your service: " << endl;
     for (Request *request : currentMember->getAcceptedRequest())
     {
         cout << Colors::CYAN << "Request No.: " << Colors::YELLOW << count << endl;
         cout << Colors::CYAN << "Request ID: " << Colors::YELLOW << request->getRequestId() << endl;
         cout << Colors::CYAN << "Service Name: " << Colors::YELLOW << request->getSkill()->getSkillName() << endl;
-        cout << Colors::CYAN << "Host Name: " << Colors::YELLOW << request->getService()->getServiceOwner()->getFullName() << endl;
+        cout << Colors::CYAN << "Host Name: " << Colors::YELLOW << request->getRequester()->getFullName() << endl;
         cout << Colors::CYAN << "Start Time: " << Colors::YELLOW << request->getStartTime().toString() << endl;
         cout << Colors::CYAN << "End Time: " << Colors::YELLOW << request->getEndTime().toString() << endl;
         cout << Colors::CYAN << "Status: " << Colors::YELLOW << request->getStatus() << endl;
@@ -878,7 +989,7 @@ void System::hostRatingFunction()
     cout << endl;
     cout << Colors::MAGENTA << "Please enter score to rate host: " << Colors::RESET;
     cin >> score;
-    rateHost(request->getService()->getServiceOwner(), score, request);
+    rateHost(request->getRequester(), score, request);
 }
 void System::rateHost(Member *host, double score, Request *request)
 {
@@ -905,12 +1016,13 @@ void System::topUp()
     int creditPoint, choice;
     cout << "Please enter credit point to top up: ";
     cin >> creditPoint;
-    cout << Colors::CYAN << " Your bill is " << Colors::BOLD << "$" << creditPoint << Colors::YELLOW << ". Please choose a payment method to complete the transaction: " << Colors::RESET << endl;
+    cout << Colors::CYAN << " Your bill is " << Colors::BOLD << "$" << creditPoint << Colors::MAGENTA << ". Please choose a payment method to complete the transaction: " << Colors::RESET << endl;
     cout << "1. Credit Card" << endl;
     cout << "2. Cash" << endl;
     cout << "3. Internet Banking" << endl;
     cout << "4. Cancel Payment" << endl;
-    cout << Colors::GREEN << "Please enter your choice: " << Colors::RESET;
+    cout << Colors::CYAN << "Please enter your choice: " << Colors::RESET;
+    cin >> choice;
 
     switch (choice)
     {
@@ -921,7 +1033,7 @@ void System::topUp()
         cout << "Top up " << Colors::YELLOW << creditPoint << Colors::GREEN << " credit point to " << Colors::YELLOW << currentMember->getFullName() << Colors::RESET << endl;
         break;
     case 4:
-        cout << "Confirm cancel paymen? (Y/N)" << endl;
+        cout << Colors::CYAN << "Confirm cancel payment? (Y/N)" << Colors::RESET << endl;
         char confirm;
         cin >> confirm;
         if (confirm == 'Y' || confirm == 'y')
@@ -1039,197 +1151,28 @@ void System::printAllData()
     }
 }
 
-// VALIDATION
-
-bool System::validateUsername(string &str)
+// ADMIN
+void System::displayAllMember()
 {
-    if (str.empty())
+    int count = 1;
+    for (Member *member : member_list)
     {
-        cout << "ERROR: Username is blank.\n";
-        return false;
+        std::cout << Colors::MAGENTA << "Member Profile\n"
+                  << std::left << std::setw(5) << "No."
+                  << std::left << std::setw(10) << "ID"
+                  << std::left << std::setw(20) << "USERNAME"
+                  << std::left << std::setw(20) << "FULL NAME"
+                  << std::left << std::setw(20) << "PHONE NUMBER"
+                  << std::left << std::setw(20) << "EMAIL"
+                  << std::left << std::setw(20) << "HOME ADDRESS"
+                  << std::left << std::setw(10) << "HOST SCORE"
+                  << std::left << std::setw(10) << "SUPPORTER SCORE"
+                  << std::left << std::setw(10) << "CREDIT POINT"
+
+                  << Colors::RESET << endl;
+        cout << Colors::YELLOW
+             << std::left << std::setw(5) << count;
+        member->viewProfile();
+        count++;
     }
-
-    if (str.length() < 6 || str.length() > 30)
-    { // Check length (6-30 characters)
-        cout << "ERROR: Username must contain 6-30 characters.\n";
-        return false;
-    }
-
-    for (char c : str)
-    { // Check allowed characters
-        if (!isalnum(c) || c == '@')
-        {
-            cout << "ERROR: Username can only contain letters, digits, and no blank space.\n";
-            return false;
-        }
-    }
-
-    for (auto mem : member_list)
-    { // Username must not duplicated
-        if (str == mem->username)
-        { // Create getUserName()
-            cout << "FAILED: Username is already taken.\n";
-            return false;
-        }
-    }
-
-    return true;
-}
-
-bool System::validatePassword(string &str)
-{
-    if (str.empty())
-    {
-        cout << "ERROR: Password is blank.\n";
-        return false;
-    }
-
-    if (str.length() < 8 || str.length() > 20)
-    { // Check length (8-20 characters)
-        cout << "ERROR: Username must contain 8-20 characters.\n";
-        return false;
-    }
-
-    if (str.find(" ") != std::string::npos)
-    { // Check blank space
-        cout << "ERROR: Password must contains no blank space.\n";
-        return false;
-    }
-
-    return true;
-}
-
-bool System::validateFullName(string &str)
-{
-    if (str.empty())
-    {
-        cout << "ERROR: Full name is blank.\n";
-        return false;
-    }
-
-    // Trim heading and ending whitespaces
-    str.erase(str.begin(), find_if_not(str.begin(), str.end(), ::isspace));
-    str.erase(find_if_not(str.rbegin(), str.rend(), ::isspace).base(), str.end());
-
-    if (str.length() < 3 || str.length() > 30)
-    { // Check length (3-30 characters)
-        cout << "ERROR: Full name must contain 3-30 characters.\n";
-        return false;
-    }
-
-    for (char c : str)
-    { // Check allowed characters
-        if (!isalpha(c) && c != ' ')
-        {
-            cout << "ERROR: Full name must contain letters and spaces only.\n";
-            return false;
-        }
-    }
-
-    if (str.find(" ") == std::string::npos)
-    { // Check for at least one space
-        cout << "ERROR: Full name must contain at least one space.\n";
-        return false;
-    }
-
-    return true;
-}
-
-bool System::validatePhoneNumber(string &str)
-{ // validate phone number
-    if (str.empty())
-    {
-        cout << "ERROR: Phone number is blank.\n";
-        return false;
-    }
-
-    // Trim heading and ending whitespaces
-    str.erase(str.begin(), find_if_not(str.begin(), str.end(), ::isspace));
-    str.erase(find_if_not(str.rbegin(), str.rend(), ::isspace).base(), str.end());
-
-    for (char c : str)
-    { // Check digits
-        if (!isdigit(c))
-        {
-            cout << "ERROR: Phone number must only contain digits.\n";
-            return false;
-        }
-    }
-
-    if (str[0] != '0' && str.compare(0, 2, "84") != 0)
-    { // Check header number (0 or 84)
-        cout << "ERROR: Phone number must start with 0 or 84.\n";
-        return false;
-    }
-
-    int validLength = (str[0] == '0') ? 10 : 11; // 10 if starting with 0, 11 if starting with 84
-
-    if (str.length() != validLength)
-    { // Check length
-        if (validLength == 10)
-        {
-            cout << "ERROR: Phone number starting with 0 must be 10 digits long.\n";
-            return false;
-        }
-        else
-        {
-            cout << "ERROR: Phone number starting with 84 must be 11 digits long.\n";
-            return false;
-        }
-    }
-
-    return true;
-}
-
-bool System::validateEmail(string &str)
-{
-    if (str.empty())
-    {
-        cout << "ERROR: Email is blank.\n";
-        return false;
-    }
-
-    int atIndex = str.find('@');               // Search for @ position
-    int dotIndex = str.find('.', atIndex + 1); // Search for . after @
-
-    if (str[0] == '.' || str[atIndex - 1] == '.')
-    {
-        cout << "ERROR: Email's local part cannot begin or end with a dot.\n";
-        return false;
-    }
-
-    for (int i = 0; i < atIndex; i++)
-    { // Loop through the local part
-        if (str[i] == '.' && str[i + 1] == '.')
-        {
-            cout << "ERROR: Email's local part cannot contain two dots in a row.\n";
-            return false;
-        }
-    }
-
-    if (!(atIndex != std::string::npos && isalnum(str[atIndex + 1]) && dotIndex != std::string::npos && isalnum(str[dotIndex + 1])))
-    {
-        // Check email address does not contains @, followed by character (domain name), a dot after @, followed by character (top-level domain)
-        std::cout << "ERROR: Wrong email domain format." << std::endl;
-        return false;
-    }
-
-    return true;
-}
-
-bool System::validateHomeAddress(string &str)
-{
-    if (str.empty())
-    {
-        cout << "ERROR: Home address is blank.\n";
-        return false;
-    }
-
-    std::string lowercaseAddress = str;
-    std::transform(lowercaseAddress.begin(), lowercaseAddress.end(), lowercaseAddress.begin(), ::tolower);
-
-    return (lowercaseAddress.find("hanoi") != std::string::npos) ||
-           (lowercaseAddress.find("ha noi") != std::string::npos) ||
-           (lowercaseAddress.find("ho chi minh") != std::string::npos) ||
-           (lowercaseAddress.find("ho chi minh city") != std::string::npos);
 }
