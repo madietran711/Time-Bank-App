@@ -102,6 +102,13 @@ public:
 
     // after done debugging delete this function
     void printAllData();
+
+    bool validateUsername(string &str);
+    bool validatePassword(string &str);
+    bool validateFullName(string &str);
+    bool validatePhoneNumber(string &str);
+    bool validateEmail(string &str);
+    bool validateHomeAddress(string &str);
 };
 
 #endif // TIME_BANK_APP_SYSTEM_H
