@@ -18,7 +18,17 @@
 #include "../review/Review.h"
 #include <fstream>
 #include <iomanip>
+
+#include <regex>
 using namespace std;
+
+std::regex usernameRegex("^[A-Za-z0-9_]+$");
+std::regex passwordRegex("^[A-Za-z0-9]+$");
+std::regex nameRegex("^[A-Za-z'-]+$");
+std::regex phoneNumRegex("^[0-9]+$");
+std::regex emailRegex("^[\\w.-]+@[\\w.-]+\\.[A-Za-z]{2,6}$");
+std::regex addressRegex("^[\\w\\s.,'-]+$");
+std::regex cityRegex("^(HANOI|SAIGON)$");
 
 class System
 {
@@ -101,6 +111,20 @@ public:
 
     // after done debugging delete this function
     void printAllData();
+
+    // login
+    bool checkLogIn(std::string username, std::string password, std::string logInType);
+    void registerNewAcc();
+    bool validateRegisterRegex(string input, std::regex pattern);
+    std::string getRegUsername();
+    std::string getRegPassword();
+    std::string getRegEmail();
+    std::string getRegPhone();
+    std::string getRegName();
+    std::string getRegAddress();
+    std::string getRegCity();
+
+    bool verifyContinue();
 };
 
 #endif // TIME_BANK_APP_SYSTEM_H

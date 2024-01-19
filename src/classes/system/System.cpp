@@ -1180,3 +1180,68 @@ void System::displayAllMember()
         count++;
     }
 }
+
+// Login and Register
+
+bool System::checkLogIn(std::string username, std::string password, std::string logInType)
+{
+    if (logInType == "admin")
+    {
+        return (username == adminUsername && password == adminPassword) ? true : false;
+    }
+    else if (logInType == "member")
+    {
+        for (Member *member : member_list)
+        {
+            if (username == member->getUsername() && password == member->getUsername())
+            {
+                currentMember = member;
+                return true;
+            }
+            return false;
+        }
+    }
+}
+
+void System::registerNewAcc()
+{
+    std::string username;
+    std::string password;
+    std::string email;
+    std::string phone;
+    std::string name;
+    std::string address;
+    std::string city;
+}
+
+std::string System::getRegUsername()
+{
+    string input;
+    std::cout << "Input Username: ";
+    cin >> input;
+    if (validateRegisterRegex(input, usernameRegex))
+    {
+    };
+};
+
+std::string System::getRegPassword(){};
+std::string System::getRegEmail(){};
+std::string System::getRegPhone(){};
+std::string System::getRegName(){};
+std::string System::getRegAddress(){};
+std::string System::getRegCity(){};
+
+bool verifyContinueRegister()
+{
+    string choice;
+    std::cout << "Do you want to continue registering? (Y/N): ";
+    std::cin >> choice;
+    if (choice == "y" or choice == "Y")
+    {
+    }
+};
+
+bool System::validateRegisterRegex(string input, std::regex pattern)
+{
+    return std::regex_match(input, pattern);
+}
