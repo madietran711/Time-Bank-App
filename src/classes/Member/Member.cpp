@@ -160,6 +160,11 @@ void Member::setCity(std::string city)
   this->city = city;
 }
 
+void Member::setHostScore(double hostScore)
+{
+  this->hostScore = hostScore;
+}
+
 void Member::setHostScore(double hostScore, Request *request)
 {
   this->hostScore = hostScore;
@@ -330,4 +335,45 @@ void Member::viewMyRequest()
               << Colors::RESET << std::endl;
     count++;
   }
+}
+
+std::vector<Member *> Member::getInteractedMembers()
+{
+  std::vector<Member *> interactedMembers;
+
+  // people that I have supported
+  for (Request *request : this->acceptedRequest)
+  {
+
+    interactedMembers.push_back(request->getRequester());
+  }
+  // people that have supported me
+  for (Request *request : this->myRequest)
+  {
+    Member *supporter = request->getService()->getServiceOwner();
+    // check if supporter is already in the list
+    bool isExist = false;
+    for (Member *member : interactedMembers)
+    {
+      if (member->getMemberId() == supporter->getMemberId())
+      {
+        isExist = true;
+        break;
+      }
+    }
+    if (!isExist)
+    {
+      interactedMembers.push_back(supporter);
+    }
+    else
+    {
+      continue;
+    }
+  }
+  return interactedMembers;
+}
+void Member::addSupporterReview(Member *supporter, std::string comment, int supporterRating, int skillRating, Request *request)
+{
+  Review *review = new Review(supporter, comment, supporterRating, skillRating, request);
+  supporter->getReviews().push_back(review);
 }

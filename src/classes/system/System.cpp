@@ -5,7 +5,13 @@
 #include <iostream>
 
 void System::run()
+
 {
+    // initData();
+    loadAllData();
+    printAllData();
+    saveAllData();
+    loadAllData();
     std::string groupNumber = "Group No.";
     std::string instructorName = "Mr. Tran Duc Linh";
 
@@ -44,11 +50,7 @@ void System::run()
 
 void System::displayWelcomeMenu()
 {
-    // initData();
-    loadAllData();
-    printAllData();
-    saveAllData();
-    loadAllData();
+
     bool exit = false;
     int choice;
     do
@@ -186,7 +188,7 @@ void System::displayMemberMenu()
         std::cout << std::setw(5) << "[6]"
                   << "View Reviews For Your Service\n";
         std::cout << std::setw(5) << "[7]"
-                  << "Manage Reviews (View, Add, Delete)\n";
+                  << "Manage Reviews For Supporters (View, Add, Delete)\n";
         std::cout << std::setw(5) << "[8]"
                   << "Rate Host\n";
         std::cout << std::setw(5) << "[9]"
@@ -194,7 +196,7 @@ void System::displayMemberMenu()
         std::cout << std::setw(5) << "[10]"
                   << "Blocking (View, Block, Unblock)\n";
 
-        std::cout << "[25] Logout\n";
+        std::cout << "[11] Logout\n";
         std::cout << endl;
         std::cout << Colors::CYAN << "Please enter your choice: " << Colors::RESET;
 
@@ -220,31 +222,32 @@ void System::displayMemberMenu()
 
         case 5:
             // displayMemberMenu();
-            std::cout << Colors::GREEN << "--------------6. Manage Request (View, Add, Delete)----------------\n"
+            std::cout << Colors::GREEN << "--------------5. Manage Request (View, Add, Delete)----------------\n"
                       << Colors::RESET;
             manageRequest();
             break;
         case 6:
-            std::cout << Colors::GREEN << "--------------7. View Reviews For My Service----------------\n"
+            std::cout << Colors::GREEN << "--------------6. View Reviews For My Service----------------\n"
                       << Colors::RESET;
             viewReviews();
             break;
         case 7:
-            std::cout << Colors::GREEN << "--------------8. Manage Reviews (View, Add, Delete)----------------\n"
+            std::cout << Colors::GREEN << "--------------7. Manage Reviews (View, Add, Delete)----------------\n"
                       << Colors::RESET;
+
             break;
         case 8:
-            std::cout << Colors::GREEN << "--------------9. Rate Host----------------\n"
+            std::cout << Colors::GREEN << "--------------8. Rate Host----------------\n"
                       << Colors::RESET;
             hostRatingFunction();
             break;
         case 9:
-            std::cout << Colors::GREEN << "--------------10. Top up Credit Point----------------\n"
+            std::cout << Colors::GREEN << "--------------9. Top up Credit Point----------------\n"
                       << Colors::RESET;
             topUp();
             break;
         case 10:
-            std::cout << Colors::GREEN << "--------------11. Blocking (View, Block, Unblock)----------------\n"
+            std::cout << Colors::GREEN << "--------------10. Blocking (View, Block, Unblock)----------------\n"
                       << Colors::RESET;
             manageBlockList();
             break;
@@ -254,7 +257,7 @@ void System::displayMemberMenu()
         case 13:
             // displayMemberMenu();
             break;
-        case 25:
+        case 11:
             // displayMemberMenu();
             char choice;
             cout << "Do you want to log out? (Y/N): ";
@@ -410,7 +413,19 @@ bool System::saveAllMembers()
                    << member->getCity() << ","
                    << member->getHostScore() << ","
                    << member->getSupporterScore() << ","
-                   << member->getCreditPoint() << "\n"; // Use '\n' for a newline character
+                   << member->getCreditPoint() << ",";
+        // Save blocked member IDs separated by dashes
+        const std::vector<Member *> &blockedList = member->getBlockedList();
+        for (size_t i = 0; i < blockedList.size(); ++i)
+        {
+            memberFile << blockedList[i]->getMemberId();
+            if (i < blockedList.size() - 1)
+            {
+                memberFile << "-";
+            }
+        }
+
+        memberFile << "\n";
     }
 
     memberFile.close();
@@ -486,7 +501,7 @@ bool System::saveAllServices()
     }
 
     for (const Service *service : service_list)
-    { // Use const reference to avoid unnecessary copy
+    {
         serviceFile << service->getServiceId() << ","
                     << service->getServiceOwner()->getMemberId() << ","
                     << service->getStartTime().toString() << ","
@@ -573,29 +588,58 @@ bool System::loadAllMembers()
     while (std::getline(memberFile, line))
     {
         std::vector<std::string> tokens = splitStr(line, ",");
-        if (tokens.size() != 11)
+        if (tokens.size() != 12)
         {
             std::cout << "Invalid member data\n";
             continue;
         }
 
-        Member *member = new Member(
-            tokens[0],
-            tokens[1],
-            tokens[2],
-            tokens[3],
-            tokens[4],
-            tokens[5],
-            tokens[6],
-            tokens[7],
-            std::stod(tokens[8]),
-            std::stod(tokens[9]),
-            std::stoi(tokens[10]));
+        Member *member = new Member();
+        member->setMemberId(tokens[0]);
+        member->setUsername(tokens[1]);
+        member->setPassword(tokens[2]);
+        member->setFullName(tokens[3]);
+        member->setPhoneNumber(tokens[4]);
+        member->setEmail(tokens[5]);
+        member->setHomeAddress(tokens[6]);
+        member->setCity(tokens[7]);
+        member->setHostScore(std::stoi(tokens[8]));
+        member->setSupporterScore(std::stoi(tokens[9]));
+        member->setCreditPoint(std::stoi(tokens[10]));
 
         member_list.push_back(member);
     }
-
     memberFile.close();
+    std::ifstream memberFile2(MEMBER_FILE, std::ios::in);
+    while (std::getline(memberFile2, line))
+    {
+        std::vector<std::string> tokens = splitStr(line, ",");
+        if (tokens.size() != 12)
+        {
+            std::cout << "Invalid member data\n";
+            continue;
+        }
+
+        Member *member = getMemberByID(tokens[0]);
+
+        // Load skill IDs from the string separated by dashes
+        std::vector<std::string> blockedList = splitStr(tokens[11], "-");
+        for (const std::string &blockedId : blockedList)
+        {
+            Member *blockedMember = getMemberByID(blockedId);
+            if (blockedMember)
+            {
+                // Linking
+                member->blockMember(blockedMember);
+                cout << "Blocked " << blockedMember->getFullName() << endl;
+            }
+            else
+            {
+                std::cout << "Invalid member ID in block list data\n";
+            }
+        }
+    }
+    memberFile2.close();
 
     cout << "Loaded " << Colors::YELLOW << member_list.size() << Colors::GREEN << " members." << Colors::RESET << endl;
     return true;
@@ -879,11 +923,12 @@ void System::displayMemberProfile(Member *member)
               << std::left << std::setw(10) << "ID"
               << std::left << std::setw(20) << "USERNAME"
               << std::left << std::setw(20) << "FULL NAME"
-              << std::left << std::setw(20) << "PHONE NUMBER"
-              << std::left << std::setw(20) << "EMAIL"
+              << std::left << std::setw(10) << "PHONE"
+              << std::left << std::setw(25) << "EMAIL"
               << std::left << std::setw(20) << "HOME ADDRESS"
-              << std::left << std::setw(10) << "HOST SCORE"
-              << std::left << std::setw(10) << "SUPPORTER SCORE"
+              << std::left << std::setw(10) << "CITY"
+              << std::left << std::setw(10) << "HOST SCR"
+              << std::left << std::setw(10) << "SUPPORTER SCR"
               << std::left << std::setw(10) << "CREDIT POINT"
 
               << Colors::RESET << endl;
@@ -939,6 +984,7 @@ void System::manageRequest()
     } while (!exit);
 }
 // --------------------------------------7. View Reviews-----------------------------
+
 void System::viewReviews()
 {
     cout << "List of my services' reviews: " << endl;
@@ -956,7 +1002,100 @@ void System::viewReviews()
         }
     }
 }
-// -------------------------8. Add Review For Service--------------------------------
+// -------------------------8.  Manage Review For Supporter Service--------------------------------
+void System::manageReviews()
+{
+    int choice;
+    bool exit = false;
+    do
+    {
+        std::cout << endl;
+        std::cout << Colors::YELLOW << "[1] View Reviews\n";
+        std::cout << Colors::YELLOW << "[2] Add Reviews\n";
+        std::cout << Colors::YELLOW << "[3] Delete Reviews\n";
+        std::cout << Colors::YELLOW << "[4] Back\n";
+
+        std::cout << Colors::CYAN << "Please enter your choice: " << Colors::RESET;
+
+        int count = 1;
+        int requestNumber;
+        std::cin >> choice;
+        switch (choice)
+        {
+        case 1:
+            cout << Colors::GREEN << "--------------1. View Reviews----------------\n"
+                 << Colors::RESET;
+            // show list of reviews that user have made
+
+            break;
+        case 2:
+            cout << Colors::GREEN << "--------------2. Add Reviews----------------\n"
+                 << Colors::RESET;
+            // show list of supporter service
+            cout << "List of services that you have been supported: " << endl;
+            std::vector<Request *> acceptedSupporterRequest;
+            for (Request *request : currentMember->getMyRequest())
+            {
+                if (request->getStatus() == 1)
+                {
+                    acceptedSupporterRequest.push_back(request);
+                }
+            }
+            // check empty
+            if (acceptedSupporterRequest.size() == 0)
+            {
+                cout << Colors::RED << "You have not been supported any service yet.\n"
+                     << Colors::RESET;
+                break;
+            }
+            count = 1;
+            for (Request *request : acceptedSupporterRequest)
+            {
+                cout << Colors::MAGENTA << "Service No.: " << Colors::YELLOW << count << endl;
+                cout << Colors::MAGENTA << "Service Name: " << Colors::YELLOW << request->getSkill()->getSkillName() << endl;
+                cout << Colors::MAGENTA << "Supporter Name: " << Colors::YELLOW << request->getService()->getServiceOwner()->getFullName() << endl;
+                cout << Colors::MAGENTA << "Start Time: " << Colors::YELLOW << request->getStartTime().toString() << endl;
+                cout << Colors::MAGENTA << "End Time: " << Colors::YELLOW << request->getEndTime().toString() << endl;
+                cout << Colors::MAGENTA << "Status: " << Colors::YELLOW << request->getStatus() << endl;
+                count++;
+            }
+            // user choice
+
+            cout << Colors::CYAN << "Please enter service number to add review: " << Colors::RESET;
+            cin >> requestNumber;
+            while (requestNumber < 1 || requestNumber > acceptedSupporterRequest.size())
+            {
+                cout << Colors::MAGENTA << "Invalid number. Please enter service number to add review: " << Colors::RESET;
+                cin >> requestNumber;
+            }
+            cout << Colors::CYAN << "Enter your comment for service: ";
+            string comment;
+            cin.ignore();
+            getline(cin, comment);
+            cout << Colors::CYAN << "Enter your rating for skill: ";
+            int skillRating;
+            cin >> skillRating;
+            cout << Colors::CYAN << "Enter your rating for supporter: ";
+            int supporterRating;
+            cin >> supporterRating;
+            Request *request = acceptedSupporterRequest[requestNumber - 1];
+            Member *serviceOwner = request->getService()->getServiceOwner();
+            currentMember->addSupporterReview(serviceOwner, comment, supporterRating, skillRating, request);
+            cout << "Added review for " << Colors::YELLOW << serviceOwner->getFullName() << Colors::GREEN << " successfully." << Colors::RESET << endl;
+            break;
+        case 3:
+            cout << Colors::GREEN << "--------------3. Delete Reviews----------------\n"
+                 << Colors::RESET;
+            // show list of user request
+
+            break;
+        case 4:
+            // displayMemberMenu();
+            exit = true;
+            break;
+        }
+    } while (!exit);
+}
 // -------------------------------------9. Rate Host----------------------------------
 void System::hostRatingFunction()
 {
@@ -1061,37 +1200,81 @@ void System::topUp()
 // -------------------------11. Blocking (View, Block, Unblock)------------------------
 void System::manageBlockList()
 {
-    cout << Colors::GREEN << "1. View Block List" << endl;
-    cout << Colors::GREEN << "2. Unblock Member" << endl;
-    cout << Colors::GREEN << "3. Block Member" << endl;
-    cout << Colors::GREEN << "4. Back" << endl;
-    cout << Colors::CYAN << "Please enter your choice: " << Colors::RESET;
-    int choice;
-    cin >> choice;
-    Member *member = new Member();
-    switch (choice)
+    bool exit = false;
+    do
     {
-    case 1:
-        currentMember->showBlockedList();
-        break;
-    case 2:
-        currentMember->showBlockedList();
-        cout << Colors::CYAN << "Please enter the number of member you want to unblock: " << Colors::RESET;
-        int number;
-        cin >> number;
-        while (number < 1 || number > currentMember->getBlockedList().size())
+        cout << endl;
+        cout << Colors::YELLOW << "[1] View Block List" << endl;
+        cout << Colors::YELLOW << "[2] Unblock Member" << endl;
+        cout << Colors::YELLOW << "[3] Block Member" << endl;
+        cout << Colors::YELLOW << "[4] Back" << endl;
+        cout << endl;
+        cout << Colors::CYAN << "Please enter your choice: " << Colors::RESET;
+        int choice;
+        cin >> choice;
+        Member *member = new Member();
+        int count = 1;
+        switch (choice)
         {
-            cout << Colors::MAGENTA << "Invalid number. Please enter the number of member you want to unblock: " << Colors::RESET;
+        case 1:
+            currentMember->showBlockedList();
+            break;
+        case 2:
+            currentMember->showBlockedList();
+            cout << Colors::CYAN << "Please enter the number of member you want to unblock: " << Colors::RESET;
+            int number;
             cin >> number;
+            while (number < 1 || number > currentMember->getBlockedList().size())
+            {
+                cout << Colors::MAGENTA << "Invalid number. Please enter the number of member you want to unblock: " << Colors::RESET;
+                cin >> number;
+            }
+
+            member = currentMember->getBlockedList()[number - 1];
+            currentMember->unblockMember(member);
+            cout << "Unblocked " << Colors::YELLOW << member->getFullName() << Colors::RESET << endl;
+            break;
+        case 3:
+            // show list of member that have interacted with current member
+            cout << "List of member that have interacted with you: " << endl;
+
+            if (currentMember->getInteractedMembers().size() == 0)
+            {
+                cout << Colors::RED << "No member found" << Colors::RESET << endl;
+                break;
+            }
+            cout << Colors::MAGENTA << std::left << std::setw(5) << "No."
+                 << std::left << std::setw(20) << "USERNAME"
+                 << std::left << std::setw(20) << "FULL NAME" << Colors::RESET << endl;
+
+            count = 1;
+            for (Member *member : currentMember->getInteractedMembers())
+            {
+                cout << Colors::YELLOW << setw(5) << count << setw(20) << member->getUsername() << setw(20) << member->getFullName() << Colors::RESET << endl;
+                count++;
+            }
+            cout << Colors::CYAN << "Please enter the number of member you want to block: " << Colors::RESET;
+            int blockMemberNo;
+            cin >> blockMemberNo;
+            while (blockMemberNo < 1 || blockMemberNo > currentMember->getInteractedMembers().size())
+            {
+                cout << Colors::MAGENTA << "Invalid number. Please enter the number of member you want to block: " << Colors::RESET;
+                cin >> blockMemberNo;
+            }
+            member = currentMember->getInteractedMembers()[blockMemberNo - 1];
+            currentMember->blockMember(member);
+            cout << "Blocked " << Colors::YELLOW << member->getFullName() << Colors::RESET << endl;
+            break;
+        case 4:
+            cout << Colors::CYAN << "Do you want to go back? (Y/N)" << Colors::RESET << endl;
+            char confirm;
+            cin >> confirm;
+            if (confirm == 'Y' || confirm == 'y')
+            {
+                exit = true;
+            }
         }
-
-        member = currentMember->getBlockedList()[number - 1];
-        currentMember->unblockMember(member);
-        break;
-    case 3:
-
-        break;
-    }
+    } while (!exit);
 }
 
 void System::printAllData()
@@ -1107,7 +1290,13 @@ void System::printAllData()
              << member->getHomeAddress() << ","
              << member->getHostScore() << ","
              << member->getSupporterScore() << ","
-             << member->getCreditPoint() << "\n"; // Use '\n' for a newline character
+             << member->getCreditPoint();
+        for (Member *blockedMember : member->getBlockedList())
+        {
+            cout << blockedMember->getMemberId() << "-";
+        }
+
+        cout << "\n"; // Use '\n' for a newline character
         // Use '\n' for a newline character
     }
     for (Skill *skill : skill_list)

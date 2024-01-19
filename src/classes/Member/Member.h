@@ -84,6 +84,7 @@ public:
     void setEmail(std::string email);
     void setHomeAddress(std::string homeAddress);
     void setCity(std::string city);
+    void setHostScore(double hostScore);
     void setHostScore(double hostScore, Request *request);
     void setSupporterScore(double supporterScore);
     void setCreditPoint(int creditPoint);
@@ -106,6 +107,7 @@ public:
     void addCD(int cd);
     bool blockMember(Member *member);
     bool unblockMember(Member *member);
+    std::vector<Member *> getInteractedMembers();
 
     // as a supporter
     bool addService(Service *service);
@@ -118,7 +120,7 @@ public:
     // as a host
     bool addRequest(Request *request);
     void requestService(Service *service);
-    void addSupporterReview(Member *supporter, std::string comment, int supporterRating, Request *request);
+    void addSupporterReview(Member *supporter, std::string comment, int supporterRating, int skillRating, Request *request);
     void rateSkill(Skill *skill, double score, Request *request);
     void showAllService();
     void showAllServiceFilterBySkill(Skill *skill);

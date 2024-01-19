@@ -82,6 +82,7 @@ public:
     // MemberMenu Functions
     void displayMemberProfile(Member *member);
     void displayMemberSkillList(Member *member);
+    void manageReviews();
     void viewReviews();
     void manageRequest();
     void topUp();
