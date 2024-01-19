@@ -407,6 +407,7 @@ bool System::saveAllMembers()
                    << member->getPhoneNumber() << ","
                    << member->getEmail() << ","
                    << member->getHomeAddress() << ","
+                   << member->getCity() << ","
                    << member->getHostScore() << ","
                    << member->getSupporterScore() << ","
                    << member->getCreditPoint() << "\n"; // Use '\n' for a newline character
@@ -572,7 +573,7 @@ bool System::loadAllMembers()
     while (std::getline(memberFile, line))
     {
         std::vector<std::string> tokens = splitStr(line, ",");
-        if (tokens.size() != 10)
+        if (tokens.size() != 11)
         {
             std::cout << "Invalid member data\n";
             continue;
@@ -586,9 +587,10 @@ bool System::loadAllMembers()
             tokens[4],
             tokens[5],
             tokens[6],
-            std::stod(tokens[7]),
+            tokens[7],
             std::stod(tokens[8]),
-            std::stoi(tokens[9]));
+            std::stod(tokens[9]),
+            std::stoi(tokens[10]));
 
         member_list.push_back(member);
     }
@@ -1160,10 +1162,11 @@ void System::displayAllMember()
               << std::left << std::setw(10) << "ID"
               << std::left << std::setw(20) << "USERNAME"
               << std::left << std::setw(20) << "FULL NAME"
-              << std::left << std::setw(20) << "PHONE NUMBER"
+              << std::left << std::setw(10) << "PHONE"
               << std::left << std::setw(25) << "EMAIL"
               << std::left << std::setw(20) << "HOME ADDRESS"
-              << std::left << std::setw(10) << "HOST SCR"
+              << std::left << std::setw(10) << "CITY"
+              << std::left << std::setw(1) << "HOST SCR"
               << std::left << std::setw(10) << "SUPPORTER SCR"
               << std::left << std::setw(10) << "CREDIT POINT"
 

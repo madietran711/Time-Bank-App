@@ -12,6 +12,7 @@ Member::Member(
     std::string phoneNumber,
     std::string email,
     std::string homeAddress,
+    std::string city,
     double hostScore,
     double supporterScore,
     int creditPoint)
@@ -22,6 +23,7 @@ Member::Member(
       phoneNumber(phoneNumber),
       email(email),
       homeAddress(homeAddress),
+      city(city),
       hostScore(hostScore),
       supporterScore(supporterScore),
       creditPoint(creditPoint),
@@ -73,6 +75,10 @@ std::string Member::getEmail() const
 std::string Member::getHomeAddress() const
 {
   return homeAddress;
+}
+std::string Member::getCity() const
+{
+  return city;
 }
 
 double Member::getHostScore() const
@@ -149,6 +155,10 @@ void Member::setHomeAddress(std::string homeAddress)
 {
   this->homeAddress = homeAddress;
 }
+void Member::setCity(std::string city)
+{
+  this->city = city;
+}
 
 void Member::setHostScore(double hostScore, Request *request)
 {
@@ -214,9 +224,10 @@ void Member::viewProfile()
             << std::left << std::setw(10) << this->getMemberId()
             << std::left << std::setw(20) << this->getUsername()
             << std::left << std::setw(20) << this->getFullName()
-            << std::left << std::setw(20) << this->getPhoneNumber()
+            << std::left << std::setw(10) << this->getPhoneNumber()
             << std::left << std::setw(25) << this->getEmail()
             << std::left << std::setw(20) << this->getHomeAddress()
+            << std::left << std::setw(10) << this->getCity()
             << std::left << std::setw(10) << this->getHostScore()
             << std::left << std::setw(10) << this->getSupporterScore()
             << std::left << std::setw(10) << this->getCreditPoint()

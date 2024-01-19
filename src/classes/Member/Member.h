@@ -26,6 +26,7 @@ private:
     std::string phoneNumber;
     std::string email;
     std::string homeAddress;
+    std::string city;
     double hostScore;
     double supporterScore;
     int creditPoint;
@@ -47,6 +48,7 @@ public:
         std::string phoneNumber,
         std::string email,
         std::string homeAddress,
+        std::string city,
         double hostScore,
         double supporterScore,
         int creditPoint = 20);
@@ -63,6 +65,7 @@ public:
     std::string getPhoneNumber() const;
     std::string getEmail() const;
     std::string getHomeAddress() const;
+    std::string getCity() const;
     double getHostScore() const;
     double getSupporterScore() const;
     int getCreditPoint() const;
@@ -80,6 +83,7 @@ public:
     void setPhoneNumber(std::string phoneNumber);
     void setEmail(std::string email);
     void setHomeAddress(std::string homeAddress);
+    void setCity(std::string city);
     void setHostScore(double hostScore, Request *request);
     void setSupporterScore(double supporterScore);
     void setCreditPoint(int creditPoint);
