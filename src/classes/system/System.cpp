@@ -117,136 +117,20 @@ void System::displayMemberMenu()
         switch (choice)
         {
         case 1:
-            std::cout << "----------------1. Manage Profile (View, Edit)----------------\n";
-            displayMemberProfile(currentMember);
-            std::cout << "1. Edit Profile";
-            std::cout << "2. Change Password";
-            std::cout << "3. Return to Main Menu";
-
-            int subchoice;
-            std::cin >> subchoice;
-            switch (subchoice)
-            {
-                case 1:
-                    std::cout << Colors::GREEN << "----------------1. Edit Profile----------------\n"
-                            << Colors::RESET;
-                    std::cout << "Enter current Password: ";
-                    std::string inputPW;
-                    std::getline(std::cin, inputPW);
-                    if (inputPW == currentMember->getPassword())
-                    {
-                        std::cout << "Enter new Username: ";
-                        std::string newUsername;
-                        std::getline(std::cin, newUsername);
-                        std::cin.ignore();
-                        std::cout << "Enter new Full Name: ";
-                        std::string newFullName;
-                        std::getline(std::cin, newFullName);
-                        std::cin.ignore();
-                        std::cout << "Enter new Phone Number: ";
-                        std::string newPhoneNumber;
-                        std::getline(std::cin, newPhoneNumber);
-                        std::cin.ignore();
-                        std::cout << "Enter new Email Address: ";
-                        std::string newEmailAddress;
-                        std::getline(std::cin, newEmailAddress);
-                        std::cin.ignore();
-                        std::cout << "Enter new Home Address: ";
-                        std::string newHomeAddress;
-                        std::getline(std::cin, newHomeAddress);
-                        std::cin.ignore();
-                        currentMember->setUsername(newUsername);
-                        currentMember->setFullName(newFullName);
-                        currentMember->setPhoneNumber(newPhoneNumber);
-                        currentMember->setEmail(newEmailAddress);
-                        currentMember->setHomeAddress(newHomeAddress);
-                        displayMemberProfile(currentMember);
-                    } else {
-                        std::cout << "Incorrect Password!\n";
-                    }
-                    break;
-                case 2:
-                    std::cout << "----------------2. Change Password----------------\n";
-                    std::cout << "Enter current Password: ";
-                    std::string inputPW;
-                    std::getline(std::cin, inputPW);
-                    std::cin.ignore();
-                    if (inputPW == currentMember->getPassword())
-                    {
-                        std::cout << "Enter new Password: ";
-                        std::string newPassword;
-                        std::getline(std::cin, newPassword);
-                        std::cin.ignore();
-                        currentMember->setPassword(newPassword);
-                    } else {
-                        std::cout << "Incorrect Password!\n";
-                    }
-                    break;
-                case 3:
-                    std::cout << "----------------3. Return to Main Menu----------------\n";
-                    displayMemberMenu();
-                    break;
-            }
-            displayMemberMenu();
+            std::cout << Colors::GREEN << "----------------1. Manage Profile (View, Edit)----------------\n"
+                    << Colors::RESET;
+            manageProfile(currentMember);
             break;
         case 2:
             std::cout << Colors::GREEN << "----------------2. Manage Skills (View, Add, Delete)----------------\n"
                     << Colors::RESET;
             displayMemberSkillList(currentMember);
-            std::cout << "1. Add a new skill";
-            std::cout << "2. Delete an existing skill";
-            std::cout << "3. Return to Main Menu";
-
-            int subchoice;
-            std::cin >> subchoice;
-            if (subchoice == 1) 
-            switch (subchoice)
-            {
-                case 1:
-                    std::cout << "----------------1. Add a new skill----------------\n";
-                    std::cout << "Enter new Skill Name: ";
-                    std::string newSkillName;
-                    std::getline(std::cin, newSkillName);
-                    std::cin.ignore();
-                    std::string newSkillID = generateId();
-                    Skill newSkill(newSkillID, currentMember, newSkillName, 0.0);
-                    currentMember->addSkill(&newSkill);
-                    displayMemberSkillList(currentMember);
-                    break;
-                case 2:
-                    std::cout << "----------------2. Delete an existing skill----------------\n";
-                    std::cout << "Enter the Skill Name of the skill to be deleted: ";
-                    std::string deletingSkillName;
-                    std::getline(std::cin, deletingSkillName);
-                    auto it = std::find_if(currentMember->getSkills().begin(), currentMember->getSkills().end(), [&deletingSkillName](const Skill& deletingSkill) 
-                        { return deletingSkill.getSkillName() == deletingSkillName; });
-                    if (it != currentMember->getSkills().end()) {
-                        std::cout << "Skill to be deleted found.\n";
-                        bool deletingResult = currentMember->removeSkill(*it);
-                        if (deletingResult) {
-                            std::cout << "Skill successfully deleted.\n";
-                        } else {
-                            std::cout << "Skill cannot be deleted.\n";
-                        }
-                    } else {
-                        std::cout << "Cannot find specified Skill.\n";
-                    }
-                    displayMemberSkillList(currentMember);
-                    break;
-                case 3:
-                    std::cout << "----------------3. Return to Main Menu----------------\n";
-                    displayMemberMenu();
-                    break;
-            }
-            displayMemberMenu();
+            manageSkills(currentMember);
             break;
         case 3:
             std::cout << Colors::GREEN << "----------------3. View Available Services----------------\n"
                     << Colors::RESET;
             // displayAvailableServices(currentMember);
-
-            std::cout << std::endl;
-            displayMemberMenu();
             break;
         case 4:
             std::cout << Colors::GREEN << "----------------4. Manage Service Listing (Add Service, Delete Service, View & Accept Request)\n----------------\n"
@@ -918,6 +802,8 @@ bool System::loadAllReviews()
 }
 
 // get BY ID
+
+// ID generation
 string generateUUIDV4() {
     static std::random_device dev;
     static std::mt19937 rng(dev());
@@ -935,7 +821,6 @@ string generateUUIDV4() {
     }
     return id;
 }
-
 string System::generateId() {
     return generateUUIDV4();
 }
@@ -1302,6 +1187,141 @@ void System::printAllData()
              << review->getComment() << ","
              << "\n"; // Use '\n' for a newline character
     }
+}
+
+void System::manageProfile(Member *member)
+{
+    displayMemberProfile(currentMember);
+    std::string inputPW;
+    int subchoice;
+    bool exit = false;
+    do
+    {
+        std::cout << "1. Edit Profile";
+        std::cout << "2. Change Password";
+        std::cout << "25. Back\n";
+            
+        std::cin >> subchoice;
+        switch (subchoice)
+        {
+            case 1:
+                std::cout << Colors::GREEN << "----------------1. Edit Profile----------------\n"
+                        << Colors::RESET;
+                std::cout << "Enter current Password: ";
+                std::getline(std::cin, inputPW);
+                if (inputPW == currentMember->getPassword())
+                {
+                    std::cout << "Enter new Username: ";
+                    std::string newUsername;
+                    std::getline(std::cin, newUsername);
+                    std::cin.ignore();
+                    std::cout << "Enter new Full Name: ";
+                    std::string newFullName;
+                    std::getline(std::cin, newFullName);
+                    std::cin.ignore();
+                    std::cout << "Enter new Phone Number: ";
+                    std::string newPhoneNumber;
+                    std::getline(std::cin, newPhoneNumber);
+                    std::cin.ignore();
+                    std::cout << "Enter new Email Address: ";
+                    std::string newEmailAddress;
+                    std::getline(std::cin, newEmailAddress);
+                    std::cin.ignore();
+                    std::cout << "Enter new Home Address: ";
+                    std::string newHomeAddress;
+                    std::getline(std::cin, newHomeAddress);
+                    std::cin.ignore();
+                    currentMember->setUsername(newUsername);
+                    currentMember->setFullName(newFullName);
+                    currentMember->setPhoneNumber(newPhoneNumber);
+                    currentMember->setEmail(newEmailAddress);
+                    currentMember->setHomeAddress(newHomeAddress);
+                    displayMemberProfile(currentMember);
+                } else {
+                    std::cout << "Incorrect Password!\n";
+                }
+                break;
+            case 2:
+                std::cout << "----------------2. Change Password----------------\n";
+                std::cout << "Enter current Password: ";
+                std::getline(std::cin, inputPW);
+                std::cin.ignore();
+                if (inputPW == currentMember->getPassword())
+                {
+                    std::cout << "Enter new Password: ";
+                    std::string newPassword;
+                    std::getline(std::cin, newPassword);
+                    std::cin.ignore();
+                    currentMember->setPassword(newPassword);
+                } else {
+                    std::cout << "Incorrect Password!\n";
+                }
+                break;
+            case 25:
+                // displayMemberMenu();
+                exit = true;
+                break;
+            }
+    } while (!exit);
+            
+}
+
+void System::manageSkills(Member* member)
+{
+    int subchoice;
+    bool exit = false;
+    std::string newSkillID;
+    std::string newSkillName;
+    Skill newSkill;
+    std::string deletingSkillName;
+    do {
+        std::cout << "1. Add a new skill";
+        std::cout << "2. Delete an existing skill";
+        std::cout << "25. Back\n";
+
+        int subchoice;
+        std::cin >> subchoice;
+        if (subchoice == 1) 
+        switch (subchoice)
+        {
+            case 1:
+                std::cout << "----------------1. Add a new skill----------------\n";
+                newSkillID = generateId();
+                std::cout << "Enter new Skill Name: ";
+                std::getline(std::cin, newSkillName);
+                std::cin.ignore();
+                newSkill.setSkillId(newSkillID);
+                newSkill.setOwner(member);
+                newSkill.setSkillName(newSkillName);
+                newSkill.setRatingScore(0.0);
+                member->addSkill(&newSkill);
+                displayMemberSkillList(member);
+                break;
+            case 2:
+                std::cout << "----------------2. Delete an existing skill----------------\n";
+                std::cout << "Enter the Skill Name of the skill to be deleted: ";
+                std::getline(std::cin, deletingSkillName);
+                auto it = std::find_if(currentMember->getSkills().begin(), currentMember->getSkills().end(), [&deletingSkillName](const Skill& deletingSkill) 
+                    { return deletingSkill.getSkillName() == deletingSkillName; });
+                if (it != currentMember->getSkills().end()) {
+                    std::cout << "Skill to be deleted found.\n";
+                    bool deletingResult = currentMember->removeSkill(*it);
+                    if (deletingResult) {
+                        std::cout << "Skill successfully deleted.\n";
+                    } else {
+                        std::cout << "Skill cannot be deleted.\n";
+                    }
+                } else {
+                    std::cout << "Cannot find specified Skill.\n";
+                }
+                displayMemberSkillList(currentMember);
+                break;
+            case 25:
+                // displayMemberMenu();
+                exit = true;
+                break;
+        }
+    } while (!exit);
 }
 
 void System::displayServiceListing(Member *member)

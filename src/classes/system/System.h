@@ -84,7 +84,9 @@ public:
 
     // MemberMenu Functions
     void displayMemberProfile(Member *member);
+    void manageProfile(Member *member);
     void displayMemberSkillList(Member *member);
+    void manageSkills(Member *member);
     void displayAvailableServices(Member *member);
     void displayServiceListing(Member *member);
     void viewReviews();
