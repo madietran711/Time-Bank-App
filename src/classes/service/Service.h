@@ -57,12 +57,13 @@ public:
     void setEndTime(std::string endTime);
     void setConsumingCD(int consumingCD);
     void setScoreRequired(double scoreRequired);
-    void setSkillList(const std::vector<Skill*> &skillList);
-    void setRequestList(const std::vector<Request*> &requestList);
+    void setSkillList(const std::vector<Skill *> &skillList);
+    void setRequestList(const std::vector<Request *> &requestList);
 
     // Return address of the array of info to display
     int *returnServiceInfo();
     void addRequest(Request *request);
+    void addSkill(Skill *skill);
 };
 
 #endif // TIME_BANK_APP_SERVICE_H

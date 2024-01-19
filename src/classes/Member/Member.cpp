@@ -28,7 +28,8 @@ Member::Member(
       skills({}),
       blockedList({}),
       acceptedRequest({}),
-      listedService({}){};
+      listedService({}),
+      myRequest({}){};
 
 Member::Member(std::string username, std::string password)
     : username(username),
@@ -108,6 +109,10 @@ const std::vector<Request *> &Member::getAcceptedRequest() const
 {
   return acceptedRequest;
 }
+const std::vector<Request *> &Member::getMyRequest() const
+{
+  return myRequest;
+}
 
 // Setter functions
 void Member::setMemberId(std::string memberId)
@@ -179,6 +184,10 @@ void Member::setAcceptedRequest(const std::vector<Request *> &acceptedRequest)
 {
   this->acceptedRequest = acceptedRequest;
 }
+void Member::setMyRequest(const std::vector<Request *> &myRequest)
+{
+  this->myRequest = myRequest;
+}
 
 // Member functions
 bool Member::acceptRequest(Request *request)
@@ -218,23 +227,32 @@ void Member::viewProfile()
 void Member::showSkills()
 {
   std::cout << Colors::MAGENTA
-            << std::left << std::setw(10) << "Skill ID"
+            << std::left << std::setw(10) << "Skill No."
             << std::left << std::setw(20) << "Skill Name"
             << std::left << std::setw(20) << "Skill Point"
             << Colors::RESET << std::endl;
+  int count = 1;
   for (Skill *skill : this->skills)
   {
     std::cout << Colors::YELLOW
+              << std::left << std::setw(10) << count
               << std::left << std::setw(10) << skill->getSkillId()
               << std::left << std::setw(20) << skill->getSkillName()
               << std::left << std::setw(20) << skill->getRatingScore()
               << Colors::RESET << std::endl;
+
+    count++;
   }
 }
 
 bool Member::blockMember(Member *member)
 {
   this->blockedList.push_back(member);
+  return true;
+}
+bool Member::addRequest(Request *request)
+{
+  this->myRequest.push_back(request);
   return true;
 }
 
@@ -254,7 +272,7 @@ void Member::showBlockedList()
 {
   std::cout << Colors::MAGENTA
             << std::left << std::setw(10) << "No."
-            << std::left << std::setw(10) << "Member ID"
+
             << std::left << std::setw(20) << "Username"
             << Colors::RESET << std::endl;
 
@@ -263,7 +281,7 @@ void Member::showBlockedList()
   {
     std::cout << Colors::YELLOW
               << std::left << std::setw(10) << count
-              << std::left << std::setw(10) << member->getMemberId()
+
               << std::left << std::setw(20) << member->getUsername()
 
               << Colors::RESET << std::endl;
@@ -274,4 +292,31 @@ void Member::showBlockedList()
 void Member::addCD(int cd)
 {
   this->creditPoint += cd;
+}
+
+void Member::viewMyRequest()
+{
+  std::cout << Colors::MAGENTA
+            << std::left << std::setw(10) << "No."
+            << std::left << std::setw(20) << "Skill Request"
+            << std::left << std::setw(20) << "Service Owner"
+            << std::left << std::setw(20) << "Start Time"
+            << std::left << std::setw(20) << "End Time"
+            << std::left << std::setw(20) << "Status"
+            << Colors::RESET << std::endl;
+
+  int count = 1;
+  for (Request *request : this->myRequest)
+  {
+    std::cout << Colors::YELLOW
+              << std::left << std::setw(10) << count
+
+              << std::left << std::setw(20) << request->getSkill()->getSkillName()
+              << std::left << std::setw(20) << request->getService()->getServiceOwner()->getUsername()
+              << std::left << std::setw(20) << request->getStartTime().toString()
+              << std::left << std::setw(20) << request->getEndTime().toString()
+              << std::left << std::setw(20) << (request->getStatus() == 0 ? "PENDING" : "ACCEPTED")
+              << Colors::RESET << std::endl;
+    count++;
+  }
 }

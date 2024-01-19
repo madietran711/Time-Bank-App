@@ -48,6 +48,8 @@ void System::displayWelcomeMenu()
     // initData();
     loadAllData();
     printAllData();
+    saveAllData();
+    loadAllData();
     // Print the main menu
     std::cout << Colors::GREEN << "--------------------------------------------------\n";
     std::cout << "Welcome to Time Bank Application\n";
@@ -134,6 +136,9 @@ void System::displayMemberMenu()
             break;
         case 6:
             // displayMemberMenu();
+            cout << Colors::GREEN << "--------------6. Manage Request (View, Add, Delete)----------------\n"
+                 << Colors::RESET;
+            manageRequest();
             break;
         case 7:
             cout << Colors::GREEN << "--------------7. View Reviews----------------\n"
@@ -187,10 +192,25 @@ void System::initData()
     initSkills();
     initServices();
     initRequests();
-    saveAllMembers();
-    saveAllSkills();
 }
-
+bool System::saveAllData()
+{
+    cout << Colors::MAGENTA << "Saving data...\n"
+         << Colors::RESET;
+    try
+    {
+        saveAllMembers();
+        saveAllSkills();
+        saveAllServices();
+        saveAllRequests();
+        saveAllReviews();
+        return true;
+    }
+    catch (const std::exception &e)
+    {
+        std::cerr << e.what() << '\n';
+    }
+}
 void System::initMembers()
 {
     // Initialize some members
@@ -268,7 +288,7 @@ bool System::saveAllMembers()
     }
 
     for (const Member *member : member_list)
-    { // Use const reference to avoid unnecessary copy
+    {
         memberFile << member->getMemberId() << ","
                    << member->getUsername() << ","
                    << member->getPassword() << ","
@@ -279,7 +299,6 @@ bool System::saveAllMembers()
                    << member->getHostScore() << ","
                    << member->getSupporterScore() << ","
                    << member->getCreditPoint() << "\n"; // Use '\n' for a newline character
-        // Use '\n' for a newline character
     }
 
     memberFile.close();
@@ -330,7 +349,9 @@ bool System::saveAllRequests()
                     << request->getService()->getServiceId() << ","
                     << request->getRequester()->getMemberId() << ","
                     << request->getStartTime().toString() << ","
+
                     << request->getEndTime().toString() << ","
+                    << request->getSkill()->getSkillId() << ","
                     << request->getStatus() << ","
                     << "\n"; // Use '\n' for a newline character
     }
@@ -359,8 +380,20 @@ bool System::saveAllServices()
                     << service->getStartTime().toString() << ","
                     << service->getEndTime().toString() << ","
                     << service->getConsumingCD() << ","
-                    << service->getScoreRequired() << ","
-                    << "\n"; // Use '\n' for a newline character
+                    << service->getScoreRequired() << ",";
+
+        // Save skill IDs separated by dashes
+        const std::vector<Skill *> &skillList = service->getSkillList();
+        for (size_t i = 0; i < skillList.size(); ++i)
+        {
+            serviceFile << skillList[i]->getSkillId();
+            if (i < skillList.size() - 1)
+            {
+                serviceFile << "-";
+            }
+        }
+
+        serviceFile << "\n"; // Use '\n' for a newline character
     }
 
     serviceFile.close();
@@ -482,6 +515,8 @@ bool System::loadAllSkills()
         skill->setSkillName(tokens[2]);
         skill->setRatingScore(std::stod(tokens[3]));
         skill_list.push_back(skill);
+
+        // Linking
         owner->addSkill(skill);
     }
 
@@ -506,7 +541,8 @@ bool System::loadAllServices()
     while (std::getline(serviceFile, line))
     {
         std::vector<std::string> tokens = splitStr(line, ",");
-        if (tokens.size() != 6)
+
+        if (tokens.size() != 7)
         {
             std::cout << "Invalid service data\n";
             continue;
@@ -520,7 +556,27 @@ bool System::loadAllServices()
         service->setEndTime(tokens[3]);
         service->setConsumingCD(std::stoi(tokens[4]));
         service->setScoreRequired(std::stod(tokens[5]));
+
+        // Load skill IDs from the string separated by dashes
+        std::vector<std::string> skillIds = splitStr(tokens[6], "-");
+        for (const std::string &skillId : skillIds)
+        {
+            Skill *skill = getSkillByID(skillId);
+            if (skill)
+            {
+                // Linking
+                service->addSkill(skill);
+            }
+            else
+            {
+                std::cout << "Invalid skill ID in service data\n";
+            }
+        }
+
         service_list.push_back(service);
+
+        // Linking
+        owner->addService(service);
     }
 
     serviceFile.close();
@@ -562,6 +618,15 @@ bool System::loadAllRequests()
         request->setStatus(stoi(tokens[6]));
 
         request_list.push_back(request);
+
+        // Linking
+        service->addRequest(request);
+        requester->addRequest(request);
+        if (request->getStatus() == 1)
+        {
+            Member *serviceOwner = service->getServiceOwner();
+            serviceOwner->acceptRequest(request);
+        }
     }
 
     requestFile.close();
@@ -677,10 +742,20 @@ std::vector<std::string> System::splitStr(std::string &str, std::string delimite
     size_t pos = 0;
     while ((pos = str.find(delimiter)) != std::string::npos)
     {
-        tokens.push_back(str.substr(0, pos));
+        std::string token = str.substr(0, pos);
+        if (!token.empty()) // Skip empty tokens
+        {
+            tokens.push_back(token);
+        }
         str.erase(0, pos + delimiter.length());
     }
-    tokens.push_back(str);
+
+    // Add the last token (or the only token if there's no delimiter)
+    if (!str.empty()) // Skip empty tokens
+    {
+        tokens.push_back(str);
+    }
+
     return tokens;
 }
 
@@ -711,6 +786,45 @@ void System::displayMemberSkillList(Member *member)
 // ---------------5. View Available Supporter (By Time or Location)----------------
 
 // -----------------------6. Manage Request (View, Add, Delete)---------------------
+void System::manageRequest()
+{
+    int choice;
+    bool exit = false;
+    do
+    {
+
+        std::cout << "1. View Request\n";
+        std::cout << "2. Add Request\n";
+        std::cout << "3. Delete Request\n";
+        std::cout << "25. Back\n";
+        std::cout << Colors::CYAN << "Please enter your choice: " << Colors::RESET;
+
+        std::cin >> choice;
+        switch (choice)
+        {
+        case 1:
+            cout << Colors::GREEN << "--------------1. View Request----------------\n"
+                 << Colors::RESET;
+            currentMember->viewMyRequest();
+            break;
+        case 2:
+            cout << Colors::GREEN << "--------------2. Add Request----------------\n"
+                 << Colors::RESET;
+            // show list of service
+            break;
+        case 3:
+            cout << Colors::GREEN << "--------------3. Delete Request----------------\n"
+                 << Colors::RESET;
+            // show list of user request
+
+            break;
+        case 25:
+            // displayMemberMenu();
+            exit = true;
+            break;
+        }
+    } while (!exit);
+}
 // --------------------------------------7. View Reviews-----------------------------
 void System::viewReviews()
 {
@@ -896,8 +1010,12 @@ void System::printAllData()
              << service->getStartTime().toString() << ","
              << service->getEndTime().toString() << ","
              << service->getConsumingCD() << ","
-             << service->getScoreRequired() << ","
-             << "\n"; // Use '\n' for a newline character
+             << service->getScoreRequired() << ",";
+        for (Skill *skill : service->getSkillList())
+        {
+            cout << skill->getSkillId() << "-";
+        }
+        cout << "\n"; // Use '\n' for a newline character
     }
     for (Request *request : request_list)
     { // Use const reference to avoid unnecessary copy
