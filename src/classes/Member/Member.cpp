@@ -215,11 +215,11 @@ void Member::viewProfile()
             << std::left << std::setw(20) << this->getUsername()
             << std::left << std::setw(20) << this->getFullName()
             << std::left << std::setw(20) << this->getPhoneNumber()
-            << std::left << std::setw(20) << this->getEmail()
+            << std::left << std::setw(25) << this->getEmail()
             << std::left << std::setw(20) << this->getHomeAddress()
-            << std::left << std::setw(20) << this->getHostScore()
-            << std::left << std::setw(20) << this->getSupporterScore()
-            << std::left << std::setw(20) << this->getCreditPoint()
+            << std::left << std::setw(10) << this->getHostScore()
+            << std::left << std::setw(10) << this->getSupporterScore()
+            << std::left << std::setw(10) << this->getCreditPoint()
 
             << Colors::RESET << std::endl;
 }

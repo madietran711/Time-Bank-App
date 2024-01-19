@@ -333,8 +333,8 @@ void System::displayAdminMenu()
                     if (confirm == 'Y' || confirm == 'y')
                     {
                         member_list[choice - 1]->setPassword(newPassword);
-                        cout << Colors::GREEN << "Password changed successfully for \n"
-                             << Colors::BOLD << member_list[choice - 1]->getFullName() << Colors::RESET;
+                        cout << Colors::GREEN << "Password changed successfully for "
+                             << Colors::BOLD << member_list[choice - 1]->getFullName() << Colors::RESET << endl;
                     }
                     else
                     {
@@ -354,7 +354,7 @@ void System::displayAdminMenu()
         case 3:
             // displayMemberMenu();
             char choice;
-            cout << "Do you want to log out? (Y/N): ";
+            cout << Colors::CYAN << "Do you want to log out? (Y/N): " << Colors::RESET;
             cin >> choice;
             if (choice == 'Y' || choice == 'y')
             {
@@ -430,11 +430,11 @@ bool System::saveAllSkills()
     }
 
     for (const Skill *skill : skill_list)
-    { // Use const reference to avoid unnecessary copy
+    {
         skillFile << skill->getSkillId() << ","
                   << skill->getOwner()->getMemberId() << ","
                   << skill->getSkillName() << ","
-                  << skill->getRatingScore() << "\n"; // Use '\n' for a newline character
+                  << skill->getRatingScore() << "\n";
     }
 
     skillFile.close();
@@ -1155,21 +1155,22 @@ void System::printAllData()
 void System::displayAllMember()
 {
     int count = 1;
+    std::cout << Colors::MAGENTA << "Member Profile\n"
+              << std::left << std::setw(5) << "No."
+              << std::left << std::setw(10) << "ID"
+              << std::left << std::setw(20) << "USERNAME"
+              << std::left << std::setw(20) << "FULL NAME"
+              << std::left << std::setw(20) << "PHONE NUMBER"
+              << std::left << std::setw(25) << "EMAIL"
+              << std::left << std::setw(20) << "HOME ADDRESS"
+              << std::left << std::setw(10) << "HOST SCR"
+              << std::left << std::setw(10) << "SUPPORTER SCR"
+              << std::left << std::setw(10) << "CREDIT POINT"
+
+              << Colors::RESET << endl;
     for (Member *member : member_list)
     {
-        std::cout << Colors::MAGENTA << "Member Profile\n"
-                  << std::left << std::setw(5) << "No."
-                  << std::left << std::setw(10) << "ID"
-                  << std::left << std::setw(20) << "USERNAME"
-                  << std::left << std::setw(20) << "FULL NAME"
-                  << std::left << std::setw(20) << "PHONE NUMBER"
-                  << std::left << std::setw(20) << "EMAIL"
-                  << std::left << std::setw(20) << "HOME ADDRESS"
-                  << std::left << std::setw(10) << "HOST SCORE"
-                  << std::left << std::setw(10) << "SUPPORTER SCORE"
-                  << std::left << std::setw(10) << "CREDIT POINT"
 
-                  << Colors::RESET << endl;
         cout << Colors::YELLOW
              << std::left << std::setw(5) << count;
         member->viewProfile();
