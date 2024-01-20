@@ -8,6 +8,9 @@
 #define REQUEST_FILE "./data/request.dat"
 #define REVIEW_FILE "./data/review.dat"
 
+#include <fstream>
+#include <iomanip>
+
 #include "../../utils/colors.h"
 #include "../../utils/Utilities.h"
 #include "../member/Member.h"
@@ -16,19 +19,8 @@
 #include "../request/Request.h"
 #include "../skill/Skill.h"
 #include "../review/Review.h"
-#include <fstream>
-#include <iomanip>
 
-#include <regex>
 using namespace std;
-
-std::regex usernameRegex("^[A-Za-z0-9_]+$");
-std::regex passwordRegex("^[A-Za-z0-9]+$");
-std::regex nameRegex("^[A-Za-z'-]+$");
-std::regex phoneNumRegex("^[0-9]+$");
-std::regex emailRegex("^[\\w.-]+@[\\w.-]+\\.[A-Za-z]{2,6}$");
-std::regex addressRegex("^[\\w\\s.,'-]+$");
-std::regex cityRegex("^(HANOI|SAIGON)$");
 
 class System
 {
@@ -127,7 +119,10 @@ public:
     std::string getRegName();
     std::string getRegAddress();
     std::string getRegCity();
-    void verifyContinueRegister();
+    int getFirstTopUp();
+    bool verifyContinueRegister();
+    std::string createNewAccId();
+    bool checkUniqueId(int i);
 };
 
 #endif // TIME_BANK_APP_SYSTEM_H
