@@ -8,6 +8,7 @@
 #include "../skill/Skill.h"
 #include "../service/Service.h"
 #include "../request/Request.h"
+#include "../review/Review.h"
 #include "../date/Date.h"
 #include "../../utils/colors.h"
 #include "../guest/Guest.h"
@@ -16,6 +17,7 @@ class Skill;
 class Service;
 class Request;
 class Date;
+class Review;
 class Member : public Guest
 {
 private:
@@ -108,6 +110,7 @@ public:
     bool blockMember(Member *member);
     bool unblockMember(Member *member);
     std::vector<Member *> getInteractedMembers();
+    std::vector<Review *> getReviews(std::vector<Review *> review_list);
 
     // as a supporter
     bool addService(Service *service);
@@ -120,7 +123,6 @@ public:
     // as a host
     bool addRequest(Request *request);
     void requestService(Service *service);
-    void addSupporterReview(Member *supporter, std::string comment, int supporterRating, int skillRating, Request *request);
     void rateSkill(Skill *skill, double score, Request *request);
     void showAllService();
     void showAllServiceFilterBySkill(Skill *skill);

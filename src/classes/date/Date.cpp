@@ -277,7 +277,7 @@ std::string Date::toString() const
 }
 
 // Getting the string representation of the month using switch case
-std::string Date::getMonthStr() const
+std::string Date::getMonthStr(int month) const
 {
     switch (month)
     {
@@ -308,12 +308,6 @@ std::string Date::getMonthStr() const
     default:
         return "Invalid Month";
     }
-}
-
-// Converting the Date and time to a string with the specified format
-std::string Date::toDateTimeString() const
-{
-    return toString();
 }
 
 void runDateTests()

@@ -20,6 +20,8 @@ public:
     static bool validateFullName(std::string &str);
     static bool validatePhoneNumber(std::string &str);
     static bool validateEmail(std::string &str);
+    static bool validateUserRating(int &rating);
+    static string generateId();
 };
 
 #endif // TIME_BANK_APP_UTILITIES_H

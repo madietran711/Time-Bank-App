@@ -169,3 +169,24 @@ bool Utilities::validateEmail(string &str)
 
     return true;
 }
+bool Utilities::validateUserRating(int &rating)
+{
+    if (rating < 0 || rating > 5)
+    {
+        cout << Colors::RED << "ERROR: Rating must be between 0 and 5.\n"
+             << Colors::RESET;
+        return false;
+    }
+
+    return true;
+}
+std::string Utilities::generateId()
+{
+    std::string id = "";
+    srand(time(NULL));
+    for (int i = 0; i < 6; i++)
+    {
+        id += std::to_string(rand() % 10);
+    }
+    return id;
+}

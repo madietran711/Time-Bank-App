@@ -184,11 +184,11 @@ void System::displayMemberMenu()
                   << "Manage Service Listing (Add Service, Delete Service, View & Accept Request)\n";
 
         std::cout << std::setw(5) << "[5]"
-                  << "Manage Request (View, Add, Delete)\n";
+                  << "Manage Request (View, Add)\n";
         std::cout << std::setw(5) << "[6]"
                   << "View Reviews For Your Service\n";
         std::cout << std::setw(5) << "[7]"
-                  << "Manage Reviews For Supporters (View, Add, Delete)\n";
+                  << "Manage Reviews For Supporters (View, Add)\n";
         std::cout << std::setw(5) << "[8]"
                   << "Rate Host\n";
         std::cout << std::setw(5) << "[9]"
@@ -232,9 +232,9 @@ void System::displayMemberMenu()
             viewReviews();
             break;
         case 7:
-            std::cout << Colors::GREEN << "--------------7. Manage Reviews (View, Add, Delete)----------------\n"
+            std::cout << Colors::GREEN << "--------------7. Manage Reviews (View, Add)----------------\n"
                       << Colors::RESET;
-
+            manageReviews();
             break;
         case 8:
             std::cout << Colors::GREEN << "--------------8. Rate Host----------------\n"
@@ -1012,13 +1012,18 @@ void System::manageReviews()
         std::cout << endl;
         std::cout << Colors::YELLOW << "[1] View Reviews\n";
         std::cout << Colors::YELLOW << "[2] Add Reviews\n";
-        std::cout << Colors::YELLOW << "[3] Delete Reviews\n";
-        std::cout << Colors::YELLOW << "[4] Back\n";
+        std::cout << Colors::YELLOW << "[3] Back\n";
 
         std::cout << Colors::CYAN << "Please enter your choice: " << Colors::RESET;
 
+        // variable declartion
+        std::vector<Request *> acceptedSupporterRequest;
+
         int count = 1;
-        int requestNumber;
+        bool isNewReview;
+        int requestNumber, hostRating;
+        Review *newReview;
+        Review *editReview;
         std::cin >> choice;
         switch (choice)
         {
@@ -1026,14 +1031,27 @@ void System::manageReviews()
             cout << Colors::GREEN << "--------------1. View Reviews----------------\n"
                  << Colors::RESET;
             // show list of reviews that user have made
-
+            cout << "List of reviews that you have made: " << endl;
+            for (Review *review : review_list)
+            {
+                if (review->getRequest()->getRequester() == currentMember)
+                {
+                    cout << Colors::MAGENTA << "Review ID: " << Colors::YELLOW << review->getReviewId() << endl;
+                    cout << Colors::MAGENTA << "Skill Rating: " << Colors::YELLOW << review->getSkillRating() << endl;
+                    cout << Colors::MAGENTA << "Supporter Rating: " << Colors::YELLOW << review->getSupporterRating() << endl;
+                    cout << Colors::MAGENTA << "Host Rating: " << Colors::YELLOW << review->getHostRating() << endl;
+                    cout << Colors::MAGENTA << "Service: " << Colors::YELLOW << review->getRequest()->getSkill()->getSkillName() << endl;
+                    cout << Colors::MAGENTA << "Comment: " << Colors::YELLOW << review->getComment() << endl;
+                    cout << "-----------------------------------------" << endl;
+                }
+            }
             break;
         case 2:
             cout << Colors::GREEN << "--------------2. Add Reviews----------------\n"
                  << Colors::RESET;
             // show list of supporter service
             cout << "List of services that you have been supported: " << endl;
-            std::vector<Request *> acceptedSupporterRequest;
+
             for (Request *request : currentMember->getMyRequest())
             {
                 if (request->getStatus() == 1)
@@ -1068,39 +1086,169 @@ void System::manageReviews()
                 cout << Colors::MAGENTA << "Invalid number. Please enter service number to add review: " << Colors::RESET;
                 cin >> requestNumber;
             }
-            cout << Colors::CYAN << "Enter your comment for service: ";
-            string comment;
-            cin.ignore();
-            getline(cin, comment);
-            cout << Colors::CYAN << "Enter your rating for skill: ";
-            int skillRating;
-            cin >> skillRating;
-            cout << Colors::CYAN << "Enter your rating for supporter: ";
-            int supporterRating;
-            cin >> supporterRating;
-            Request *request = acceptedSupporterRequest[requestNumber - 1];
-            Member *serviceOwner = request->getService()->getServiceOwner();
-            currentMember->addSupporterReview(serviceOwner, comment, supporterRating, skillRating, request);
-            cout << "Added review for " << Colors::YELLOW << serviceOwner->getFullName() << Colors::GREEN << " successfully." << Colors::RESET << endl;
-            break;
-        case 3:
-            cout << Colors::GREEN << "--------------3. Delete Reviews----------------\n"
-                 << Colors::RESET;
-            // show list of user request
+            Request *request;
+            request = acceptedSupporterRequest[requestNumber - 1];
 
-            break;
-        case 4:
-            // displayMemberMenu();
+            // find if the review already exist
+            isNewReview = true;
+            for (Review *review : review_list)
+            {
+                // if review exist
+                if (review->getRequest() == request && review->getSkillRating() != 0 && review->getSupporterRating() != 0)
+                {
+                    isNewReview = false;
+                    cout << Colors::RED << "You have already reviewed this service.\n"
+                         << Colors::RESET;
+                    cout << Colors::CYAN << "Do you want to edit your review? (Y/N): " << Colors::RESET;
+                    char confirm;
+                    cin >> confirm;
+                    if (confirm == 'Y' || confirm == 'y')
+                    {
+                        editReview = inputReview(request, review->getReviewId());
+                        review->setComment(editReview->getComment());
+                        review->setSkillRating(editReview->getSkillRating());
+                        review->setSupporterRating(editReview->getSupporterRating());
+                        cout << "Edited review for " << Colors::YELLOW << request->getService()->getServiceOwner()->getFullName() << Colors::GREEN << " successfully." << Colors::RESET << endl;
+                        break;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                    break;
+                }
+
+                // if review exist but only the supporter has reviewed not the host
+                else if (review->getRequest() == request && review->getHostRating() != 0)
+                {
+                    isNewReview = false;
+                    hostRating = review->getHostRating();
+                    newReview = inputReview(request, review->getReviewId());
+                    review->setComment(newReview->getComment());
+                    review->setSkillRating(newReview->getSkillRating());
+                    review->setSupporterRating(newReview->getSupporterRating());
+                    cout << "Added review for " << Colors::YELLOW << request->getService()->getServiceOwner()->getFullName() << Colors::GREEN << " successfully." << Colors::RESET << endl;
+                    break;
+                }
+            }
+            // if review not exist
+            if (isNewReview)
+            {
+                newReview = inputReview(request, Utilities::generateId());
+
+                review_list.push_back(newReview);
+
+                Member *serviceOwner;
+                serviceOwner = request->getService()->getServiceOwner();
+
+                cout << "Added review for " << Colors::YELLOW << serviceOwner->getFullName() << Colors::GREEN << " successfully." << Colors::RESET << endl;
+                break;
+            }
+
+        case 3:
+
             exit = true;
             break;
         }
     } while (!exit);
 }
+
+Review *System::inputReview(Request *request, string reviewID)
+{
+
+    int hostRating, supporterRating, skillRating;
+    string comment;
+
+    cout << Colors::CYAN << "Enter your comment for service: ";
+    cin.ignore();
+    getline(cin, comment);
+    bool isValidRating = false;
+    do
+    {
+        cout << Colors::CYAN << "Enter your rating for skill: ";
+        int skillRating;
+        cin >> skillRating;
+        isValidRating = Utilities::validateUserRating(skillRating);
+    } while (!isValidRating);
+
+    isValidRating = false;
+    do
+    {
+        cout << Colors::CYAN << "Enter your rating for supporter: ";
+        cin >> supporterRating;
+        isValidRating = Utilities::validateUserRating(supporterRating);
+    } while (!isValidRating);
+
+    return new Review(reviewID, skillRating, supporterRating, request, comment);
+}
+void System::rateSupporter(Member *supporter, double score, Request *request, bool isNewReview, double skillScore)
+{
+    Review *existedReview;
+    int numberOfSupporterReview = 0;
+    int currentSupporterScore = supporter->getSupporterScore();
+    Skill *skill = request->getSkill();
+    int currentSkillScore = skill->getRatingScore();
+    // find number of review related to the supporter
+    bool isExistedReviewButOnlySupporterRate = false;
+    for (Review *review : review_list)
+    {
+        if (review->getRequest()->getService()->getServiceOwner() == supporter && review->getSupporterRating() != 0)
+        {
+            numberOfSupporterReview++;
+        }
+        // get the exsisted review
+        if (review->getRequest() == request && review->getSupporterRating() != 0)
+        {
+            existedReview = review;
+        }
+        else if (review->getRequest() == request && review->getSupporterRating() == 0 && review->getHostRating() != 0)
+        {
+            isExistedReviewButOnlySupporterRate = true;
+            existedReview = review;
+        }
+    }
+
+    // calculate new score for supporter or update score
+    if (isNewReview)
+    {
+        double newSkillScore = (currentSkillScore * numberOfSupporterReview + skillScore) / (numberOfSupporterReview + 1);
+        double newSupporterScore = (currentSupporterScore * numberOfSupporterReview + score) / (numberOfSupporterReview + 1);
+        supporter->setSupporterScore(newSupporterScore);
+        skill->setRatingScore(newSkillScore);
+        Review *newReview = new Review(Utilities::generateId(), skillScore, score, 0, request, "");
+        review_list.push_back(newReview);
+    }
+    else
+    { // if review exist but only the host has reviewed not the supporter
+        if (isExistedReviewButOnlySupporterRate)
+        {
+            double newSupporterScore = (currentSupporterScore * numberOfSupporterReview + score) / (numberOfSupporterReview + 1);
+            supporter->setSupporterScore(newSupporterScore);
+            existedReview->setSupporterRating(score);
+        }
+        else
+        {
+            // exclude the existed score
+            currentSkillScore = currentSkillScore - existedReview->getSkillRating();
+            currentSupporterScore = currentSupporterScore - existedReview->getSupporterRating();
+
+            // recalculate the score
+            double newSkillScore = (currentSkillScore * numberOfSupporterReview + skillScore) / (numberOfSupporterReview);
+            double newSupporterScore = (currentSupporterScore * numberOfSupporterReview + score) / (numberOfSupporterReview);
+            supporter->setSupporterScore(newSupporterScore);
+            skill->setRatingScore(newSkillScore);
+            existedReview->setSupporterRating(score);
+            existedReview->setSkillRating(skillScore);
+        }
+    }
+}
+
 // -------------------------------------9. Rate Host----------------------------------
 void System::hostRatingFunction()
 {
     // show list of accepted request and let user choose
     int count = 1;
+    double score;
     cout << "List of accepted request for your service: " << endl;
     for (Request *request : currentMember->getAcceptedRequest())
     {
@@ -1113,7 +1261,7 @@ void System::hostRatingFunction()
         cout << Colors::CYAN << "Status: " << Colors::YELLOW << request->getStatus() << endl;
         count++;
     }
-    // user choirce
+    // user choice
     int requestNumber;
     cout << Colors::MAGENTA << "Please enter request number to rate host: " << Colors::RESET;
     cin >> requestNumber;
@@ -1124,31 +1272,104 @@ void System::hostRatingFunction()
     }
 
     Request *request = currentMember->getAcceptedRequest()[requestNumber - 1];
-    // rate host
 
-    double score;
-    cout << endl;
-    cout << Colors::MAGENTA << "Please enter score to rate host: " << Colors::RESET;
-    cin >> score;
-    rateHost(request->getRequester(), score, request);
-}
-void System::rateHost(Member *host, double score, Request *request)
-{
-    int numberOfHostReview = 0;
-    int currentHostScore = host->getHostScore();
-    // find review from review_list by request
+    // check if review exist
+    bool isNewReview = true;
     for (Review *review : review_list)
     {
-        if (review->getRequest() == request)
+        if (review->getRequest() == request && review->getHostRating() != 0)
         {
-
-            numberOfHostReview++;
+            isNewReview = false;
+            cout << Colors::RED << "You have already reviewed this host.\n"
+                 << Colors::RESET;
+            cout << Colors::CYAN << "Do you want to edit your review? (Y/N): " << Colors::RESET;
+            char confirm;
+            cin >> confirm;
+            if (confirm == 'Y' || confirm == 'y')
+            {
+                cout << endl;
+                cout << Colors::MAGENTA << "Please enter score to rate host: " << Colors::RESET;
+                cin >> score;
+                rateHost(request->getRequester(), score, request, false);
+                cout << "Edited host score for " << Colors::YELLOW << request->getRequester()->getFullName() << Colors::GREEN << " successfully." << Colors::RESET << endl;
+                break;
+            }
+            else
+            {
+                break;
+            }
+        }
+        // review exist but only the host has reviewed not the supporter
+        else if (review->getRequest() == request && review->getSupporterRating() != 0 && review->getSkillRating() != 0)
+        {
+            isNewReview = false;
+            cout << Colors::MAGENTA << "Please enter score to rate host: " << Colors::RESET;
+            cin >> score;
+            rateHost(request->getRequester(), score, request, false);
         }
     }
-    // calculate new score
-    double newHostScore = (currentHostScore * numberOfHostReview + score) / (numberOfHostReview + 1);
-    host->setHostScore(newHostScore, request);
-    cout << "Rated host " << Colors::YELLOW << host->getFullName() << Colors::GREEN << " with score " << Colors::YELLOW << score << Colors::RESET << endl;
+
+    if (isNewReview)
+    {
+        // rate host
+        cout << endl;
+        cout << Colors::MAGENTA << "Please enter score to rate host: " << Colors::RESET;
+        cin >> score;
+        rateHost(request->getRequester(), score, request, true);
+        cout << "Rated host " << Colors::YELLOW << request->getRequester()->getFullName() << Colors::GREEN << " with score " << Colors::YELLOW << score << Colors::RESET << endl;
+    }
+}
+void System::rateHost(Member *host, double score, Request *request, bool isNewReview)
+{
+    Review *existedReview;
+    int numberOfHostReview = 0;
+    int currentHostScore = host->getHostScore();
+    bool isExistedReviewButOnlySupporterRate = false;
+    // find number of review related to the host
+    for (Review *review : review_list)
+    {
+        if (review->getRequest()->getRequester() == host && review->getHostRating() != 0)
+        {
+            numberOfHostReview++;
+        }
+        // get the exsisted review
+        if (review->getRequest() == request && review->getHostRating() != 0)
+        {
+            existedReview = review;
+        }
+        else if (review->getRequest() == request && review->getHostRating() == 0)
+        {
+            isExistedReviewButOnlySupporterRate = true;
+            existedReview = review;
+        }
+    }
+
+    // calculate new score for Host or update score
+    if (isNewReview)
+    {
+        double newHostScore = (currentHostScore * numberOfHostReview + score) / (numberOfHostReview + 1);
+        host->setHostScore(newHostScore, request);
+        Review *newReview = new Review(Utilities::generateId(), 0, 0, score, request, "");
+        review_list.push_back(newReview);
+    }
+    else
+    {
+        // if review exist but only the supporter has reviewed not the host
+        if (isExistedReviewButOnlySupporterRate)
+        {
+            double newHostScore = (currentHostScore * numberOfHostReview + score) / (numberOfHostReview + 1);
+            host->setHostScore(newHostScore, request);
+            existedReview->setHostRating(score);
+        }
+        else
+        {
+            // exclude the existed score
+            currentHostScore = currentHostScore - existedReview->getHostRating();
+            double newHostScore = (currentHostScore * numberOfHostReview + score) / (numberOfHostReview);
+            host->setHostScore(newHostScore, request);
+            existedReview->setHostRating(score);
+        }
+    }
 }
 // --------------------------10. Top up Credit Point-----------------------------------
 void System::topUp()

@@ -87,15 +87,11 @@ public:
     void manageRequest();
     void topUp();
     void manageBlockList();
-    // void displayAvailableSupporter();
-    // void displayAvailableSupporterByLocation(string location);
-    // void displayAvailableSupporterByTime(string startTime, string endTime);
-    // void displayMemberRequestList(Member *member);
-    // void addRequest(Request *request);
-    // void deleteRequest(Request *request);
-    // void displayMyReview(Member *member);
-    // void addReviewForSupporter(Member *member, Request *request, int supporterRaying, int skillRating, string comment);
-    void rateHost(Member *host, double score, Request *request);
+    Review *inputReview(Request *request, string reviewID);
+
+    void rateHost(Member *host, double score, Request *request, bool isNewReview);
+    void rateSupporter(Member *supporter, double score, Request *request, bool isNewReview, double skillScore);
+
     void hostRatingFunction();
     // void topUpCD(Member *member, int cd);
     void manageBlockList(Member *member);

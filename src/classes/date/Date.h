@@ -43,8 +43,7 @@ public:
     static int daysInMonth(int month, int year);
 
     std::string toString() const;
-    std::string getMonthStr() const;
-    std::string toDateTimeString() const;
+    std::string getMonthStr(int month) const;
 
     void runDateTest();
 };

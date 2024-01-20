@@ -372,8 +372,16 @@ std::vector<Member *> Member::getInteractedMembers()
   }
   return interactedMembers;
 }
-void Member::addSupporterReview(Member *supporter, std::string comment, int supporterRating, int skillRating, Request *request)
+
+std::vector<Review *> Member::getReviews(std::vector<Review *> review_list)
 {
-  Review *review = new Review(supporter, comment, supporterRating, skillRating, request);
-  supporter->getReviews().push_back(review);
+  std::vector<Review *> reviews;
+  for (Review *review : review_list)
+  {
+    if (review->getRequest()->getRequester()->getMemberId() == this->getMemberId())
+    {
+      reviews.push_back(review);
+    }
+  }
+  return reviews;
 }
