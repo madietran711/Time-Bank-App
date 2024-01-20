@@ -951,10 +951,9 @@ void System::manageRequest()
     do
     {
 
-        std::cout << "1. View Request\n";
-        std::cout << "2. Add Request\n";
-        std::cout << "3. Delete Request\n";
-        std::cout << "25. Back\n";
+        std::cout << Colors::YELLOW << "[1]  View Request\n";
+        std::cout << "[2] Add Request\n";
+        std::cout << "[3] Back\n";
         std::cout << Colors::CYAN << "Please enter your choice: " << Colors::RESET;
 
         std::cin >> choice;
@@ -970,13 +969,8 @@ void System::manageRequest()
                  << Colors::RESET;
             // show list of service
             break;
-        case 3:
-            cout << Colors::GREEN << "--------------3. Delete Request----------------\n"
-                 << Colors::RESET;
-            // show list of user request
 
-            break;
-        case 25:
+        case 3:
             // displayMemberMenu();
             exit = true;
             break;
