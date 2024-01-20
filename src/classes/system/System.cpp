@@ -224,140 +224,7 @@ void System::displayMemberMenu()
             std::cout << Colors::GREEN << "----------------4. Manage Service Listing (Add Service, Delete Service, View & Accept Request)\n----------------\n"
                       << Colors::RESET;
             displayServiceListing(currentMember);
-            std::cout << "1. Add a new service";
-            std::cout << "2. Delete an existing service";
-            std::cout << "3. View available requests";
-            std::cout << "4. Accept a request";
-            std::cout << "5. Return to Main Menu";
 
-            int subchoice;
-            std::cin >> subchoice;
-            switch (subchoice)
-            {
-            case 1:
-                std::cout << "----------------1. Add a new service----------------\n";
-                std::string newServiceID = generateId();
-                std::cout << "Enter new Service Start Time:\n";
-                int startYear, startMonth, startDay, startHour, startMinute;
-                std::cout << "Enter the Year: ";
-                cin >> startYear;
-                std::cin.ignore();
-                std::cout << "Enter the Month: ";
-                cin >> startMonth;
-                std::cin.ignore();
-                std::cout << "Enter the Day: ";
-                cin >> startDay;
-                std::cin.ignore();
-                std::cout << "Enter the Hour: ";
-                cin >> startHour;
-                std::cin.ignore();
-                std::cout << "Enter the Minute: ";
-                cin >> startMinute;
-                std::cin.ignore();
-                Date startDate(startYear, startMonth, startDay, startHour, startMinute);
-                std::cout << "Enter new Service End Time: ";
-                int endYear, endMonth, endDay, endHour, endMinute;
-                std::cout << "Enter the Year: ";
-                cin >> endYear;
-                std::cin.ignore();
-                std::cout << "Enter the Month: ";
-                cin >> endMonth;
-                std::cin.ignore();
-                std::cout << "Enter the Day: ";
-                cin >> endDay;
-                std::cin.ignore();
-                std::cout << "Enter the Hour: ";
-                cin >> endHour;
-                std::cin.ignore();
-                std::cout << "Enter the Minute: ";
-                cin >> endMinute;
-                std::cin.ignore();
-                Date endDate(endYear, endMonth, endDay, endHour, endMinute);
-                std::cout << "Enter new Service Consuming Credit Points: ";
-                int newServiceCCD;
-                std::cin >> newServiceCCD;
-                std::cin.ignore();
-            std:
-                cout << "Enter new Service Minimum Host Score Required: ";
-                double newSericeMinHostScore;
-                std::cin >> newSericeMinHostScore;
-                std::cin.ignore();
-                displayMemberSkillList(currentMember);
-                std::vector<Skill *> newServiceSkillList;
-                int count;
-                std::cout << "Enter the number of Skills available for the new Service: ";
-                std::cin >> count;
-                std::cin.ignore();
-                std::string selectedSkillName;
-                for (int i = 0; i < count; i++)
-                {
-                    std::cout << "Enter the Skill Name: ";
-                    std::getline(std::cin, selectedSkillName);
-                    auto it = std::find_if(currentMember->getSkills().begin(), currentMember->getSkills().end(), [&selectedSkillName](const Skill &selectedSkill)
-                                           { return selectedSkill.getSkillName() == selectedSkillName; });
-                    if (it != currentMember->getSkills().end())
-                    {
-                        auto itt = std::find(newServiceSkillList.begin(), newServiceSkillList.end(), it);
-                        // Checking if the Skill has already been added to the NEW Service lisitng
-                        if (itt != newServiceSkillList.end())
-                        {
-                            std::cout << "The Skill has already been listed.\n";
-                            i--;
-                        }
-                        else
-                        {
-                            newServiceSkillList.push_back(*it);
-                        }
-                    }
-                    else
-                    {
-                        std::cout << "Cannot find specified Skill.\n";
-                    }
-                }
-                Service newService(newServiceID, currentMember, startDate, endDate, newServiceCCD, newSericeMinHostScore, newServiceSkillList, {});
-                currentMember->addService(&newService);
-                std::cout << "New Service listing has been successfully added!\n";
-                displayServiceListing(currentMember);
-                break;
-            case 2:
-                std::cout << "----------------2. Delete an existing service----------------\n";
-                displayServiceListing(currentMember);
-                std::cout << "Enter the Service ID of the skill to be deleted: ";
-                std::string deletingServiceID;
-                std::getline(std::cin, deletingServiceID);
-                auto it = std::find_if(currentMember->getListedService().begin(), currentMember->getListedService().end(), [&deletingServiceID](const Service &deletingService)
-                                       { return deletingService.getServiceId() == deletingServiceID; });
-                if (it != currentMember->getListedService().end())
-                {
-                    std::cout << "Service to be deleted found.\n";
-                    bool deletingResult = currentMember->removeService(*it);
-                    if (deletingResult)
-                    {
-                        std::cout << "Service successfully deleted.\n";
-                    }
-                    else
-                    {
-                        std::cout << "Service cannot be deleted.\n";
-                    }
-                }
-                else
-                {
-                    std::cout << "Cannot find specified Service.\n";
-                }
-                displayServiceListing(currentMember);
-                break;
-            case 3:
-                std::cout << "----------------3. View available requests----------------\n";
-                break;
-            case 4:
-                std::cout << "----------------4. Accept a request----------------\n";
-                break;
-            case 5:
-                std::cout << "----------------5. Return to Main Menu----------------\n";
-                displayMemberMenu();
-                break;
-            }
-            displayMemberMenu();
             break;
 
         case 5:
@@ -1295,7 +1162,7 @@ void System::manageReviews()
             // if review not exist
             if (isNewReview)
             {
-                newReview = inputReview(request, Utilities::generateId());
+                newReview = inputReview(request, System::generateId());
 
                 review_list.push_back(newReview);
 
@@ -1376,7 +1243,7 @@ void System::rateSupporter(Member *supporter, double score, Request *request, bo
         double newSupporterScore = (currentSupporterScore * numberOfSupporterReview + score) / (numberOfSupporterReview + 1);
         supporter->setSupporterScore(newSupporterScore);
         skill->setRatingScore(newSkillScore);
-        Review *newReview = new Review(Utilities::generateId(), skillScore, score, 0, request, "");
+        Review *newReview = new Review(generateId(), skillScore, score, 0, request, "");
         review_list.push_back(newReview);
     }
     else
@@ -1510,7 +1377,7 @@ void System::rateHost(Member *host, double score, Request *request, bool isNewRe
     {
         double newHostScore = (currentHostScore * numberOfHostReview + score) / (numberOfHostReview + 1);
         host->setHostScore(newHostScore, request);
-        Review *newReview = new Review(Utilities::generateId(), 0, 0, score, request, "");
+        Review *newReview = new Review(generateId(), 0, 0, score, request, "");
         review_list.push_back(newReview);
     }
     else
@@ -1846,6 +1713,7 @@ void System::manageSkills(Member *member)
         std::cout << "25. Back\n";
 
         int subchoice;
+        auto it = currentMember->getSkills().end();
         std::cin >> subchoice;
         if (subchoice == 1)
             switch (subchoice)
@@ -1867,8 +1735,14 @@ void System::manageSkills(Member *member)
                 std::cout << "----------------2. Delete an existing skill----------------\n";
                 std::cout << "Enter the Skill Name of the skill to be deleted: ";
                 std::getline(std::cin, deletingSkillName);
-                auto it = std::find_if(currentMember->getSkills().begin(), currentMember->getSkills().end(), [&deletingSkillName](const Skill &deletingSkill)
-                                       { return deletingSkill.getSkillName() == deletingSkillName; });
+                it = std::find_if(
+                    currentMember->getSkills().begin(),
+                    currentMember->getSkills().end(),
+                    [&deletingSkillName](const Skill *deletingSkillPtr)
+                    {
+                        // Assuming Skill has a method getSkillName() to get the skill name
+                        return deletingSkillPtr->getSkillName() == deletingSkillName;
+                    });
                 if (it != currentMember->getSkills().end())
                 {
                     std::cout << "Skill to be deleted found.\n";
@@ -1899,4 +1773,167 @@ void System::manageSkills(Member *member)
 void System::displayServiceListing(Member *member)
 {
     member->showListedService();
+}
+
+void System::manageServiceListing()
+{
+    bool exit = false;
+    do
+    {
+        std::cout << "1. Add a new service";
+        std::cout << "2. Delete an existing service";
+        std::cout << "3. View available requests";
+        std::cout << "4. Accept a request";
+        std::cout << "5. Return to Main Menu";
+
+        int subchoice;
+
+        Service *newService;
+        bool deletingResult;
+        std::string deletingServiceID, selectedSkillName, newServiceID;
+        std::vector<Skill *> newServiceSkillList;
+        auto it = currentMember->getSkills().end();
+        auto itService = currentMember->getListedService().end();
+        auto itt = newServiceSkillList.end();
+        std::cin >> subchoice;
+
+        Date endDate, startDate;
+        switch (subchoice)
+        {
+        case 1:
+            std::cout << "----------------1. Add a new service----------------\n";
+            newServiceID = generateId();
+            std::cout << "Enter new Service Start Time:\n";
+            int startYear, startMonth, startDay, startHour, startMinute;
+            std::cout << "Enter the Year: ";
+            cin >> startYear;
+            std::cin.ignore();
+            std::cout << "Enter the Month: ";
+            cin >> startMonth;
+            std::cin.ignore();
+            std::cout << "Enter the Day: ";
+            cin >> startDay;
+            std::cin.ignore();
+            std::cout << "Enter the Hour: ";
+            cin >> startHour;
+            std::cin.ignore();
+            std::cout << "Enter the Minute: ";
+            cin >> startMinute;
+            std::cin.ignore();
+            startDate = Date(startYear, startMonth, startDay, startHour, startMinute);
+            std::cout << "Enter new Service End Time: ";
+            int endYear, endMonth, endDay, endHour, endMinute;
+            std::cout << "Enter the Year: ";
+            cin >> endYear;
+            std::cin.ignore();
+            std::cout << "Enter the Month: ";
+            cin >> endMonth;
+            std::cin.ignore();
+            std::cout << "Enter the Day: ";
+            cin >> endDay;
+            std::cin.ignore();
+            std::cout << "Enter the Hour: ";
+            cin >> endHour;
+            std::cin.ignore();
+            std::cout << "Enter the Minute: ";
+            cin >> endMinute;
+            std::cin.ignore();
+            endDate = Date(endYear, endMonth, endDay, endHour, endMinute);
+            std::cout << "Enter new Service Consuming Credit Points: ";
+            int newServiceCCD;
+            std::cin >> newServiceCCD;
+            std::cin.ignore();
+
+        std:
+            cout << "Enter new Service Minimum Host Score Required: ";
+            double newSericeMinHostScore;
+            std::cin >> newSericeMinHostScore;
+            std::cin.ignore();
+            displayMemberSkillList(currentMember);
+
+            int count;
+            std::cout << "Enter the number of Skills available for the new Service: ";
+            std::cin >> count;
+            std::cin.ignore();
+
+            for (int i = 0; i < count; i++)
+            {
+                std::cout << "Enter the Skill Name: ";
+                std::getline(std::cin, selectedSkillName);
+                it = std::find_if(
+                    currentMember->getSkills().begin(),
+                    currentMember->getSkills().end(),
+                    [&selectedSkillName](const Skill *selectedSkillPtr)
+                    {
+                        // Assuming Skill has a method getSkillName() to get the skill name
+                        return selectedSkillPtr->getSkillName() == selectedSkillName;
+                    });
+                if (it != currentMember->getSkills().end())
+                {
+                    itt = std::find(newServiceSkillList.begin(), newServiceSkillList.end(), *it);
+                    // Checking if the Skill has already been added to the NEW Service lisitng
+                    if (itt != newServiceSkillList.end())
+                    {
+                        std::cout << "The Skill has already been listed.\n";
+                        i--;
+                    }
+                    else
+                    {
+                        newServiceSkillList.push_back(*it);
+                    }
+                }
+                else
+                {
+                    std::cout << "Cannot find specified Skill.\n";
+                }
+            }
+            newService = new Service(newServiceID, currentMember, startDate, endDate, newServiceCCD, newSericeMinHostScore, newServiceSkillList, {});
+            currentMember->addService(newService);
+            std::cout << "New Service listing has been successfully added!\n";
+            displayServiceListing(currentMember);
+            break;
+        case 2:
+            std::cout << "----------------2. Delete an existing service----------------\n";
+            displayServiceListing(currentMember);
+            std::cout << "Enter the Service ID of the skill to be deleted: ";
+
+            std::getline(std::cin, deletingServiceID);
+            itService = std::find_if(
+                currentMember->getListedService().begin(),
+                currentMember->getListedService().end(),
+                [&deletingServiceID](const Service *deletingServicePtr)
+                {
+                    return deletingServicePtr->getServiceId() == deletingServiceID;
+                });
+            if (itService != currentMember->getListedService().end())
+            {
+                std::cout << "Service to be deleted found.\n";
+                deletingResult = currentMember->removeService(*itService);
+                if (deletingResult)
+                {
+                    std::cout << "Service successfully deleted.\n";
+                }
+                else
+                {
+                    std::cout << "Service cannot be deleted.\n";
+                }
+            }
+            else
+            {
+                std::cout << "Cannot find specified Service.\n";
+            }
+            displayServiceListing(currentMember);
+            break;
+        case 3:
+            std::cout << "----------------3. View available requests----------------\n";
+            break;
+        case 4:
+            std::cout << "----------------4. Accept a request----------------\n";
+            break;
+        case 5:
+            std::cout << "----------------5. Return to Main Menu----------------\n";
+            exit = true;
+            break;
+        }
+    } while (!exit);
 }

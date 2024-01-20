@@ -10,6 +10,8 @@
 #include <string>
 #include <regex>
 #include <algorithm>
+#include <fstream>
+#include <iomanip>
 #include "../classes/system/System.h"
 using namespace std;
 class Utilities
@@ -21,7 +23,7 @@ public:
     static bool validatePhoneNumber(std::string &str);
     static bool validateEmail(std::string &str);
     static bool validateUserRating(int &rating);
-    static string generateId();
+    // static string generateId();
 };
 
 #endif // TIME_BANK_APP_UTILITIES_H

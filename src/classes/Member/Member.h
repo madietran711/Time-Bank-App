@@ -11,6 +11,7 @@
 #include "../../utils/colors.h"
 #include "../guest/Guest.h"
 #include <iomanip>
+#include <algorithm>
 class Skill;
 class Service;
 class Request;

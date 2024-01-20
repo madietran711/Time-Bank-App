@@ -61,7 +61,7 @@ public:
     bool loadAllReviews();
 
     // getByID
-    string System::generateId();
+    string generateId();
     Member *getMemberByID(std::string memberID);
     Skill *getSkillByID(std::string skillID);
     Service *getServiceByID(std::string serviceID);
@@ -81,6 +81,7 @@ public:
     // GuestMenu Functions
 
     // MemberMenu Functions
+    void manageServiceListing();
     void displayMemberProfile(Member *member);
     void manageProfile(Member *member);
     void displayMemberSkillList(Member *member);

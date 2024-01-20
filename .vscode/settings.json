@@ -68,7 +68,8 @@
     "iterator": "cpp",
     "numeric": "cpp",
     "random": "cpp",
-    "numbers": "cpp"
+    "numbers": "cpp",
+    "regex": "cpp"
   },
   "C_Cpp.errorSquiggles": "enabled",
   "C_Cpp_Runner.msvcBatchPath": "",

@@ -180,13 +180,13 @@ bool Utilities::validateUserRating(int &rating)
 
     return true;
 }
-std::string Utilities::generateId()
-{
-    std::string id = "";
-    srand(time(NULL));
-    for (int i = 0; i < 6; i++)
-    {
-        id += std::to_string(rand() % 10);
-    }
-    return id;
-}
+// std::string Utilities::generateId()
+// {
+//     std::string id = "";
+//     srand(time(NULL));
+//     for (int i = 0; i < 6; i++)
+//     {
+//         id += std::to_string(rand() % 10);
+//     }
+//     return id;
+// }

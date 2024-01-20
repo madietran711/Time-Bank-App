@@ -1,7 +1,6 @@
 // Member.cpp
 
 #include "Member.h"
-#include "../../../../../../../../../mingw64/lib/gcc/x86_64-w64-mingw32/13.2.0/include/c++/bits/algorithmfwd.h"
 
 // Constructors
 Member::Member() {}
@@ -226,9 +225,18 @@ bool Member::addSkill(Skill *skill)
 
 bool Member::removeSkill(Skill *skill)
 {
+  if (skill == nullptr)
+  {
+    // Handle nullptr case, e.g., by returning false or throwing an exception
+    return false;
+  }
+
   std::string removeSkillName = skill->getSkillId();
-  auto it = std::find_if(this->skills.begin(), this->skills.end(), [removeSkillName](const Service &serv)
-                         { return serv.getServiceId() == removeSkillName; });
+
+  // Update lambda to accept a pointer to Skill
+  auto it = std::find_if(this->skills.begin(), this->skills.end(), [removeSkillName](const Skill *skillPtr)
+                         { return skillPtr->getSkillId() == removeSkillName; });
+
   if (it != this->skills.end())
   {
     this->skills.erase(it);
@@ -401,27 +409,27 @@ std::vector<Review *> Member::getReviews(std::vector<Review *> review_list)
   return reviews;
 }
 // Member - Supporter functions
-bool Member::addService(Service *service)
-{
-  this->listedService.push_back(service);
-  return true;
-}
 
 bool Member::removeService(Service *service)
 {
+  if (service == nullptr)
+  {
+    // Handle nullptr case, e.g., by returning false or throwing an exception
+    return false;
+  }
+
   std::string removeServiceName = service->getServiceId();
-  auto it = std::find_if(this->listedService.begin(), this->listedService.end(), [removeServiceName](const Service &serv)
-                         { return serv.getServiceId() == removeServiceName; });
+
+  // Update lambda to accept a pointer to Service
+  auto it = std::find_if(this->listedService.begin(), this->listedService.end(), [removeServiceName](const Service *servicePtr)
+                         { return servicePtr->getServiceId() == removeServiceName; });
+
   if (it != this->listedService.end())
   {
     this->listedService.erase(it);
     return true;
   }
   return false;
-}
-
-bool Member::acceptRequest(Request *request)
-{
 }
 
 void rateHost(Member *host, double score) {}
@@ -474,8 +482,8 @@ void Member::showListedService()
     std::cout << Colors::YELLOW
               << std::left << std::setw(10) << count
               << std::left << std::setw(15) << service->getServiceId()
-              << std::left << std::setw(15) << service->getStartTime()
-              << std::left << std::setw(15) << service->getEndTime()
+              << std::left << std::setw(15) << service->getStartTime().toString()
+              << std::left << std::setw(15) << service->getEndTime().toString()
               << std::left << std::setw(15) << service->getConsumingCD()
               << std::left << std::setw(15) << service->getScoreRequired()
               << Colors::RESET << std::endl;

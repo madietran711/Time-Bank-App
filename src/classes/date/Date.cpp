@@ -349,7 +349,7 @@ void runDateTests()
     assert(dateString == "2023/01/15 12:30");
 
     // Test 5: Month string representation
-    std::string monthString = startDate.getMonthStr();
+    std::string monthString = startDate.getMonthStr(1);
     assert(monthString == "January");
 
     std::cout << "All tests passed!" << std::endl;
