@@ -355,8 +355,23 @@ void runDateTests()
     std::cout << "All tests passed!" << std::endl;
 }
 
+Date Date::getCurrentDate()
+{
+    std::time_t now = std::time(nullptr);
+    std::tm *currentTime = std::localtime(&now);
+
+    // Extract year, month, day, hour, and minute
+    int year = currentTime->tm_year + 1900;
+    int month = currentTime->tm_mon + 1; // Months are 0-based
+    int day = currentTime->tm_mday;
+    int hour = currentTime->tm_hour;
+    int minute = currentTime->tm_min;
+
+    return Date(year, month, day, hour, minute);
+}
 // int main()
 // {
-//     runDateTests();
+//     cout << Date::getCurrentDate().toString();
+//     cout << "df";
 //     return 0;
 // }

@@ -274,7 +274,7 @@ void Member::showSkills()
   {
     std::cout << Colors::YELLOW
               << std::left << std::setw(10) << count
-              << std::left << std::setw(10) << skill->getSkillId()
+
               << std::left << std::setw(20) << skill->getSkillName()
               << std::left << std::setw(20) << skill->getRatingScore()
               << Colors::RESET << std::endl;
@@ -354,7 +354,7 @@ void Member::viewMyRequest()
               << std::left << std::setw(20) << request->getService()->getServiceOwner()->getUsername()
               << std::left << std::setw(20) << request->getStartTime().toString()
               << std::left << std::setw(20) << request->getEndTime().toString()
-              << std::left << std::setw(20) << (request->getStatus() == 0 ? "PENDING" : "ACCEPTED")
+              << std::left << std::setw(20) << (request->getStatus() == 0 ? "PENDING" : (request->getStatus() == 1 ? "ACCEPTED" : "REJECTED"))
               << Colors::RESET << std::endl;
     count++;
   }
@@ -469,24 +469,30 @@ void rateSkill(Skill *skill, double score, Request *request) {}
 void Member::showListedService()
 {
   std::cout << Colors::MAGENTA
-            << std::left << std::setw(10) << "Service No."
-            << std::left << std::setw(15) << "Service ID"
-            << std::left << std::setw(15) << "Start Time"
-            << std::left << std::setw(15) << "End Time"
-            << std::left << std::setw(15) << "Consuming Credit Points"
-            << std::left << std::setw(15) << "Host Score Required"
+            << std::left << std::setw(15) << "Service No."
+            << std::left << std::setw(20) << "Start Time"
+            << std::left << std::setw(20) << "End Time"
+            << std::left << std::setw(30) << "Consuming Credit Points"
+            << std::left << std::setw(20) << "Host Score Required"
+            << std::left << std::setw(50) << "Listed Skills"
+
             << Colors::RESET << std::endl;
   int count = 1;
   for (Service *service : this->listedService)
   {
     std::cout << Colors::YELLOW
-              << std::left << std::setw(10) << count
-              << std::left << std::setw(15) << service->getServiceId()
-              << std::left << std::setw(15) << service->getStartTime().toString()
-              << std::left << std::setw(15) << service->getEndTime().toString()
-              << std::left << std::setw(15) << service->getConsumingCD()
-              << std::left << std::setw(15) << service->getScoreRequired()
-              << Colors::RESET << std::endl;
+              << std::left << std::setw(15) << count
+
+              << std::left << std::setw(20) << service->getStartTime().toString()
+              << std::left << std::setw(20) << service->getEndTime().toString()
+              << std::left << std::setw(30) << service->getConsumingCD()
+              << std::left << std::setw(20) << service->getScoreRequired();
+    for (Skill *skill : service->getSkillList())
+    {
+      std::cout << skill->getSkillName() << ",";
+    }
+    std::cout << Colors::RESET << std::endl;
+    count++;
   }
 }
 

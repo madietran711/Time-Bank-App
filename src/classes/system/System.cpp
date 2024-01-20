@@ -178,7 +178,7 @@ void System::displayMemberMenu()
         std::cout << Colors::YELLOW << std::setw(5) << "[1]"
                   << "Manage Profile (View, Edit)\n";
         std::cout << std::setw(5) << "[2]"
-                  << "Manage Skills (View, Add)\n";
+                  << "Manage Skills (View, Add, Delete)\n";
         std::cout << std::setw(5) << "[3]"
                   << "View Available Services\n";
         std::cout << std::setw(5) << "[4]"
@@ -224,7 +224,7 @@ void System::displayMemberMenu()
             std::cout << Colors::GREEN << "----------------4. Manage Service Listing (Add Service, Delete Service, View & Accept Request)\n----------------\n"
                       << Colors::RESET;
             displayServiceListing(currentMember);
-
+            manageServiceListing();
             break;
 
         case 5:
@@ -849,17 +849,13 @@ string generateUUIDV4()
     std::uniform_int_distribution<int> dist(0, 15);
 
     const char *hexaDigits = "0123456789abcdef";
-    const bool dashPostitions[] = {0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0};
 
-    string id;
-    for (int i = 0; i < 16; i++)
+    std::stringstream id;
+    for (int i = 0; i < 32; i++)
     {
-        if (dashPostitions[i])
-            id += "-";
-        id += hexaDigits[dist(rng)];
-        id += hexaDigits[dist(rng)];
+        id << hexaDigits[dist(rng)];
     }
-    return id;
+    return id.str();
 }
 string System::generateId()
 {
@@ -975,8 +971,6 @@ void System::displayMemberSkillList(Member *member)
     member->showSkills();
 }
 
-// ---------------5. View Available Supporter (By Time or Location)----------------
-
 // -----------------------6. Manage Request (View, Add, Delete)---------------------
 void System::manageRequest()
 {
@@ -991,6 +985,10 @@ void System::manageRequest()
         std::cout << Colors::CYAN << "Please enter your choice: " << Colors::RESET;
 
         std::cin >> choice;
+        int serviceNumber;
+        Request *newRequest;
+        string startTime, endTime;
+        int count = 1;
         switch (choice)
         {
         case 1:
@@ -1002,6 +1000,49 @@ void System::manageRequest()
             cout << Colors::GREEN << "--------------2. Add Request----------------\n"
                  << Colors::RESET;
             // show list of service
+            //             cout << Colors::GREEN << "List of available services: " << endl;
+
+            //             cout << Colors::CYAN << "Enter service number to add request: " << Colors::RESET;
+            //             cin >> serviceNumber;
+
+            //             while (serviceNumber < 1 || serviceNumber > service_list.size())
+            //             {
+            //                 cout << Colors::RED << "Invalid number. Please enter service number to add request: " << Colors::RESET;
+            //                 cin >> serviceNumber;
+            //             }
+
+            //             Service *service = service_list[serviceNumber - 1];
+            //             user Input
+
+            //                     cout
+            //                 << "Enter start time (yyyy/mm/dd hh:mm): ";
+            //             cin.ignore();
+            //             getline(cin, startTime);
+            //             cout << "Enter end time (yyyy/mm/dd hh:mm): ";
+            //             cin.ignore();
+            //             getline(cin, endTime);
+            //             cout << "Enter skill number to request: ";
+
+            //             for (Skill *skill : service->getSkillList())
+            //             {
+            //                 cout << count << ". " skill->getSkillName() << "\n ";
+            //                 count++
+            //             }
+            //             cin >> skillNumber;
+            //             while (skillNumber < 1 || skillNumber > service->getSkillList().size())
+            //             {
+            //                 cout << Colors::RED << "Invalid number. Please enter skill number to request: " << Colors::RESET;
+            //                 cin >> skillNumber;
+            //             }
+            //             Skill *skill = service->getSkillList()[skillNumber - 1];
+            //             newRequest = new Request(generateId(), service, currentMember, Date::parse(startTime), Date::parse(endTime), skill, 0);
+            //             request_list.push_back(newRequest);
+            //             currentMember->addRequest(newRequest);
+            //             service->addRequest(newRequest);
+            //             cout << Colors::GREEN << "Request added successfully.\n"
+            //                  << Colors::RESET;
+            // cout<<endl;
+            //                currentMember->viewMyRequest();
             break;
 
         case 3:
@@ -1462,6 +1503,7 @@ void System::manageBlockList()
         int choice;
         cin >> choice;
         Member *member = new Member();
+        bool isAlreadyBlocked = false;
         int count = 1;
         switch (choice)
         {
@@ -1511,8 +1553,25 @@ void System::manageBlockList()
                 cin >> blockMemberNo;
             }
             member = currentMember->getInteractedMembers()[blockMemberNo - 1];
-            currentMember->blockMember(member);
-            cout << "Blocked " << Colors::YELLOW << member->getFullName() << Colors::RESET << endl;
+
+            // check if member is already blocked
+
+            for (Member *blockedMember : currentMember->getBlockedList())
+            {
+                if (blockedMember == member)
+                {
+                    isAlreadyBlocked = true;
+                    cout << Colors::RED << "Member " << Colors::YELLOW << member->getFullName() << Colors::RED << " is already blocked." << Colors::RESET << endl;
+                    break;
+                }
+            }
+
+            if (!isAlreadyBlocked)
+            {
+                currentMember->blockMember(member);
+                cout << "Blocked " << Colors::YELLOW << member->getFullName() << Colors::RESET << endl;
+            }
+
             break;
         case 4:
             cout << Colors::CYAN << "Do you want to go back? (Y/N)" << Colors::RESET << endl;
@@ -1626,10 +1685,12 @@ void System::manageProfile(Member *member)
     bool exit = false;
     do
     {
-        std::cout << "1. Edit Profile";
-        std::cout << "2. Change Password";
-        std::cout << "25. Back\n";
-
+    std:
+        cout << endl;
+        std::cout << Colors::YELLOW << "[1] Edit Profile\n";
+        std::cout << "[2] Change Password\n";
+        std::cout << "[3] Back\n";
+        std::cout << Colors::CYAN << "Please enter your choice: " << Colors::RESET;
         std::cin >> subchoice;
         switch (subchoice)
         {
@@ -1637,34 +1698,47 @@ void System::manageProfile(Member *member)
             std::cout << Colors::GREEN << "----------------1. Edit Profile----------------\n"
                       << Colors::RESET;
             std::cout << "Enter current Password: ";
+            cin.ignore();
             std::getline(std::cin, inputPW);
+
             if (inputPW == currentMember->getPassword())
             {
                 std::cout << "Enter new Username: ";
                 std::string newUsername;
-                std::getline(std::cin, newUsername);
                 std::cin.ignore();
+                std::getline(std::cin, newUsername);
+
                 std::cout << "Enter new Full Name: ";
                 std::string newFullName;
-                std::getline(std::cin, newFullName);
                 std::cin.ignore();
+                std::getline(std::cin, newFullName);
+
                 std::cout << "Enter new Phone Number: ";
                 std::string newPhoneNumber;
-                std::getline(std::cin, newPhoneNumber);
                 std::cin.ignore();
+                std::getline(std::cin, newPhoneNumber);
+
                 std::cout << "Enter new Email Address: ";
                 std::string newEmailAddress;
-                std::getline(std::cin, newEmailAddress);
                 std::cin.ignore();
+                std::getline(std::cin, newEmailAddress);
+
                 std::cout << "Enter new Home Address: ";
                 std::string newHomeAddress;
-                std::getline(std::cin, newHomeAddress);
                 std::cin.ignore();
+                std::getline(std::cin, newHomeAddress);
+
+                std::cout << "Enter new City (HANOI/SAIGON): ";
+                std::string newCity;
+                std::cin.ignore();
+                std::getline(std::cin, newCity);
+
                 currentMember->setUsername(newUsername);
                 currentMember->setFullName(newFullName);
                 currentMember->setPhoneNumber(newPhoneNumber);
                 currentMember->setEmail(newEmailAddress);
                 currentMember->setHomeAddress(newHomeAddress);
+                currentMember->setCity(newCity);
                 displayMemberProfile(currentMember);
             }
             else
@@ -1690,7 +1764,7 @@ void System::manageProfile(Member *member)
                 std::cout << "Incorrect Password!\n";
             }
             break;
-        case 25:
+        case 3:
             // displayMemberMenu();
             exit = true;
             break;
@@ -1704,69 +1778,70 @@ void System::manageSkills(Member *member)
     bool exit = false;
     std::string newSkillID;
     std::string newSkillName;
-    Skill newSkill;
+    Skill *newSkill;
     std::string deletingSkillName;
     do
     {
-        std::cout << "1. Add a new skill";
-        std::cout << "2. Delete an existing skill";
-        std::cout << "25. Back\n";
+        std::cout << endl;
+        std::cout << Colors::YELLOW << "[1] Add a new skill\n";
+        std::cout << "[2] Delete an existing skill\n";
+        std::cout << "[3] Back\n";
+
+        std::cout << Colors::CYAN << "Please enter your choice: " << Colors::RESET;
 
         int subchoice;
         auto it = currentMember->getSkills().end();
+
         std::cin >> subchoice;
-        if (subchoice == 1)
-            switch (subchoice)
+
+        switch (subchoice)
+        {
+        case 1:
+            std::cout << Colors::GREEN << "----------------1. Add a new skill----------------\n";
+
+            std::cout << Colors::CYAN << "Enter new Skill Name: " << Colors::RESET;
+            std::cin.ignore();
+            std::getline(std::cin, newSkillName);
+
+            newSkill = new Skill(generateId(), currentMember, newSkillName, 0);
+            currentMember->addSkill(newSkill);
+            skill_list.push_back(newSkill);
+            displayMemberSkillList(member);
+            break;
+        case 2:
+            std::cout << Colors::GREEN << "----------------2. Delete an existing skill----------------\n";
+            std::cout << Colors::CYAN << "Enter the Skill Name of the skill to be deleted: " << Colors::RESET;
+            cin.ignore();
+            std::getline(std::cin, deletingSkillName);
+            it = std::find_if(
+                currentMember->getSkills().begin(),
+                currentMember->getSkills().end(),
+                [&deletingSkillName](const Skill *deletingSkillPtr)
+                {
+                    return deletingSkillPtr->getSkillName() == deletingSkillName;
+                });
+            if (it != currentMember->getSkills().end())
             {
-            case 1:
-                std::cout << "----------------1. Add a new skill----------------\n";
-                newSkillID = generateId();
-                std::cout << "Enter new Skill Name: ";
-                std::getline(std::cin, newSkillName);
-                std::cin.ignore();
-                newSkill.setSkillId(newSkillID);
-                newSkill.setOwner(member);
-                newSkill.setSkillName(newSkillName);
-                newSkill.setRatingScore(0.0);
-                member->addSkill(&newSkill);
-                displayMemberSkillList(member);
-                break;
-            case 2:
-                std::cout << "----------------2. Delete an existing skill----------------\n";
-                std::cout << "Enter the Skill Name of the skill to be deleted: ";
-                std::getline(std::cin, deletingSkillName);
-                it = std::find_if(
-                    currentMember->getSkills().begin(),
-                    currentMember->getSkills().end(),
-                    [&deletingSkillName](const Skill *deletingSkillPtr)
-                    {
-                        // Assuming Skill has a method getSkillName() to get the skill name
-                        return deletingSkillPtr->getSkillName() == deletingSkillName;
-                    });
-                if (it != currentMember->getSkills().end())
-                {
-                    std::cout << "Skill to be deleted found.\n";
-                    bool deletingResult = currentMember->removeSkill(*it);
-                    if (deletingResult)
-                    {
-                        std::cout << "Skill successfully deleted.\n";
-                    }
-                    else
-                    {
-                        std::cout << "Skill cannot be deleted.\n";
-                    }
-                }
-                else
-                {
-                    std::cout << "Cannot find specified Skill.\n";
-                }
-                displayMemberSkillList(currentMember);
-                break;
-            case 25:
-                // displayMemberMenu();
-                exit = true;
-                break;
+                std::cout << Colors::GREEN << "Skill to be deleted found.\n"
+                          << Colors::RESET;
+                currentMember->removeSkill(*it);
+                // delete skill from system vector
+                skill_list.erase(std::remove(skill_list.begin(), skill_list.end(), *it), skill_list.end());
+
+                std::cout << "Skill successfully deleted.\n";
             }
+            else
+            {
+                std::cout << Colors::RED << "Cannot find specified Skill.\n"
+                          << Colors::RESET;
+            }
+            displayMemberSkillList(currentMember);
+            break;
+        case 3:
+            // displayMemberMenu();
+            exit = true;
+            break;
+        }
     } while (!exit);
 }
 
@@ -1780,28 +1855,30 @@ void System::manageServiceListing()
     bool exit = false;
     do
     {
-        std::cout << "1. Add a new service";
-        std::cout << "2. Delete an existing service";
-        std::cout << "3. View available requests";
-        std::cout << "4. Accept a request";
-        std::cout << "5. Return to Main Menu";
+        std::cout << Colors::YELLOW << "[1] Add a new service\n";
+        std::cout << "[2] Delete an existing service\n";
+        std::cout << "[3] View available requests\n";
+        std::cout << "[4] Return to Main Menu\n";
 
+        std::cout << Colors::CYAN << "Please enter your choice: " << Colors::RESET;
         int subchoice;
-
-        Service *newService;
+        std::cin >> subchoice;
+        Service *newService, *serviceToViewRequest;
+        int requestNumber;
+        Request *toBeAcceptRequest;
         bool deletingResult;
         std::string deletingServiceID, selectedSkillName, newServiceID;
         std::vector<Skill *> newServiceSkillList;
         auto it = currentMember->getSkills().end();
         auto itService = currentMember->getListedService().end();
         auto itt = newServiceSkillList.end();
-        std::cin >> subchoice;
 
         Date endDate, startDate;
         switch (subchoice)
         {
         case 1:
-            std::cout << "----------------1. Add a new service----------------\n";
+            std::cout << Colors::GREEN << "----------------1. Add a new service----------------\n"
+                      << Colors::RESET;
             newServiceID = generateId();
             std::cout << "Enter new Service Start Time:\n";
             int startYear, startMonth, startDay, startHour, startMinute;
@@ -1889,13 +1966,14 @@ void System::manageServiceListing()
             }
             newService = new Service(newServiceID, currentMember, startDate, endDate, newServiceCCD, newSericeMinHostScore, newServiceSkillList, {});
             currentMember->addService(newService);
+            service_list.push_back(newService);
             std::cout << "New Service listing has been successfully added!\n";
             displayServiceListing(currentMember);
             break;
         case 2:
-            std::cout << "----------------2. Delete an existing service----------------\n";
+            std::cout << Colors::GREEN << "----------------2. Delete an existing service----------------\n";
             displayServiceListing(currentMember);
-            std::cout << "Enter the Service ID of the skill to be deleted: ";
+            std::cout << Colors::CYAN << "Enter the Service ID of the skill to be deleted: " << Colors::RESET;
 
             std::getline(std::cin, deletingServiceID);
             itService = std::find_if(
@@ -1925,15 +2003,154 @@ void System::manageServiceListing()
             displayServiceListing(currentMember);
             break;
         case 3:
-            std::cout << "----------------3. View available requests----------------\n";
+            std::cout << Colors::GREEN << "----------------3. View available requests----------------\n";
+            displayServiceListing(currentMember);
+            std::cout << Colors::CYAN << "Enter the  Number of the service to view requests: " << Colors::RESET;
+            int serviceNumber;
+            std::cin >> serviceNumber;
+            if (serviceNumber < 1 || serviceNumber > currentMember->getListedService().size())
+            {
+                std::cout << Colors::RED << "Invalid number. Please enter the number of service to view requests: " << Colors::RESET;
+                std::cin >> serviceNumber;
+            }
+
+            serviceToViewRequest = currentMember->getListedService()[serviceNumber - 1];
+
+            // display all request of a service
+            displayMemberRequestList(serviceToViewRequest);
+
+            // user choice
+
+            std::cout << Colors::CYAN << "Please enter request number to accept: " << Colors::RESET;
+            std::cin >> requestNumber;
+            while (requestNumber < 1 || requestNumber > getRequestByService(serviceToViewRequest).size())
+            {
+                std::cout << "Invalid number. Please enter request number to accept: ";
+                std::cin >> requestNumber;
+            }
+
+            // accept request
+            toBeAcceptRequest = getRequestByService(serviceToViewRequest)[requestNumber - 1];
+            if (acceptRequest(toBeAcceptRequest))
+            {
+                cout << Colors::GREEN << "Accepted request successfully" << endl
+                     << Colors::RESET;
+            }
+            else
+            {
+                cout << Colors::RED << "Accepted request failed" << endl
+                     << Colors::RESET;
+            }
             break;
+
+            std::cout << Colors::GREEN << "Request List Updated!" << Colors::RESET << endl;
+            displayMemberRequestList(serviceToViewRequest);
+
         case 4:
-            std::cout << "----------------4. Accept a request----------------\n";
-            break;
-        case 5:
-            std::cout << "----------------5. Return to Main Menu----------------\n";
+            std::cout << "----------------4. Return to Main Menu----------------\n";
             exit = true;
             break;
         }
     } while (!exit);
+}
+
+void System::displayMemberRequestList(Service *service)
+{
+    // display all request of a service
+    int count = 1;
+    cout << "List of request for your service: " << endl;
+    std::cout << Colors::MAGENTA
+              << std::left << std::setw(10) << "No."
+              << std::left << std::setw(20) << "Skill Request"
+              << std::left << std::setw(20) << "Requester"
+              << std::left << std::setw(20) << "Start Time"
+              << std::left << std::setw(20) << "End Time"
+              << std::left << std::setw(20) << "Status"
+              << Colors::RESET << std::endl;
+
+    // get request by service
+    std::vector<Request *> requestList = getRequestByService(service);
+
+    for (Request *request : requestList)
+    {
+        std::cout << Colors::YELLOW
+                  << std::left << std::setw(10) << count
+
+                  << std::left << std::setw(20) << request->getSkill()->getSkillName()
+                  << std::left << std::setw(20) << request->getRequester()->getFullName()
+                  << std::left << std::setw(20) << request->getStartTime().toString()
+                  << std::left << std::setw(20) << request->getEndTime().toString()
+                  << std::left << std::setw(20) << (request->getStatus() == 0 ? "PENDING" : (request->getStatus() == 1 ? "ACCEPTED" : "REJECTED"))
+                  << Colors::RESET << std::endl;
+        count++;
+    }
+}
+std::vector<Request *> System::getRequestByService(Service *service)
+{
+    std::vector<Request *> requestList;
+    for (Request *request : request_list)
+    {
+        if (request->getService() == service)
+        {
+            requestList.push_back(request);
+        }
+    }
+    return requestList;
+}
+
+bool System::acceptRequest(Request *request)
+{
+    // check if request is accepted
+    if (request->getStatus() == 1)
+    {
+        cout << Colors::RED << "Request is already accepted." << Colors::RESET << endl;
+        return false;
+    }
+    // check if request is expired
+    else if (Date::compare(request->getEndTime(), Date::getCurrentDate()) < 0)
+    {
+        cout << Colors::RED << "Request is expired." << Colors::RESET << endl;
+        return false;
+    }
+    // accept request and reject other request
+    else
+    {
+        // accept request
+
+        currentMember->acceptRequest(request);
+
+        // reject other time overlapped request
+
+        std::vector<Request *> requestList = getRequestByService(request->getService());
+        for (Request *otherRequest : requestList)
+        {
+            if (otherRequest == request)
+            {
+                continue;
+            }
+            Date currentRequestStartTime = request->getStartTime();
+            Date currentRequestEndTime = request->getEndTime();
+            Date otherRequestStartTime = otherRequest->getStartTime();
+            Date otherRequestEndTime = otherRequest->getEndTime();
+
+            // otherEndTime after currentStartTime
+            // otherStartTime before currentEndTime
+            // otherStartTime after/= currentStartTime and otherEndTime before/= currentEndTime
+            // otherStartTime before currentStartTime and otherEndTime after currentEndTime
+            if (Date::compare(otherRequestEndTime, currentRequestStartTime) > 0 || Date::compare(otherRequestStartTime, currentRequestEndTime) < 0)
+            {
+                otherRequest->setStatus(2);
+            }
+            else if (Date::compare(otherRequestStartTime, currentRequestStartTime) >= 0 && Date::compare(otherRequestEndTime, currentRequestEndTime) <= 0)
+            {
+                otherRequest->setStatus(2);
+            }
+            else if (Date::compare(otherRequestStartTime, currentRequestStartTime) <= 0 && Date::compare(otherRequestEndTime, currentRequestEndTime) >= 0)
+            {
+                otherRequest->setStatus(2);
+            }
+        }
+
+        return true;
+    }
 }

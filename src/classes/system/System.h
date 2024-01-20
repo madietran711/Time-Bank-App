@@ -18,6 +18,8 @@
 #include "../review/Review.h"
 #include <fstream>
 #include <iomanip>
+#include <sstream>
+
 using namespace std;
 
 class System
@@ -94,6 +96,9 @@ public:
     void topUp();
     void manageBlockList();
     Review *inputReview(Request *request, string reviewID);
+    void displayMemberRequestList(Service *service);
+    std::vector<Request *> getRequestByService(Service *service);
+    bool acceptRequest(Request *request);
 
     void rateHost(Member *host, double score, Request *request, bool isNewReview);
     void rateSupporter(Member *supporter, double score, Request *request, bool isNewReview, double skillScore);

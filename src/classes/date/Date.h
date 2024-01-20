@@ -2,6 +2,7 @@
 #define TIME_BANK_APP_DATE_H
 
 #include <string>
+#include <ctime>
 
 class Date
 {
@@ -41,6 +42,7 @@ public:
     static int getDurationInMinutes(const Date &date1, const Date &date2);
     static bool isLeapYear(int year);
     static int daysInMonth(int month, int year);
+    static Date getCurrentDate();
 
     std::string toString() const;
     std::string getMonthStr(int month) const;
