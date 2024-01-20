@@ -13,6 +13,24 @@ Review::Review(
 {
 }
 
+Review::Review(
+    std::string reviewId,
+    int skillRating,
+    int supporterRating,
+
+    Request *request,
+    std::string comment)
+    : reviewId(reviewId), skillRating(skillRating),
+      supporterRating(supporterRating), request(request), comment(comment)
+{
+}
+Review::Review(
+    std::string reviewId,
+    int hostRating,
+    Request *request)
+    : reviewId(reviewId), hostRating(hostRating), request(request)
+{
+}
 // Destructor
 Review::~Review()
 {

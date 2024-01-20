@@ -1,5 +1,3 @@
-
-
 #ifndef TIME_BANK_APP_MEMBER_H
 #define TIME_BANK_APP_MEMBER_H
 
@@ -8,14 +6,18 @@
 #include "../skill/Skill.h"
 #include "../service/Service.h"
 #include "../request/Request.h"
+#include "../review/Review.h"
 #include "../date/Date.h"
 #include "../../utils/colors.h"
+#include "../guest/Guest.h"
 #include <iomanip>
+#include <algorithm>
 class Skill;
 class Service;
 class Request;
 class Date;
-class Member
+class Review;
+class Member : public Guest
 {
 private:
     std::string memberId;
@@ -25,6 +27,7 @@ private:
     std::string phoneNumber;
     std::string email;
     std::string homeAddress;
+    std::string city;
     double hostScore;
     double supporterScore;
     int creditPoint;
@@ -36,6 +39,7 @@ private:
 
 public:
     // Constructors
+
     Member(); // default constructor
     Member(
         std::string memberId,
@@ -45,6 +49,7 @@ public:
         std::string phoneNumber,
         std::string email,
         std::string homeAddress,
+        std::string city,
         double hostScore,
         double supporterScore,
         int creditPoint = 20);
@@ -61,6 +66,7 @@ public:
     std::string getPhoneNumber() const;
     std::string getEmail() const;
     std::string getHomeAddress() const;
+    std::string getCity() const;
     double getHostScore() const;
     double getSupporterScore() const;
     int getCreditPoint() const;
@@ -78,6 +84,8 @@ public:
     void setPhoneNumber(std::string phoneNumber);
     void setEmail(std::string email);
     void setHomeAddress(std::string homeAddress);
+    void setCity(std::string city);
+    void setHostScore(double hostScore);
     void setHostScore(double hostScore, Request *request);
     void setSupporterScore(double supporterScore);
     void setCreditPoint(int creditPoint);
@@ -91,6 +99,7 @@ public:
     Member *login();
     bool logout();
     bool addSkill(Skill *skill);
+    bool removeSkill(Skill *skill);
     void showSkills();
     void showListedService();
     void showAcceptedRequest();
@@ -100,8 +109,10 @@ public:
     void addCD(int cd);
     bool blockMember(Member *member);
     bool unblockMember(Member *member);
+    std::vector<Member *> getInteractedMembers();
+    std::vector<Review *> getReviews(std::vector<Review *> review_list);
 
-    // as a supporter
+    // Member - Supporter functions
     bool addService(Service *service);
     bool removeService(Service *service);
     bool acceptRequest(Request *request);
@@ -109,10 +120,9 @@ public:
     void showAllRequest();
     void showAllRequestFilterBySkill(Skill *skill);
 
-    // as a host
+    // Member - Host functions
     bool addRequest(Request *request);
     void requestService(Service *service);
-    void addSupporterReview(Member *supporter, std::string comment, int supporterRating, Request *request);
     void rateSkill(Skill *skill, double score, Request *request);
     void showAllService();
     void showAllServiceFilterBySkill(Skill *skill);

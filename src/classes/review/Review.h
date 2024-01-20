@@ -27,6 +27,17 @@ public:
         Request *request,
         std::string comment);
 
+    Review(
+        std::string reviewId,
+        int skillRating,
+        int supporterRating,
+
+        Request *request,
+        std::string comment);
+
+    Review(
+        std::string reviewId,
+        int hostRating, Request *request);
     // Destructor
     ~Review();
 
