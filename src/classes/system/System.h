@@ -8,6 +8,9 @@
 #define REQUEST_FILE "./data/request.dat"
 #define REVIEW_FILE "./data/review.dat"
 
+#include <fstream>
+#include <iomanip>
+
 #include "../../utils/colors.h"
 #include "../../utils/Utilities.h"
 #include "../member/Member.h"
@@ -109,6 +112,26 @@ public:
 
     // after done debugging delete this function
     void printAllData();
+
+    // login
+    bool checkLogIn(std::string username, std::string password, std::string logInType);
+    void registerNewAcc();
+    bool validateRegisterRegex(string input, std::regex pattern);
+    bool validateUniqueUsername(string input, vector<Member *> member_list);
+    bool validateUniqueEmail(string input, vector<Member *> member_list);
+    bool validateUniquePhone(string input, vector<Member *> member_list);
+
+    std::string getRegUsername();
+    std::string getRegPassword();
+    std::string getRegEmail();
+    std::string getRegPhone();
+    std::string getRegName();
+    std::string getRegAddress();
+    std::string getRegCity();
+    int getFirstTopUp();
+    bool verifyContinueRegister();
+    std::string createNewAccId();
+    bool checkUniqueId(int i);
 };
 
 #endif // TIME_BANK_APP_SYSTEM_H
