@@ -510,8 +510,7 @@ bool System::saveAllMembers()
     for (const Member *member : member_list)
 
     {
-        cout << "member id: " << member->getMemberId() << endl;
-        cout << "username: " << member->getUsername() << endl;
+
         memberFile << member->getMemberId() << ","
                    << member->getUsername() << ","
                    << member->getPassword() << ","
@@ -522,7 +521,7 @@ bool System::saveAllMembers()
                    << member->getCity() << ","
                    << member->getHostScore() << ","
                    << member->getSupporterScore() << ","
-                   << member->getCreditPoint();
+                   << member->getCreditPoint() << ",";
         // Save blocked member IDs separated by dashes
         const std::vector<Member *> &blockedList = member->getBlockedList();
         // check if blocked list is empty
@@ -599,7 +598,7 @@ bool System::saveAllRequests()
 
     requestFile.close();
 
-    cout << "Saved " << Colors::YELLOW << request_list.size() << Colors::GREEN << " skills." << Colors::RESET << endl;
+    cout << "Saved " << Colors::YELLOW << request_list.size() << Colors::GREEN << " requests." << Colors::RESET << endl;
 
     return true;
 }
@@ -639,7 +638,7 @@ bool System::saveAllServices()
 
     serviceFile.close();
 
-    cout << "Saved " << Colors::YELLOW << service_list.size() << Colors::GREEN << " skills." << Colors::RESET << endl;
+    cout << "Saved " << Colors::YELLOW << service_list.size() << Colors::GREEN << " services." << Colors::RESET << endl;
 
     return true;
 }
@@ -1057,7 +1056,7 @@ void System::displayMemberProfile(Member *member)
 {
 
     std::cout << Colors::MAGENTA << "Member Profile\n"
-              << std::left << std::setw(10) << "ID"
+
               << std::left << std::setw(20) << "USERNAME"
               << std::left << std::setw(20) << "FULL NAME"
               << std::left << std::setw(10) << "PHONE"
@@ -1990,60 +1989,60 @@ void System::manageServiceListing()
             newServiceID = generateId();
             std::cout << "Enter new Service Start Time:\n";
             int startYear, startMonth, startDay, startHour, startMinute;
-            std::cout << "Enter the Year: ";
+            std::cout << Colors::CYAN << "Enter the Year: " << Colors::RESET;
             cin >> startYear;
             std::cin.ignore();
-            std::cout << "Enter the Month: ";
+            std::cout << Colors::CYAN << "Enter the Month: " << Colors::RESET;
             cin >> startMonth;
             std::cin.ignore();
-            std::cout << "Enter the Day: ";
+            std::cout << Colors::CYAN << "Enter the Day: " << Colors::RESET;
             cin >> startDay;
             std::cin.ignore();
-            std::cout << "Enter the Hour: ";
+            std::cout << Colors::CYAN << "Enter the Hour: " << Colors::RESET;
             cin >> startHour;
             std::cin.ignore();
-            std::cout << "Enter the Minute: ";
+            std::cout << Colors::CYAN << "Enter the Minute: " << Colors::RESET;
             cin >> startMinute;
             std::cin.ignore();
             startDate = Date(startYear, startMonth, startDay, startHour, startMinute);
-            std::cout << "Enter new Service End Time: ";
+            std::cout << "Enter new Service End Time: \n";
             int endYear, endMonth, endDay, endHour, endMinute;
-            std::cout << "Enter the Year: ";
+            std::cout << Colors::CYAN << "Enter the Year: " << Colors::RESET;
             cin >> endYear;
             std::cin.ignore();
-            std::cout << "Enter the Month: ";
+            std::cout << Colors::CYAN << "Enter the Month: " << Colors::RESET;
             cin >> endMonth;
             std::cin.ignore();
-            std::cout << "Enter the Day: ";
+            std::cout << Colors::CYAN << "Enter the Day: " << Colors::RESET;
             cin >> endDay;
             std::cin.ignore();
-            std::cout << "Enter the Hour: ";
+            std::cout << Colors::CYAN << "Enter the Hour: " << Colors::RESET;
             cin >> endHour;
             std::cin.ignore();
-            std::cout << "Enter the Minute: ";
+            std::cout << Colors::CYAN << "Enter the Minute: " << Colors::RESET;
             cin >> endMinute;
             std::cin.ignore();
             endDate = Date(endYear, endMonth, endDay, endHour, endMinute);
-            std::cout << "Enter new Service Consuming Credit Points: ";
+            std::cout << Colors::CYAN << "Enter new Service Consuming Credit Points: " << Colors::RESET;
             int newServiceCCD;
             std::cin >> newServiceCCD;
             std::cin.ignore();
 
         std:
-            cout << "Enter new Service Minimum Host Score Required: ";
+            cout << Colors::CYAN << "Enter new Service Minimum Host Score Required: " << Colors::RESET;
             double newSericeMinHostScore;
             std::cin >> newSericeMinHostScore;
             std::cin.ignore();
             displayMemberSkillList(currentMember);
 
             int count;
-            std::cout << "Enter the number of Skills available for the new Service: ";
+            std::cout << Colors::CYAN << "Enter the number of Skills available for the new Service: " << Colors::RESET;
             std::cin >> count;
             std::cin.ignore();
 
             for (int i = 0; i < count; i++)
             {
-                std::cout << "Enter the Skill Name: ";
+                std::cout << Colors::CYAN << "Enter the Skill Name: " << Colors::RESET;
                 std::getline(std::cin, selectedSkillName);
                 it = std::find_if(
                     currentMember->getSkills().begin(),
@@ -2316,8 +2315,6 @@ void System::registerNewAcc()
 
     std::string city = getRegCity();
     int creditPoint = getFirstTopUp();
-
-    std::cout << username << password << email << phone << name << address << city << creditPoint << endl;
 
     std::cout << "Registergin..." << endl;
     Member *member = new Member(generateId(), username, password, name, phone, email, address, city, 0, 0, creditPoint);
