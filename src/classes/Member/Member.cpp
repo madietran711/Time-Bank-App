@@ -499,10 +499,9 @@ void Member::deductCD(int cd)
 {
   this->creditPoint -= cd;
 }
-void showAllServiceFilterBySkill(Skill *skill) {}
 
-void showAllServiceFilterByTime(Date startTime, Date endTime) {}
-
-void showAllServiceFilterByLocation(std::string location) {}
-
-void viewSupporterReview(Member *supporter) {}
+bool Member::rejectRequest(Request *request)
+{
+  request->setStatus(2);
+  return true;
+}

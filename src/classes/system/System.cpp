@@ -1166,7 +1166,7 @@ void System::manageRequest()
                 getline(cin, endTime);
 
             } while (!Date::isValid(endTime));
-            cout << Colors : CYAN << "Enter skill number to request: " << Colors::RESET;
+            cout << Colors ::CYAN << "Enter skill number to request: " << Colors::RESET;
 
             cin >> skillNumber;
             while (skillNumber < 1 || skillNumber > service->getSkillList().size())
@@ -2181,7 +2181,7 @@ void System::manageServiceListing()
         std::cin >> subchoice;
         Service *newService, *serviceToViewRequest;
         int requestNumber;
-        Request *toBeAcceptRequest;
+        Request *toBeAcceptRequest, *toBeRejectRequest;
         bool deletingResult;
         std::string deletingServiceID, selectedSkillName, newServiceID;
         std::vector<Skill *> newServiceSkillList;
@@ -2191,6 +2191,7 @@ void System::manageServiceListing()
         int startYear, startMonth, startDay, startHour, startMinute;
         int endYear, endMonth, endDay, endHour, endMinute;
         Date endDate, startDate;
+        int acceptOrReject;
         switch (subchoice)
         {
         case 1:
@@ -2336,28 +2337,40 @@ void System::manageServiceListing()
             displayMemberRequestList(serviceToViewRequest);
 
             // user choice
-
-            std::cout << Colors::CYAN << "Please enter request number to accept: " << Colors::RESET;
+            std::cout << "Do you want to accept or reject request?  [1] Accept     [2] Reject" << endl;
+            std::cin >> acceptOrReject;
+            std::cout << Colors::CYAN << "Please enter request number to accept/reject: " << Colors::RESET;
             std::cin >> requestNumber;
+
             while (requestNumber < 1 || requestNumber > getRequestByService(serviceToViewRequest).size())
             {
-                std::cout << "Invalid number. Please enter request number to accept: ";
+                std::cout << Colors::RED << "Invalid number. Please enter request number again: " << Colors::RESET;
                 std::cin >> requestNumber;
             }
+            if (acceptOrReject == 1)
+            {
 
-            // accept request
-            toBeAcceptRequest = getRequestByService(serviceToViewRequest)[requestNumber - 1];
-            if (acceptRequest(toBeAcceptRequest))
+                // accept request
+                toBeAcceptRequest = getRequestByService(serviceToViewRequest)[requestNumber - 1];
+                if (acceptRequest(toBeAcceptRequest))
+                {
+                    std::cout << Colors::GREEN << "Accepted request successfully" << endl
+                              << Colors::RESET;
+                }
+                else
+                {
+                    std::cout << Colors::RED << "Accepted request failed" << endl
+                              << Colors::RESET;
+                }
+                break;
+            }
+            else if (acceptOrReject == 2)
             {
-                std::cout << Colors::GREEN << "Accepted request successfully" << endl
+                toBeRejectRequest = getRequestByService(serviceToViewRequest)[requestNumber - 1];
+                currentMember->rejectRequest(toBeRejectRequest);
+                std::cout << Colors::GREEN << "Rejected request successfully" << endl
                           << Colors::RESET;
             }
-            else
-            {
-                std::cout << Colors::RED << "Accepted request failed" << endl
-                          << Colors::RESET;
-            }
-            break;
 
             std::cout << Colors::GREEN << "Request List Updated!" << Colors::RESET << endl;
             displayMemberRequestList(serviceToViewRequest);

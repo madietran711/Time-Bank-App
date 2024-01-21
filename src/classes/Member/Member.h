@@ -9,7 +9,7 @@
 #include "../review/Review.h"
 #include "../date/Date.h"
 #include "../../utils/colors.h"
-#include "../guest/Guest.h"
+
 #include <iomanip>
 #include <algorithm>
 class Skill;
@@ -17,7 +17,7 @@ class Service;
 class Request;
 class Date;
 class Review;
-class Member : public Guest
+class Member
 {
 private:
     std::string memberId;
@@ -116,6 +116,7 @@ public:
     bool addService(Service *service);
     bool removeService(Service *service);
     bool acceptRequest(Request *request);
+    bool rejectRequest(Request *request);
 
     void showAllRequest();
     void showAllRequestFilterBySkill(Skill *skill);
