@@ -89,8 +89,10 @@ void System::displayWelcomeMenu()
             // currentMember = getMemberByID("1");
             do
             {
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 std::cout << Colors::CYAN << "Enter username: " << Colors::RESET;
                 std::cin >> username;
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 std::cout << Colors::CYAN << "Enter password: " << Colors::RESET;
                 std::cin >> password;
 
@@ -108,7 +110,7 @@ void System::displayWelcomeMenu()
                     std::cout << Colors::RED << "Login failed\n"
                               << Colors::RESET;
                     std::cout << Colors::CYAN << "Do you want to try again? (Y/N): " << Colors::RESET;
-
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                     std::cin >> confirm;
                     if (confirm == 'Y' || confirm == 'y')
                     {
@@ -441,9 +443,9 @@ void System::displayAdminMenu()
                     std::cin >> confirm;
                     if (confirm == 'Y' || confirm == 'y')
                     {
-                        member_list[choice - 1]->setPassword(newPassword);
+                        member_list[memberNo - 1]->setPassword(newPassword);
                         std::cout << Colors::GREEN << "Password changed successfully for "
-                                  << Colors::BOLD << member_list[choice - 1]->getFullName() << Colors::RESET << endl;
+                                  << Colors::BOLD << member_list[memberNo - 1]->getFullName() << Colors::RESET << endl;
                     }
                     else
                     {
@@ -1823,7 +1825,7 @@ void System::displayAllMember()
               << std::left << std::setw(20) << "HOME ADDRESS"
               << std::left << std::setw(10) << "CITY"
               << std::left << std::setw(10) << "HOST SCR"
-              << std::left << std::setw(10) << "SUPPORTER SCR"
+              << std::left << std::setw(15) << "SUPPORTER SCR"
               << std::left << std::setw(10) << "CREDIT POINT"
 
               << Colors::RESET << endl;
@@ -2555,7 +2557,7 @@ void System::registerNewAcc()
     std::string city = getRegCity();
     int creditPoint = getFirstTopUp();
 
-    std::cout << "Registergin..." << endl;
+    std::cout << "Registering..." << endl;
     Member *member = new Member(generateId(), username, password, name, phone, email, address, city, 5, 5, creditPoint);
     member_list.push_back(member);
 }
@@ -2699,8 +2701,6 @@ std::string System::getRegName()
         std::cout << Colors::CYAN << "Input your full name: ";
 
         std::getline(std::cin, input);
-
-        std::cout << input << endl;
 
         if (validateRegisterRegex(input, nameRegex))
         {
