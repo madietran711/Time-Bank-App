@@ -773,7 +773,7 @@ bool System::loadAllMembers()
             }
             else
             {
-                std::cout << "Invalid member ID in block list data\n";
+                continue;
             }
         }
     }
