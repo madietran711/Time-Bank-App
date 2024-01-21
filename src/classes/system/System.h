@@ -103,7 +103,7 @@ public:
     void displayMemberSkillList(Member *member);
     void manageReviews();
     void manageSkills(Member *member);
-    void displayAvailableServices(Member *member);
+    std::vector<Service *> retrieveAvailableServices(Member *member);
     void displayAvailableSupporters(Member *member);
     void displayServiceListing(Member *member);
     void viewReviews();

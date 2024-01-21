@@ -95,10 +95,10 @@ bool Date::isValid(const std::string &date)
 {
     std::istringstream ss(date);
     int year, month, day, hour, minute;
-    cout << "date: " << date << endl;
+    cout << "Confirmed Date: " << date << endl;
 
     char slash1, slash2, colon;
-    cout << "START" << endl;
+
     if (!(ss >> year >> slash1 >> month >> slash2 >> day >> hour >> colon >> minute) ||
         (slash1 != '/' || slash2 != '/' || colon != ':'))
     {
@@ -313,6 +313,13 @@ std::string Date::getMonthStr(int month) const
 void runDateTests()
 {
     // Test 1: Date validation
+    // test from user input
+    std::string userInput, userInput2;
+    std::cout << "Enter a date: ";
+    std::getline(std::cin, userInput);
+    std::cout << "Enter another date: ";
+    std::getline(std::cin, userInput2);
+    assert(Date::isValid(userInput2));
     std::string validDate = "2023/01/15 12:30";
     std::string invalidDate = "2023/13/35 25:70";
 
@@ -371,7 +378,6 @@ Date Date::getCurrentDate()
 }
 // int main()
 // {
-//     cout << Date::getCurrentDate().toString();
-//     cout << "df";
+//     runDateTests();
 //     return 0;
 // }

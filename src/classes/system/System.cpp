@@ -314,7 +314,7 @@ void System::displayMemberMenu()
             std::cout << Colors::GREEN << "----------------3. View Available Services (View Supporters, Filter by Time or Location)----------------\n"
                       << Colors::RESET;
             // displayAvailableSupporters(currentMember);
-            displayAvailableServices(currentMember);
+            retrieveAvailableServices(currentMember);
             break;
         case 4:
             std::cout << Colors::GREEN << "----------------4. Manage Service Listing (Add Service, Delete Service, View & Accept Request)\n----------------\n"
@@ -502,19 +502,6 @@ std::vector<Skill *> System::getSkillList() const
 std::vector<Review *> System::getReviewList() const
 {
     return review_list;
-}
-
-void System::initData()
-{
-    std::cout << "\n"
-              << "\n"
-              << "\n";
-    std::cout << Colors::MAGENTA << "Initializing data...\n"
-              << Colors::RESET;
-    initMembers();
-    initSkills();
-    initServices();
-    initRequests();
 }
 
 bool System::saveAllData()
@@ -1130,7 +1117,11 @@ void System::manageRequest()
 
         std::cin >> choice;
         int serviceNumber;
+        std::vector<Service *> serviceList;
+        int skillNumber;
+        Skill *skill;
         Request *newRequest;
+        Service *service;
         string startTime, endTime;
         int count = 1;
         switch (choice)
@@ -1143,51 +1134,55 @@ void System::manageRequest()
         case 2:
             std::cout << Colors::GREEN << "--------------2. Add Request----------------\n"
                       << Colors::RESET;
-            // show list of service
-            //             cout << Colors::GREEN << "List of available services: " << endl;
+            serviceList = retrieveAvailableServices(currentMember);
 
-            //             cout << Colors::CYAN << "Enter service number to add request: " << Colors::RESET;
-            //             cin >> serviceNumber;
+            cout << endl;
 
-            //             while (serviceNumber < 1 || serviceNumber > service_list.size())
-            //             {
-            //                 cout << Colors::RED << "Invalid number. Please enter service number to add request: " << Colors::RESET;
-            //                 cin >> serviceNumber;
-            //             }
+            cout << Colors::CYAN << "Enter service number to add request: " << Colors::RESET;
+            cin >> serviceNumber;
 
-            //             Service *service = service_list[serviceNumber - 1];
-            //             user Input
+            while (serviceNumber < 1 || serviceNumber > serviceList.size())
+            {
+                cout << Colors::RED << "Invalid number. Please enter service number to add request: " << Colors::RESET;
+                cin >> serviceNumber;
+            }
 
-            //                     cout
-            //                 << "Enter start time (yyyy/mm/dd hh:mm): ";
-            //             cin.ignore();
-            //             getline(cin, startTime);
-            //             cout << "Enter end time (yyyy/mm/dd hh:mm): ";
-            //             cin.ignore();
-            //             getline(cin, endTime);
-            //  ___________REMEMBER TO APPLY LOGIC TO CALCULATE CREDIT POINTS TO SEE IF USER HAS ENOUGH CREDIT POINTS TO REQUEST SERVICE_____________________
-            //             cout << "Enter skill number to request: ";
+            service = serviceList[serviceNumber - 1];
+            cin.ignore();
 
-            //             for (Skill *skill : service->getSkillList())
-            //             {
-            //                 cout << count << ". " skill->getSkillName() << "\n ";
-            //                 count++
-            //             }
-            //             cin >> skillNumber;
-            //             while (skillNumber < 1 || skillNumber > service->getSkillList().size())
-            //             {
-            //                 cout << Colors::RED << "Invalid number. Please enter skill number to request: " << Colors::RESET;
-            //                 cin >> skillNumber;
-            //             }
-            //             Skill *skill = service->getSkillList()[skillNumber - 1];
-            //             newRequest = new Request(generateId(), service, currentMember, Date::parse(startTime), Date::parse(endTime), skill, 0);
-            //             request_list.push_back(newRequest);
-            //             currentMember->addRequest(newRequest);
-            //             service->addRequest(newRequest);
-            //             cout << Colors::GREEN << "Request added successfully.\n"
-            //                  << Colors::RESET;
-            // cout<<endl;
-            //                currentMember->viewMyRequest();
+            do
+            {
+
+                cout << Colors::CYAN << "Enter start time (yyyy/mm/dd hh:mm): " << Colors::RESET;
+
+                getline(cin, startTime);
+
+            } while (!Date::isValid(startTime));
+            do
+            {
+
+                cout << Colors::CYAN << "Enter end time (yyyy/mm/dd hh:mm): " << Colors::RESET;
+
+                getline(cin, endTime);
+
+            } while (!Date::isValid(endTime));
+            cout << Colors : CYAN << "Enter skill number to request: " << Colors::RESET;
+
+            cin >> skillNumber;
+            while (skillNumber < 1 || skillNumber > service->getSkillList().size())
+            {
+                cout << Colors::RED << "Invalid number. Please enter skill number to request: " << Colors::RESET;
+                cin >> skillNumber;
+            }
+            skill = service->getSkillList()[skillNumber - 1];
+            newRequest = new Request(generateId(), service, currentMember, Date::parse(startTime), Date::parse(endTime), skill, 0);
+            request_list.push_back(newRequest);
+            currentMember->addRequest(newRequest);
+            service->addRequest(newRequest);
+            cout << Colors::GREEN << "Request added successfully.\n"
+                 << Colors::RESET;
+            cout << endl;
+            currentMember->viewMyRequest();
             break;
 
         case 3:
@@ -1991,8 +1986,9 @@ void System::manageSkills(Member *member)
     } while (!exit);
 }
 
-void System::displayAvailableServices(Member *member)
+std::vector<Service *> System::retrieveAvailableServices(Member *member)
 {
+    std::vector<Service *> availableServices;
     string inputFilterByDate;
     std::cout << "Would you like to filter by Date y/n: ";
     std::cin >> inputFilterByDate;
@@ -2004,42 +2000,42 @@ void System::displayAvailableServices(Member *member)
     {
         filterByDate = true;
         std::cout << "Enter the Starting Date of the Filtering Period:\n";
-        std::cout << "Enter the Year: ";
+        std::cout << Colors::CYAN << "Enter the Year: " << Colors::RESET;
         std::cin >> startYear;
         std::cin.ignore();
-        std::cout << "Enter the Month: ";
+        std::cout << Colors::CYAN << "Enter the Month: " << Colors::RESET;
         std::cin >> startMonth;
         std::cin.ignore();
-        std::cout << "Enter the Day: ";
+        std::cout << Colors::CYAN << "Enter the Day: " << Colors::RESET;
         std::cin >> startDay;
         std::cin.ignore();
-        std::cout << "Enter the Hour: ";
+        std::cout << Colors::CYAN << "Enter the Hour: " << Colors::RESET;
         std::cin >> startHour;
         std::cin.ignore();
-        std::cout << "Enter the Minute: ";
+        std::cout << Colors::CYAN << "Enter the Minute: " << Colors::RESET;
         std::cin >> startMinute;
         std::cin.ignore();
         std::cout << "Enter the Ending Date of the Filtering Period:\n";
-        std::cout << "Enter the Year: ";
+        std::cout << Colors::CYAN << "Enter the Year: " << Colors::RESET;
         std::cin >> endYear;
         std::cin.ignore();
-        std::cout << "Enter the Month: ";
+        std::cout << Colors::CYAN << "Enter the Month: " << Colors::RESET;
         std::cin >> endMonth;
         std::cin.ignore();
-        std::cout << "Enter the Day: ";
+        std::cout << Colors::CYAN << "Enter the Day: " << Colors::RESET;
         std::cin >> endDay;
         std::cin.ignore();
-        std::cout << "Enter the Hour: ";
+        std::cout << Colors::CYAN << "Enter the Hour: " << Colors::RESET;
         std::cin >> endHour;
         std::cin.ignore();
-        std::cout << "Enter the Minute: ";
+        std::cout << Colors::CYAN << "Enter the Minute: " << Colors::RESET;
         std::cin >> endMinute;
         std::cin.ignore();
         startDate = Date(startYear, startMonth, startDay, startHour, startMinute);
         endDate = Date(endYear, endMonth, endDay, endHour, endMinute);
     }
     string inputFilterByLocation;
-    std::cout << "Would you like to filter by Location y/n: ";
+    std::cout << Colors::CYAN << "Would you like to filter by Location y/n: " << Colors::RESET;
     std::cin >> inputFilterByLocation;
     std::cin.ignore();
     bool filterByLocation = false;
@@ -2047,13 +2043,13 @@ void System::displayAvailableServices(Member *member)
     if (inputFilterByLocation == "y")
     {
         filterByLocation = true;
-        std::cout << "Enter Location (HANOI/SAIGON): ";
+        std::cout << Colors::CYAN << "Enter Location (HANOI/SAIGON): " << Colors::RESET;
         std::cin >> inputFilteringLocation;
         std::cin.ignore();
     }
     std::cout << "List of available services: " << endl;
     int count = 1;
-    for (Service *service : getServiceList())
+    for (Service *service : service_list)
     {
         // Move on to the next iteration if the service's lister is the same Member inquiring
         if (service->getServiceOwner()->getFullName() == member->getFullName())
@@ -2071,16 +2067,22 @@ void System::displayAvailableServices(Member *member)
         // Check if user want to filter by Service's Time Period
         if (filterByDate)
         {
-            if (Date::compare(service->getStartTime(), startDate) > 0 || Date::compare(service->getEndTime(), endDate) < 0)
+            if (Date::compare(service->getStartTime(), startDate) < 0 || Date::compare(service->getEndTime(), endDate) > 0)
             {
+
                 continue;
             }
         }
         if (service->getScoreRequired() <= member->getHostScore() && service->getConsumingCD() <= member->getCreditPoint())
         {
-            std::cout << Colors::CYAN << "Service No.: " << Colors::YELLOW << count << endl;
-            std::cout << Colors::CYAN << "Service ID: " << Colors::YELLOW << service->getServiceId() << endl;
-            std::cout << Colors::CYAN << "Service Owner: " << Colors::YELLOW << service->getServiceOwner() << endl;
+            availableServices.push_back(service);
+            std::cout << Colors::BLACK << "-------------------------------------------\n"
+                      << Colors::RESET << endl;
+            std::cout
+                << Colors::CYAN << "Service No.: " << Colors::YELLOW << count << endl;
+
+            std::cout << Colors::CYAN << "Service Owner: " << Colors::YELLOW << service->getServiceOwner()->getFullName() << endl;
+            std::cout << Colors::CYAN << "Location: " << Colors::YELLOW << service->getServiceOwner()->getCity() << endl;
             std::cout << Colors::CYAN << "Start Time: " << Colors::YELLOW << service->getStartTime().toString() << endl;
             std::cout << Colors::CYAN << "End Time: " << Colors::YELLOW << service->getEndTime().toString() << endl;
             std::cout << Colors::CYAN << "Consuming Credit Points " << Colors::YELLOW << service->getConsumingCD() << endl;
@@ -2094,8 +2096,8 @@ void System::displayAvailableServices(Member *member)
             for (Skill *skill : service->getSkillList())
             {
                 std::cout << Colors::YELLOW
-                          << std::left << std::setw(10) << count
-                          << std::left << std::setw(10) << skill->getSkillId()
+                          << std::left << std::setw(10) << count2
+
                           << std::left << std::setw(20) << skill->getSkillName()
                           << std::left << std::setw(20) << skill->getRatingScore()
                           << Colors::RESET << std::endl;
@@ -2105,6 +2107,7 @@ void System::displayAvailableServices(Member *member)
             count++;
         }
     }
+    return availableServices;
 }
 
 void System::displayAvailableSupporters(Member *member)
@@ -2235,8 +2238,7 @@ void System::manageServiceListing()
             std::cin >> newServiceCCD;
             std::cin.ignore();
 
-        std:
-            cout << Colors::CYAN << "Enter new Service Minimum Host Score Required: " << Colors::RESET;
+            std::cout << Colors::CYAN << "Enter new Service Minimum Host Score Required: " << Colors::RESET;
             double newSericeMinHostScore;
             std::cin >> newSericeMinHostScore;
             std::cin.ignore();
@@ -2524,7 +2526,7 @@ void System::registerNewAcc()
     int creditPoint = getFirstTopUp();
 
     std::cout << "Registergin..." << endl;
-    Member *member = new Member(generateId(), username, password, name, phone, email, address, city, 0, 0, creditPoint);
+    Member *member = new Member(generateId(), username, password, name, phone, email, address, city, 5, 5, creditPoint);
     member_list.push_back(member);
 }
 std::string System::getRegUsername()
