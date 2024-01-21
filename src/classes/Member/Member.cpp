@@ -248,7 +248,7 @@ bool Member::removeSkill(Skill *skill)
 void Member::viewProfile()
 {
   std::cout << Colors::YELLOW
-            << std::left << std::setw(10) << this->getMemberId()
+
             << std::left << std::setw(20) << this->getUsername()
             << std::left << std::setw(20) << this->getFullName()
             << std::left << std::setw(10) << this->getPhoneNumber()
