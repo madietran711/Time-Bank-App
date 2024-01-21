@@ -48,6 +48,14 @@ public:
     // Constructors
     System() = default; // default constructor
 
+    // Getter functions
+    std::vector<Member *> getMemberList() const;
+    std::vector<Service *> getServiceList() const;
+    std::vector<Request *> getRequestList() const;
+    std::vector<Skill *> getSkillList() const;
+    std::vector<Review *> getReviewList() const;
+
+    // Run when initdata() run, init data
     std::vector<std::string> splitStr(std::string &, std::string);
 
     // save data to file
@@ -96,6 +104,7 @@ public:
     void manageReviews();
     void manageSkills(Member *member);
     void displayAvailableServices(Member *member);
+    void displayAvailableSupporters(Member *member);
     void displayServiceListing(Member *member);
     void viewReviews();
     void manageRequest();
