@@ -312,9 +312,8 @@ void System::displayMemberMenu()
         case 3:
             std::cout << Colors::GREEN << "----------------3. View Available Services (View Supporters, Filter by Time or Location)----------------\n"
                     << Colors::RESET;
-            displayAvailableServices(currentMember);
             displayAvailableSupporters(currentMember);
-
+            displayAvailableServices(currentMember);
             break;
         case 4:
             std::cout << Colors::GREEN << "----------------4. Manage Service Listing (Add Service, Delete Service, View & Accept Request)\n----------------\n"
