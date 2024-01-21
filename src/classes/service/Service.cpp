@@ -110,3 +110,20 @@ void Service::addSkill(Skill *skill)
 {
     this->skillList.push_back(skill);
 }
+
+void Service::viewService()
+{
+
+    std::cout << Colors::YELLOW
+
+              << std::left << std::setw(20) << this->getServiceOwner()->getFullName()
+              << std::left << std::setw(20) << this->getStartTime().toString()
+              << std::left << std::setw(20) << this->getEndTime().toString()
+              << std::left << std::setw(10) << this->getConsumingCD()
+              << std::left << std::setw(10) << this->getScoreRequired();
+    for (Skill *skill : this->getSkillList())
+    {
+        std::cout << skill->getSkillName() << ",";
+    }
+    std::cout << Colors::RESET << std::endl;
+}

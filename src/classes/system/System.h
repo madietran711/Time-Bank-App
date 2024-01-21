@@ -8,6 +8,9 @@
 #define REQUEST_FILE "./data/request.dat"
 #define REVIEW_FILE "./data/review.dat"
 
+#include <fstream>
+#include <iomanip>
+
 #include "../../utils/colors.h"
 #include "../../utils/Utilities.h"
 #include "../member/Member.h"
@@ -19,6 +22,7 @@
 #include <fstream>
 #include <iomanip>
 #include <sstream>
+#include <cmath>
 
 using namespace std;
 
@@ -81,6 +85,8 @@ public:
     void displayAllMember();
 
     // GuestMenu Functions
+    void displayAllService();
+    void displaySupporterDetail(Service *service);
 
     // MemberMenu Functions
     void manageServiceListing();
@@ -99,16 +105,33 @@ public:
     void displayMemberRequestList(Service *service);
     std::vector<Request *> getRequestByService(Service *service);
     bool acceptRequest(Request *request);
-
     void rateHost(Member *host, double score, Request *request, bool isNewReview);
     void rateSupporter(Member *supporter, double score, Request *request, bool isNewReview, double skillScore);
-
     void hostRatingFunction();
-    // void topUpCD(Member *member, int cd);
     void manageBlockList(Member *member);
 
     // after done debugging delete this function
     void printAllData();
+
+    // authentication and validation
+    bool checkLogIn(std::string username, std::string password, std::string logInType);
+    void registerNewAcc();
+    bool validateRegisterRegex(string input, std::regex pattern);
+    bool validateUniqueUsername(string input, vector<Member *> member_list);
+    bool validateUniqueEmail(string input, vector<Member *> member_list);
+    bool validateUniquePhone(string input, vector<Member *> member_list);
+
+    std::string getRegUsername();
+    std::string getRegPassword();
+    std::string getRegEmail();
+    std::string getRegPhone();
+    std::string getRegName();
+    std::string getRegAddress();
+    std::string getRegCity();
+    int getFirstTopUp();
+    bool verifyContinueRegister();
+    Member *getMemberByUsername(std::string username);
+    bool checkUniqueId(int i);
 };
 
 #endif // TIME_BANK_APP_SYSTEM_H
