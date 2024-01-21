@@ -13,3 +13,13 @@ g++ main.cpp   ./src/classes/date/Date.cpp ./src/classes/member/Member.cpp ./src
 ```
 ./program.exe
 ```
+
+## Note:
+
+- Admin username = admin
+- Admin password = admin123
+
+Test user account with data
+
+- username: newUsername1
+- password: newPassword1

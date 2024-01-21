@@ -16,9 +16,9 @@ std::regex cityRegex("^(HANOI|SAIGON)$");
 void System::run()
 
 {
-    // initData();
+
     loadAllData();
-    printAllData();
+    // printAllData();
     saveAllData();
     loadAllData();
     std::string groupNumber = "Group No.";
@@ -2039,6 +2039,7 @@ std::vector<Service *> System::retrieveAvailableServices(Member *member)
     std::cin >> inputFilterByLocation;
     std::cin.ignore();
     bool filterByLocation = false;
+    bool isBlocked;
     std::string inputFilteringLocation;
     if (inputFilterByLocation == "y")
     {
@@ -2051,6 +2052,20 @@ std::vector<Service *> System::retrieveAvailableServices(Member *member)
     int count = 1;
     for (Service *service : service_list)
     {
+        // exclude people from block list
+        isBlocked = false;
+        for (Member *blockedMember : member->getBlockedList())
+        {
+            if (blockedMember == service->getServiceOwner())
+            {
+                isBlocked = true;
+                continue;
+            }
+        }
+        if (isBlocked)
+        {
+            continue;
+        }
         // Move on to the next iteration if the service's lister is the same Member inquiring
         if (service->getServiceOwner()->getFullName() == member->getFullName())
         {
