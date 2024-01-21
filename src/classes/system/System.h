@@ -22,6 +22,7 @@
 #include <fstream>
 #include <iomanip>
 #include <sstream>
+#include <cmath>
 
 using namespace std;
 
@@ -84,6 +85,8 @@ public:
     void displayAllMember();
 
     // GuestMenu Functions
+    void displayAllService();
+    void displaySupporterDetail(Service *service);
 
     // MemberMenu Functions
     void manageServiceListing();
@@ -102,18 +105,15 @@ public:
     void displayMemberRequestList(Service *service);
     std::vector<Request *> getRequestByService(Service *service);
     bool acceptRequest(Request *request);
-
     void rateHost(Member *host, double score, Request *request, bool isNewReview);
     void rateSupporter(Member *supporter, double score, Request *request, bool isNewReview, double skillScore);
-
     void hostRatingFunction();
-    // void topUpCD(Member *member, int cd);
     void manageBlockList(Member *member);
 
     // after done debugging delete this function
     void printAllData();
 
-    // login
+    // authentication and validation
     bool checkLogIn(std::string username, std::string password, std::string logInType);
     void registerNewAcc();
     bool validateRegisterRegex(string input, std::regex pattern);
@@ -130,7 +130,7 @@ public:
     std::string getRegCity();
     int getFirstTopUp();
     bool verifyContinueRegister();
-    std::string createNewAccId();
+    Member *getMemberByUsername(std::string username);
     bool checkUniqueId(int i);
 };
 

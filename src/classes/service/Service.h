@@ -61,7 +61,7 @@ public:
     void setRequestList(const std::vector<Request *> &requestList);
 
     // Return address of the array of info to display
-    int *returnServiceInfo();
+    void viewService();
     void addRequest(Request *request);
     void addSkill(Skill *skill);
 };

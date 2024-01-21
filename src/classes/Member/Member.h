@@ -116,7 +116,7 @@ public:
     bool addService(Service *service);
     bool removeService(Service *service);
     bool acceptRequest(Request *request);
-    // void rateHost(Member *host, double score);
+
     void showAllRequest();
     void showAllRequestFilterBySkill(Skill *skill);
 
@@ -130,6 +130,7 @@ public:
     void showAllServiceFilterByLocation(std::string location);
     void viewSupporterReview(Member *supporter);
     void viewMyRequest();
+    void deductCD(int cd);
 
     // declare friend class
     friend class Request;

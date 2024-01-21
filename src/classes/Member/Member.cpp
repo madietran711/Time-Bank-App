@@ -495,7 +495,10 @@ void Member::showListedService()
     count++;
   }
 }
-
+void Member::deductCD(int cd)
+{
+  this->creditPoint -= cd;
+}
 void showAllServiceFilterBySkill(Skill *skill) {}
 
 void showAllServiceFilterByTime(Date startTime, Date endTime) {}
