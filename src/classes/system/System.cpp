@@ -2567,14 +2567,31 @@ int System::getFirstTopUp()
 
 bool System::verifyContinueRegister()
 {
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    std::string choice;
-    std::cout << Colors::CYAN << "Do you want to continue registering? (Y/N): " << Colors::RESET;
-    std::cin >> choice;
-    if (choice == "y" or choice == "Y")
+    bool quit = false;
+    do
     {
-        return true;
-    }
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::string choice;
+        std::cout << Colors::CYAN << "Do you want to continue registering? (Y/N): " << Colors::RESET;
+        std::cin >> choice;
+        if (choice == "y" or choice == "Y")
+        {
+            return true;
+        }
+        else if (choice == "n" or choice == "N")
+        {
+            std::cout << Colors::GREEN << "Confirmed. Returning to Member Menu\n"
+                      << Colors::RESET;
+            quit = true;
+            ;
+        }
+        else
+        {
+            std::cout << Colors::RED << "ERROR! WRONG INPUT\n"
+                      << Colors::RESET;
+        }
+
+    } while (!quit);
     displayWelcomeMenu();
     return false;
 };
