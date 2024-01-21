@@ -4,9 +4,10 @@
 #include <random>
 #include <vector>
 #include <iostream>
-std::regex usernameRegex("^[A-Za-z0-9_]{5,30}$");             // Alphanumeric and underscores, 5-30 characters
-std::regex passwordRegex("^[A-Za-z0-9]{8,}$");                // Alphanumeric, minimum 8 characters
-std::regex nameRegex("^[A-Za-z'-]{1,50}$");                   // Letters, hyphen, apostrophe, up to 50 characters
+std::regex usernameRegex("^[A-Za-z0-9_]{5,30}$"); // Alphanumeric and underscores, 5-30 characters
+std::regex passwordRegex("^[A-Za-z0-9]{8,}$");    // Alphanumeric, minimum 8 characters
+std::regex nameRegex("^[A-Za-z'\\- ]{1,50}$");
+// Letters, hyphen, ap    ostrophe, up to 50 characters
 std::regex phoneNumRegex("^[0-9]{8,15}$");                    // Only numbers, 8-15 digits
 std::regex emailRegex("^[\\w.-]+@[\\w.-]+\\.[A-Za-z]{2,6}$"); // Simple email pattern
 std::regex addressRegex("^[\\w\\s.,'-]{1,}$");                // Alphanumeric with space, comma, period, apostrophes, hyphen, minimum 10 characters
@@ -521,7 +522,7 @@ bool System::saveAllMembers()
                    << member->getCity() << ","
                    << member->getHostScore() << ","
                    << member->getSupporterScore() << ","
-                   << member->getCreditPoint() << ",";
+                   << member->getCreditPoint();
         // Save blocked member IDs separated by dashes
         const std::vector<Member *> &blockedList = member->getBlockedList();
         // check if blocked list is empty
@@ -2327,6 +2328,7 @@ std::string System::getRegUsername()
     std::string input = "";
     do
     {
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         std::cout << Colors::MAGENTA << "Username must be unique and only contains alphanumeric and underscores (5-30 characters)" << std::endl;
         std::cout << Colors::CYAN << "Input Username: " << Colors::RESET;
         cin >> input;
@@ -2360,6 +2362,7 @@ std::string System::getRegPassword()
     std::string input = "";
     do
     {
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         std::cout << Colors::MAGENTA << "Password cannot have space or special character (Minimum 8 characters)" << std::endl;
         std::cout << Colors::CYAN << "Input Password: " << Colors::RESET;
         cin >> input;
@@ -2384,6 +2387,7 @@ std::string System::getRegEmail()
     std::string input = "";
     do
     {
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         cout << Colors::MAGENTA << "Email must be unique and only includes characters, an @ symbol, domain name, and a domain suffix" << std::endl;
         std::cout << Colors::CYAN << "Input Email: " << Colors::RESET;
 
@@ -2419,10 +2423,12 @@ std::string System::getRegPhone()
     std::string input = "";
     do
     {
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         std::cout << Colors::MAGENTA << "Phone Number must be unique and only includes numbers (8-15 digits)" << std::endl;
         std::cout << Colors::CYAN << "Input Phone Number: " << Colors::RESET;
 
         cin >> input;
+        cout << input << endl;
 
         if (validateRegisterRegex(input, phoneNumRegex) && validateUniquePhone(input, member_list))
         {
@@ -2453,6 +2459,7 @@ std::string System::getRegName()
     std::string input = "";
     do
     {
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         std::cout << Colors::MAGENTA << "Name can only have letters, hyphen, apostrophe (maximun 50 characters)" << std::endl;
         std::cout << Colors::CYAN << "Input your full name: ";
 
@@ -2480,6 +2487,7 @@ std::string System::getRegCity()
     std::string input = "";
     do
     {
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         std::cout << Colors::MAGENTA << "Input only HANOI or SAIGON" << std::endl;
         std::cout << Colors::CYAN << "Input your city (HANOI/SAIGON): ";
 
@@ -2506,6 +2514,7 @@ std::string System::getRegAddress()
     std::string input = "";
     do
     {
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         std::cout << Colors::MAGENTA << "Address can only have alphanumeric with space, comma, period, apostrophes, hyphen" << std::endl;
         std::cout << Colors::CYAN << "Input your address: ";
 
@@ -2531,6 +2540,7 @@ int System::getFirstTopUp()
 {
     do
     {
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         std::string choice;
         std::cout << Colors::CYAN << "You have to pay $20 for your first 20 credit points. Confirm? (Y/N): ";
         std::cin >> choice;
@@ -2538,8 +2548,17 @@ int System::getFirstTopUp()
         {
             return 20;
         }
-        std::cout << Colors::GREEN << "Cancelled topup\n"
-                  << Colors::RESET;
+        else if (choice == "n" or choice == "N")
+        {
+            std::cout << Colors::GREEN << "Cancelled topup\n"
+                      << Colors::RESET;
+        }
+        else
+        {
+            std::cout << Colors::RED << "ERROR! Wrong input\n"
+                      << Colors::RESET;
+        }
+
         if (!verifyContinueRegister())
         {
             std::cout << Colors::RED << "Cancelled registering, back to welcome menu\n"
@@ -2551,10 +2570,11 @@ int System::getFirstTopUp()
 
 bool System::verifyContinueRegister()
 {
-    char choice;
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    std::string choice;
     std::cout << Colors::CYAN << "Do you want to continue registering? (Y/N): " << Colors::RESET;
     std::cin >> choice;
-    if (choice == 'y' or choice == 'Y')
+    if (choice == "y" or choice == "Y")
     {
         return true;
     }

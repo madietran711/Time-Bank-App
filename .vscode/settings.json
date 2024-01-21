@@ -69,7 +69,8 @@
     "numeric": "cpp",
     "random": "cpp",
     "numbers": "cpp",
-    "regex": "cpp"
+    "regex": "cpp",
+    "map": "cpp"
   },
   "C_Cpp.errorSquiggles": "enabled",
   "C_Cpp_Runner.msvcBatchPath": "",
