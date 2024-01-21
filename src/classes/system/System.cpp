@@ -770,7 +770,6 @@ bool System::loadAllMembers()
             {
                 // Linking
                 member->blockMember(blockedMember);
-                std::cout << "Blocked " << blockedMember->getFullName() << endl;
             }
             else
             {
@@ -1865,32 +1864,31 @@ void System::manageProfile(Member *member)
             {
                 std::cout << "Enter new Username: ";
                 std::string newUsername;
-                std::cin.ignore();
                 std::getline(std::cin, newUsername);
 
                 std::cout << "Enter new Full Name: ";
                 std::string newFullName;
-                std::cin.ignore();
+
                 std::getline(std::cin, newFullName);
 
                 std::cout << "Enter new Phone Number: ";
                 std::string newPhoneNumber;
-                std::cin.ignore();
+
                 std::getline(std::cin, newPhoneNumber);
 
                 std::cout << "Enter new Email Address: ";
                 std::string newEmailAddress;
-                std::cin.ignore();
+
                 std::getline(std::cin, newEmailAddress);
 
                 std::cout << "Enter new Home Address: ";
                 std::string newHomeAddress;
-                std::cin.ignore();
+
                 std::getline(std::cin, newHomeAddress);
 
                 std::cout << "Enter new City (HANOI/SAIGON): ";
                 std::string newCity;
-                std::cin.ignore();
+
                 std::getline(std::cin, newCity);
 
                 currentMember->setUsername(newUsername);
