@@ -441,9 +441,9 @@ void System::displayAdminMenu()
                     std::cin >> confirm;
                     if (confirm == 'Y' || confirm == 'y')
                     {
-                        member_list[choice - 1]->setPassword(newPassword);
+                        member_list[memberNo - 1]->setPassword(newPassword);
                         std::cout << Colors::GREEN << "Password changed successfully for "
-                                  << Colors::BOLD << member_list[choice - 1]->getFullName() << Colors::RESET << endl;
+                                  << Colors::BOLD << member_list[memberNo - 1]->getFullName() << Colors::RESET << endl;
                     }
                     else
                     {
