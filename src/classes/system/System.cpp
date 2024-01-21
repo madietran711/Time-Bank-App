@@ -124,6 +124,7 @@ void System::displayWelcomeMenu()
 
             break;
         case 3:
+
             do
             {
                 std::cout << Colors::CYAN << "Enter username: " << Colors::RESET;
@@ -467,7 +468,7 @@ void System::displayAdminMenu()
             if (choice == 'Y' || choice == 'y')
             {
                 saveAllData();
-                isUserAdmin = false;
+
                 exit = true;
             }
             else
@@ -1124,6 +1125,8 @@ void System::manageRequest()
         Service *service;
         string startTime, endTime;
         int count = 1;
+        bool isValidStartTime = false;
+        bool isValidEndTime = false;
         switch (choice)
         {
         case 1:
@@ -1149,23 +1152,25 @@ void System::manageRequest()
 
             service = serviceList[serviceNumber - 1];
             cin.ignore();
-
+            isValidStartTime = false;
             do
             {
 
                 cout << Colors::CYAN << "Enter start time (yyyy/mm/dd hh:mm): " << Colors::RESET;
 
                 getline(cin, startTime);
+                isValidStartTime = Date::isValid(startTime);
+            } while (!isValidStartTime);
 
-            } while (!Date::isValid(startTime));
             do
             {
 
                 cout << Colors::CYAN << "Enter end time (yyyy/mm/dd hh:mm): " << Colors::RESET;
 
                 getline(cin, endTime);
+                isValidEndTime = Date::isValid(endTime);
 
-            } while (!Date::isValid(endTime));
+            } while (!isValidEndTime);
             cout << Colors ::CYAN << "Enter skill number to request: " << Colors::RESET;
 
             cin >> skillNumber;
@@ -1371,21 +1376,24 @@ Review *System::inputReview(Request *request, string reviewID)
     std::cout << Colors::CYAN << "Enter your comment for service: ";
     std::cin.ignore();
     std::getline(std::cin, comment);
-    bool isValidRating = false;
+    bool isValidSkillRating = false;
+
     do
     {
         std::cout << Colors::CYAN << "Enter your rating for skill: ";
         int skillRating;
         std::cin >> skillRating;
-        isValidRating = Utilities::validateUserRating(skillRating);
-    } while (!isValidRating);
+        double convertedRating = static_cast<double>(skillRating);
+        isValidSkillRating = Utilities::validateUserRating(convertedRating);
+    } while (!isValidSkillRating);
 
-    isValidRating = false;
+    bool isValidRating = false;
     do
     {
         std::cout << Colors::CYAN << "Enter your rating for supporter: ";
         std::cin >> supporterRating;
-        isValidRating = Utilities::validateUserRating(supporterRating);
+        double convertedRating = static_cast<double>(supporterRating);
+        isValidRating = Utilities::validateUserRating(convertedRating);
     } while (!isValidRating);
 
     return new Review(reviewID, skillRating, supporterRating, request, comment);
@@ -1459,6 +1467,12 @@ void System::hostRatingFunction()
     int count = 1;
     double score;
     std::cout << "List of accepted request for your service: " << endl;
+    if (currentMember->getAcceptedRequest().size() == 0)
+    {
+        std::cout << Colors::RED << "You have not accepted any request yet.\n"
+                  << Colors::RESET;
+        return;
+    }
     for (Request *request : currentMember->getAcceptedRequest())
     {
         std::cout << Colors::CYAN << "Request No.: " << Colors::YELLOW << count << endl;
@@ -1484,6 +1498,7 @@ void System::hostRatingFunction()
 
     // check if review exist
     bool isNewReview = true;
+    bool isValidRating = false;
     for (Review *review : review_list)
     {
         if (review->getRequest() == request && review->getHostRating() != 0)
@@ -1497,8 +1512,13 @@ void System::hostRatingFunction()
             if (confirm == 'Y' || confirm == 'y')
             {
                 std::cout << endl;
-                std::cout << Colors::MAGENTA << "Please enter score to rate host: " << Colors::RESET;
-                std::cin >> score;
+                do
+                {
+                    std::cout << Colors::MAGENTA << "Please enter score to rate host: " << Colors::RESET;
+                    std::cin >> score;
+                    isValidRating = Utilities::validateUserRating(score);
+                } while (!isValidRating);
+
                 rateHost(request->getRequester(), score, request, false);
                 std::cout << "Edited host score for " << Colors::YELLOW << request->getRequester()->getFullName() << Colors::GREEN << " successfully." << Colors::RESET << endl;
                 break;
@@ -1796,14 +1816,14 @@ void System::displayAllMember()
     int count = 1;
     std::cout << Colors::MAGENTA << "Member Profile\n"
               << std::left << std::setw(5) << "No."
-              << std::left << std::setw(10) << "ID"
+
               << std::left << std::setw(20) << "USERNAME"
               << std::left << std::setw(20) << "FULL NAME"
-              << std::left << std::setw(10) << "PHONE"
+              << std::left << std::setw(20) << "PHONE"
               << std::left << std::setw(25) << "EMAIL"
               << std::left << std::setw(20) << "HOME ADDRESS"
               << std::left << std::setw(10) << "CITY"
-              << std::left << std::setw(1) << "HOST SCR"
+              << std::left << std::setw(10) << "HOST SCR"
               << std::left << std::setw(10) << "SUPPORTER SCR"
               << std::left << std::setw(10) << "CREDIT POINT"
 
@@ -1992,47 +2012,39 @@ std::vector<Service *> System::retrieveAvailableServices(Member *member)
     string inputFilterByDate;
     std::cout << "Would you like to filter by Date y/n: ";
     std::cin >> inputFilterByDate;
-    std::cin.ignore();
+
     bool filterByDate = false;
+    bool isValidStartTime = false;
+    bool isValidEndTime = false;
     int startYear, startMonth, startDay, startHour, startMinute, endYear, endMonth, endDay, endHour, endMinute;
     Date startDate, endDate;
+    string startTime, endTime;
     if (inputFilterByDate == "y")
     {
+        std::cin.ignore();
+
         filterByDate = true;
-        std::cout << "Enter the Starting Date of the Filtering Period:\n";
-        std::cout << Colors::CYAN << "Enter the Year: " << Colors::RESET;
-        std::cin >> startYear;
-        std::cin.ignore();
-        std::cout << Colors::CYAN << "Enter the Month: " << Colors::RESET;
-        std::cin >> startMonth;
-        std::cin.ignore();
-        std::cout << Colors::CYAN << "Enter the Day: " << Colors::RESET;
-        std::cin >> startDay;
-        std::cin.ignore();
-        std::cout << Colors::CYAN << "Enter the Hour: " << Colors::RESET;
-        std::cin >> startHour;
-        std::cin.ignore();
-        std::cout << Colors::CYAN << "Enter the Minute: " << Colors::RESET;
-        std::cin >> startMinute;
-        std::cin.ignore();
-        std::cout << "Enter the Ending Date of the Filtering Period:\n";
-        std::cout << Colors::CYAN << "Enter the Year: " << Colors::RESET;
-        std::cin >> endYear;
-        std::cin.ignore();
-        std::cout << Colors::CYAN << "Enter the Month: " << Colors::RESET;
-        std::cin >> endMonth;
-        std::cin.ignore();
-        std::cout << Colors::CYAN << "Enter the Day: " << Colors::RESET;
-        std::cin >> endDay;
-        std::cin.ignore();
-        std::cout << Colors::CYAN << "Enter the Hour: " << Colors::RESET;
-        std::cin >> endHour;
-        std::cin.ignore();
-        std::cout << Colors::CYAN << "Enter the Minute: " << Colors::RESET;
-        std::cin >> endMinute;
-        std::cin.ignore();
-        startDate = Date(startYear, startMonth, startDay, startHour, startMinute);
-        endDate = Date(endYear, endMonth, endDay, endHour, endMinute);
+        isValidStartTime = false;
+        do
+        {
+
+            cout << Colors::CYAN << "Enter start time (yyyy/mm/dd hh:mm): " << Colors::RESET;
+
+            getline(cin, startTime);
+            isValidStartTime = Date::isValid(startTime);
+        } while (!isValidStartTime);
+
+        do
+        {
+
+            cout << Colors::CYAN << "Enter end time (yyyy/mm/dd hh:mm): " << Colors::RESET;
+
+            getline(cin, endTime);
+            isValidEndTime = Date::isValid(endTime);
+
+        } while (!isValidEndTime);
+        startDate = Date::parse(startTime);
+        endDate = Date::parse(endTime);
     }
     string inputFilterByLocation;
     std::cout << Colors::CYAN << "Would you like to filter by Location y/n: " << Colors::RESET;
@@ -2206,49 +2218,41 @@ void System::manageServiceListing()
         int startYear, startMonth, startDay, startHour, startMinute;
         int endYear, endMonth, endDay, endHour, endMinute;
         Date endDate, startDate;
+        string startTime, endTime;
         int acceptOrReject;
+        bool
+            isValidStartTime = false;
+        bool isValidEndTime = false;
         switch (subchoice)
         {
         case 1:
             std::cout << Colors::GREEN << "----------------1. Add a new service----------------\n"
                       << Colors::RESET;
             newServiceID = generateId();
-            std::cout << "Enter new Service Start Time:\n";
-            int startYear, startMonth, startDay, startHour, startMinute;
-            std::cout << Colors::CYAN << "Enter the Year: " << Colors::RESET;
-            cin >> startYear;
-            std::cin.ignore();
-            std::cout << Colors::CYAN << "Enter the Month: " << Colors::RESET;
-            cin >> startMonth;
-            std::cin.ignore();
-            std::cout << Colors::CYAN << "Enter the Day: " << Colors::RESET;
-            cin >> startDay;
-            std::cin.ignore();
-            std::cout << Colors::CYAN << "Enter the Hour: " << Colors::RESET;
-            cin >> startHour;
-            std::cin.ignore();
-            std::cout << Colors::CYAN << "Enter the Minute: " << Colors::RESET;
-            cin >> startMinute;
-            std::cin.ignore();
-            startDate = Date(startYear, startMonth, startDay, startHour, startMinute);
-            std::cout << "Enter new Service End Time: \n";
-            int endYear, endMonth, endDay, endHour, endMinute;
-            std::cout << Colors::CYAN << "Enter the Year: " << Colors::RESET;
-            cin >> endYear;
-            std::cin.ignore();
-            std::cout << Colors::CYAN << "Enter the Month: " << Colors::RESET;
-            cin >> endMonth;
-            std::cin.ignore();
-            std::cout << Colors::CYAN << "Enter the Day: " << Colors::RESET;
-            cin >> endDay;
-            std::cin.ignore();
-            std::cout << Colors::CYAN << "Enter the Hour: " << Colors::RESET;
-            cin >> endHour;
-            std::cin.ignore();
-            std::cout << Colors::CYAN << "Enter the Minute: " << Colors::RESET;
-            cin >> endMinute;
-            std::cin.ignore();
-            endDate = Date(endYear, endMonth, endDay, endHour, endMinute);
+
+            isValidStartTime = false;
+            cin.ignore();
+            do
+            {
+
+                cout << Colors::CYAN << "Enter start time (yyyy/mm/dd hh:mm): " << Colors::RESET;
+
+                getline(cin, startTime);
+                isValidStartTime = Date::isValid(startTime);
+            } while (!isValidStartTime);
+
+            do
+            {
+
+                cout << Colors::CYAN << "Enter end time (yyyy/mm/dd hh:mm): " << Colors::RESET;
+
+                getline(cin, endTime);
+                isValidEndTime = Date::isValid(endTime);
+
+            } while (!isValidEndTime);
+            startDate = Date::parse(startTime);
+
+            endDate = Date::parse(endTime);
             std::cout << Colors::CYAN << "Enter new Service Consuming Credit Points: " << Colors::RESET;
             int newServiceCCD;
             std::cin >> newServiceCCD;

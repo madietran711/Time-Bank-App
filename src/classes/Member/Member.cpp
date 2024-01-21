@@ -251,7 +251,7 @@ void Member::viewProfile()
 
             << std::left << std::setw(20) << this->getUsername()
             << std::left << std::setw(20) << this->getFullName()
-            << std::left << std::setw(10) << this->getPhoneNumber()
+            << std::left << std::setw(20) << this->getPhoneNumber()
             << std::left << std::setw(25) << this->getEmail()
             << std::left << std::setw(20) << this->getHomeAddress()
             << std::left << std::setw(10) << this->getCity()

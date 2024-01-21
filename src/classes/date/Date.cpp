@@ -90,12 +90,11 @@ void Date::setMinute(int minute)
 
 // Other methods
 
-// Date validation based on the specified format
+// Date validation based on the specified format and month, day, and hour values
 bool Date::isValid(const std::string &date)
 {
     std::istringstream ss(date);
     int year, month, day, hour, minute;
-    cout << "Confirmed Date: " << date << endl;
 
     char slash1, slash2, colon;
 

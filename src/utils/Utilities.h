@@ -22,7 +22,7 @@ public:
     static bool validateFullName(std::string &str);
     static bool validatePhoneNumber(std::string &str);
     static bool validateEmail(std::string &str);
-    static bool validateUserRating(int &rating);
+    static bool validateUserRating(double &rating);
     // static string generateId();
 };
 

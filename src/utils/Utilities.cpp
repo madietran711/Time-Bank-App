@@ -169,7 +169,7 @@ bool Utilities::validateEmail(string &str)
 
     return true;
 }
-bool Utilities::validateUserRating(int &rating)
+bool Utilities::validateUserRating(double &rating)
 {
     if (rating < 0 || rating > 5)
     {
