@@ -21,7 +21,7 @@ void System::run()
     // printAllData();
     saveAllData();
     loadAllData();
-    std::string groupNumber = "Group No.";
+    std::string groupNumber = "Group No. 19";
     std::string instructorName = "Mr. Tran Duc Linh";
 
     // Student information
